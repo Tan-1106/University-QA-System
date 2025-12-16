@@ -1,0 +1,30 @@
+name: university_qa_system
+description: "A new Flutter project."
+version: 1.0.0+1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.6.0
+  uuid: ^4.5.2
+  fpdart: ^1.2.0
+  google_fonts: ^6.3.3
+  cupertino_icons: ^1.0.8
+  flutter_web_auth_2: ^4.1.0
+  flutter_dotenv: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - .env
