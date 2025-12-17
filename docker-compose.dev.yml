@@ -11,7 +11,7 @@ services:
       - ./hf_cache:/root/.cache/huggingface
       - ./uploads:/app/uploads
     env_file:
-      - .env
+      - backend/.env
     depends_on:
       mongodb:
         condition: service_healthy

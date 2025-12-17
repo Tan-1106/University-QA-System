@@ -1,4 +1,4 @@
-import 'package:university_qa_system/common/entities/user.dart';
+import 'package:university_qa_system/core/common/entities/user.dart';
 
 class UserModel extends User {
   UserModel({required super.sub});

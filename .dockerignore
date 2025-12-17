@@ -24,6 +24,6 @@ hf_cache/
 uploads/
 
 # Env and logs
-.env
+backend/.env
 .env.*
 *.log
