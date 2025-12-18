@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/core/common/entities/user.dart';
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 import 'package:university_qa_system/features/authentication/domain/usecases/user_information.dart';
+
 
 part 'auth_event.dart';
 
@@ -27,7 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
-      (user) => emit(AuthSuccess(user)),
+      (user) => _emitAuthSuccess(user, emit),
     );
+  }
+
+  void _emitAuthSuccess(
+    User user,
+    Emitter<AuthState> emit,
+  ) {
+    logger.i('Authenticated user: ${user.toString()}');
+    emit(AuthSuccess(user));
   }
 }

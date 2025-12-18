@@ -1,21 +1,47 @@
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/authentication/data/models/user_model.dart';
+import 'package:university_qa_system/core/common/api_response.dart';
+import 'package:university_qa_system/features/authentication/data/models/user_details.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<UserModel> getUserInformation(String authCode);
+  Future<UserDetails> getUserInformation(String authCode);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final http.Client client;
+  final Dio _dio;
 
-  AuthRemoteDataSourceImpl(this.client);
+  AuthRemoteDataSourceImpl(this._dio);
 
   @override
-  Future<UserModel> getUserInformation(String authCode) async {
+  Future<UserDetails> getUserInformation(String authCode) async {
     try {
+      final response = await _dio.post(
+        '/api/auth/verify',
+        data: {
+          'code': authCode,
+        },
+      );
 
-      return UserModel(sub: "PLACEHOLDER");
+      if (response.statusCode == 200 && response.data != null) {
+        final apiResponse = ApiResponse<UserDetails>.fromJson(
+          response.data as Map<String, dynamic>,
+          (json) => UserDetails.fromJson(json as Map<String, dynamic>),
+        );
+
+        if (apiResponse.details != null) {
+          return apiResponse.details!;
+        } else {
+          throw ServerException('User details are missing in the response');
+        }
+      } else {
+        throw ServerException('Failed to retrieve user information');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
     } catch (e) {
       throw ServerException(e.toString());
     }

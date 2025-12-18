@@ -5,10 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.routes import llm_route
 from app.utils.api_response import api_response, UserError, NotFoundException, DatabaseException, AuthException
 from app.databases.mongo import connect_to_mongo, close_mongo_connection
 from app.routes import auth_route, user_route, document_route, document_chunk_route, embedding_route, qa_route, statistical_route
-from app.routes import llm_route
 
 
 # --- LOGGER SETUP ---

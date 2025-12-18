@@ -1,3 +1,5 @@
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+
 import 'core/config/theme/theme.dart';
 import 'core/utils/create_theme.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,8 @@ import 'package:university_qa_system/features/authentication/presentation/bloc/a
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
+  await initDependencies();
+  Bloc.observer = AppBlocObserver();
 
   runApp(
     MultiBlocProvider(

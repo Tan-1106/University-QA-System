@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:university_qa_system/core/utils/logger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/widgets/sign_in_button.dart';
 
@@ -9,7 +9,7 @@ class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
   void _handleSignInClick(BuildContext context) async {
-    final result = await context.push<Map<String, dynamic>>('/login/auth-webview');
+    final result = await context.pushNamed<Map<String, dynamic>>('authWebview');
 
     if (!context.mounted) return;
     if (result == null) return;
@@ -27,8 +27,6 @@ class SignInPage extends StatelessWidget {
       );
       return;
     }
-
-    logger.i('ELIT Authentication successful. Authorization code: $serverCode');
     context.read<AuthBloc>().add(AuthGetUserInformation(authCode: serverCode));
   }
 
@@ -42,33 +40,51 @@ class SignInPage extends StatelessWidget {
           vertical: 40,
           horizontal: 20,
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                brightness == Brightness.light ? 'assets/images/welcome_illustration_light.png' : 'assets/images/welcome_illustration_dark.png',
-                width: 250,
-                height: 250,
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthFailure) {
+              showSnackBar(context, state.message);
+            } else if (state is AuthSuccess) {
+              // TODO: Navigate to the main page
+              showSnackBar(context, 'Đăng nhập thành công!');
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    brightness == Brightness.light ? 'assets/images/welcome_illustration_light.png' : 'assets/images/welcome_illustration_dark.png',
+                    width: 250,
+                    height: 250,
+                  ),
+                  Text(
+                    'Chào mừng!',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Vui lòng đăng nhập để tiếp tục',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: 340,
+                    child: SignInButton(
+                      onSignInClick: () => _handleSignInClick(context),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                'Chào mừng!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Vui lòng đăng nhập để tiếp tục',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
-              ),
-              Spacer(),
-              SizedBox(
-                width: 340,
-                child: SignInButton(
-                  onSignInClick: () => _handleSignInClick(context),
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

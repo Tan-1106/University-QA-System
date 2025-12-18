@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 
 # --- CONFIGURATION ---
-DB_NAME = os.getenv("MONGO_DB_NAME", "tdtu_qa_db")
+DB_NAME = os.getenv("MONGO_DB_NAME", "university_qa_db")
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://mongodb:27017")
 
 
