@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/widgets/sign_in_button.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
 
+  @override
+  State<SignInPage> createState() {
+    return _SignInPageState();
+  }
+}
+
+class _SignInPageState extends State<SignInPage> {
+  // Verify if the user is already signed in
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthVerifyUserAccess());
+  }
+
+  //
   void _handleSignInClick(BuildContext context) async {
     final result = await context.pushNamed<Map<String, dynamic>>('authWebview');
 
@@ -19,7 +35,6 @@ class SignInPage extends StatelessWidget {
       );
       return;
     }
-
     final String? serverCode = result['code'];
     if (serverCode == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -27,8 +42,10 @@ class SignInPage extends StatelessWidget {
       );
       return;
     }
-    context.read<AuthBloc>().add(AuthGetUserInformation(authCode: serverCode));
+
+    context.read<AuthBloc>().add(AuthSignInWithELIT(authCode: serverCode));
   }
+
 
   @override
   Widget build(context) {
@@ -44,18 +61,10 @@ class SignInPage extends StatelessWidget {
           listener: (context, state) {
             if (state is AuthFailure) {
               showSnackBar(context, state.message);
-            } else if (state is AuthSuccess) {
-              // TODO: Navigate to the main page
-              showSnackBar(context, 'Đăng nhập thành công!');
             }
           },
           builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
+            if (state is AuthLoading) return Loader();
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

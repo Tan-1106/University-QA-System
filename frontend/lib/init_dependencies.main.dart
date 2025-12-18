@@ -8,6 +8,28 @@ Future<void> initDependencies() async {
 }
 
 Future<void> _initCore() async {
+  // Internet Connection Checker
+  serviceLocator.registerFactory(() => InternetConnection());
+  serviceLocator.registerFactory<ConnectionChecker>(
+        () => ConnectionCheckerImpl(
+      serviceLocator(),
+    ),
+  );
+
+  // Secure Storage Service
+  serviceLocator.registerLazySingleton(() => const FlutterSecureStorage());
+  serviceLocator.registerLazySingleton(
+        () => SecureStorageService(
+      serviceLocator(),
+    ),
+  );
+
+  // Shared Preferences Service
+  final sharedPreferences = await SharedPreferences.getInstance();
+  serviceLocator.registerLazySingleton(
+        () => SharedPreferencesService(sharedPreferences),
+  );
+
   // Dio Client
   serviceLocator.registerLazySingleton<Dio>(() {
     final dio = Dio();
@@ -26,30 +48,16 @@ Future<void> _initCore() async {
     if (const bool.fromEnvironment('dart.vm.product') == false) {
       dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     }
+
+    dio.interceptors.add(
+      AuthInterceptor(
+        dio: dio,
+        secureStorageService: serviceLocator(),
+      ),
+    );
+
     return dio;
   });
-
-  // Internet Connection Checker
-  serviceLocator.registerFactory(() => InternetConnection());
-  serviceLocator.registerFactory<ConnectionChecker>(
-    () => ConnectionCheckerImpl(
-      serviceLocator(),
-    ),
-  );
-
-  // Secure Storage Service
-  serviceLocator.registerLazySingleton(() => const FlutterSecureStorage());
-  serviceLocator.registerLazySingleton(
-    () => SecureStorageService(
-      serviceLocator(),
-    ),
-  );
-
-  // Shared Preferences Service
-  final sharedPreferences = await SharedPreferences.getInstance();
-  serviceLocator.registerLazySingleton(
-    () => SharedPreferencesService(sharedPreferences),
-  );
 }
 
 void _initAuth() {
@@ -69,17 +77,27 @@ void _initAuth() {
     ),
   );
 
-  // User Information
+  // Sign In With ELIT Use Case
   serviceLocator.registerFactory(
-    () => UserInformation(
+    () => SignInWithELIT(
       serviceLocator(),
     ),
   );
 
-  // Auth Bloc
+
+  // Verify User Access Use Case
   serviceLocator.registerFactory(
+    () => VerifyUserAccess(
+      serviceLocator(),
+    ),
+  );
+
+
+  // Auth Bloc
+  serviceLocator.registerLazySingleton(
     () => AuthBloc(
-      userInformation: serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
     ),
   );
 }

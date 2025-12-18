@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 
 class SharedPreferencesService {
@@ -12,7 +11,6 @@ class SharedPreferencesService {
 
   Future<void> saveUserInfo(User userInfo) async {
     final userInfoString = jsonEncode(userInfo);
-    logger.i('Saving user info: $userInfoString');
     await _preferences.setString(_userKey, userInfoString);
   }
 

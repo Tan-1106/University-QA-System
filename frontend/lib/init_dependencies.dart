@@ -10,7 +10,10 @@ import 'package:university_qa_system/core/services/shared_preferences_service.da
 import 'package:university_qa_system/features/authentication/data/data_sources/auth_remote_data_source.dart';
 import 'package:university_qa_system/features/authentication/data/repositories/auth_repository_impl.dart';
 import 'package:university_qa_system/features/authentication/domain/repositories/auth_repository.dart';
-import 'package:university_qa_system/features/authentication/domain/usecases/user_information.dart';
+import 'package:university_qa_system/features/authentication/domain/usecases/sign_in_with_elit.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
+
+import 'core/network/auth_interceptor.dart';
+import 'features/authentication/domain/usecases/verify_user_access.dart';
 
 part 'init_dependencies.main.dart';

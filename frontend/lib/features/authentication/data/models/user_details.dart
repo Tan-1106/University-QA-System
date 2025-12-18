@@ -7,7 +7,7 @@ class UserDetails {
   final String email;
   final String imageUrl;
   final String role;
-  final String faculty;
+  final String? faculty;
   final bool isFacultyManager;
   final bool banned;
   final Tokens tokens;
@@ -54,7 +54,7 @@ class UserDetails {
       email: email,
       imageUrl: imageUrl,
       role: role,
-      faculty: faculty,
+      faculty: faculty ?? '',
       isFacultyManager: isFacultyManager,
       banned: banned,
     );
@@ -74,4 +74,16 @@ class Tokens {
     required this.accessToken,
     required this.refreshToken,
   });
+
+  factory Tokens.fromJson(Map<String, dynamic> json) {
+    return Tokens(
+      accessToken: json['access_token'] as String,
+      refreshToken: json['refresh_token'] as String,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Tokens{accessToken: $accessToken, refreshToken: $refreshToken}';
+  }
 }

@@ -3,10 +3,12 @@ part of 'auth_bloc.dart';
 @immutable
 sealed class AuthEvent {}
 
-final class AuthGetUserInformation extends AuthEvent {
+final class AuthSignInWithELIT extends AuthEvent {
   final String authCode;
 
-  AuthGetUserInformation({
+  AuthSignInWithELIT({
     required this.authCode,
   });
 }
+
+final class AuthVerifyUserAccess extends AuthEvent {}
