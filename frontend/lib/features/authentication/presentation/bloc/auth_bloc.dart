@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 import 'package:university_qa_system/features/authentication/domain/usecases/sign_in_with_elit.dart';
 import 'package:university_qa_system/features/authentication/domain/usecases/verify_user_access.dart';

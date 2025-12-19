@@ -16,14 +16,12 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  // Verify if the user is already signed in
   @override
   void initState() {
     super.initState();
     context.read<AuthBloc>().add(AuthVerifyUserAccess());
   }
 
-  //
   void _handleSignInClick(BuildContext context) async {
     final result = await context.pushNamed<Map<String, dynamic>>('authWebview');
 

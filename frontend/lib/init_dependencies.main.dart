@@ -24,12 +24,6 @@ Future<void> _initCore() async {
     ),
   );
 
-  // Shared Preferences Service
-  final sharedPreferences = await SharedPreferences.getInstance();
-  serviceLocator.registerLazySingleton(
-        () => SharedPreferencesService(sharedPreferences),
-  );
-
   // Dio Client
   serviceLocator.registerLazySingleton<Dio>(() {
     final dio = Dio();
@@ -71,7 +65,6 @@ void _initAuth() {
   // Auth Repository
   serviceLocator.registerFactory<AuthRepository>(
     () => AuthRepositoryImpl(
-      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
     ),

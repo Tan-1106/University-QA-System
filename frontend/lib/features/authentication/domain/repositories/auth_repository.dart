@@ -6,6 +6,4 @@ abstract interface class AuthRepository {
   Future<Either<Failure, User>> signInWithELIT(String authCode);
 
   Future<Either<Failure, User>> getUserInformation();
-
-  Either<Failure, User> getCurrentUser();
 }

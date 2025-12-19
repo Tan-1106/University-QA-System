@@ -1,13 +1,24 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
+import 'package:university_qa_system/core/common/widgets/manager_shell_layout.dart';
+import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/elit_login_webview.dart';
 
+// GoRouter Navigator Keys
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _adminShellNavigatorKey = GlobalKey<NavigatorState>();
+final _managerShellNavigatorKey = GlobalKey<NavigatorState>();
+final _normalUserShellNavigatorKey = GlobalKey<NavigatorState>();
+
+// App Router
 final GoRouter appRouter = GoRouter(
   initialLocation: '/sign-in',
+  navigatorKey: _rootNavigatorKey,
   refreshListenable: GoRouterRefreshStream(serviceLocator<AuthBloc>().stream),
   redirect: (context, state) {
     final authState = serviceLocator<AuthBloc>().state;
@@ -20,45 +31,127 @@ final GoRouter appRouter = GoRouter(
         final isManager = authState.user.isFacultyManager;
 
         if (role == 'Admin') return '/admin-dashboard';
-        if (isManager) return '/faculty-manager-dashboard';
+        if (isManager) return '/manager-dashboard';
         return '/qa';
       }
       return null;
     }
-
     if (authState is AuthFailure || authState is AuthInitial) {
       if (!isSigningIn && !isAuthWebview) {
         return '/sign-in';
       }
     }
-
     return null;
   },
   routes: <RouteBase>[
+    // Sign In Page
     GoRoute(
       name: 'signIn',
       path: '/sign-in',
       builder: (context, state) => const SignInPage(),
     ),
+
+    // ELIT Authentication Webview
     GoRoute(
       name: 'authWebview',
       path: '/auth-webview',
       builder: (context, state) => const ElitLoginWebview(),
     ),
-    GoRoute(
-      name: 'adminDashboard',
-      path: '/admin-dashboard',
-      builder: (context, state) => const Scaffold(body: Center(child: Text('Admin Dashboard'))),
+
+    // Admin Shell Route
+    ShellRoute(
+      navigatorKey: _adminShellNavigatorKey,
+      builder: (context, state, child) {
+        return AdminShellLayout(child: child);
+      },
+      routes: [
+        GoRoute(
+          name: 'AdminDashboard',
+          path: '/admin-dashboard',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin Dashboard'))),
+        ),
+        GoRoute(
+          name: 'AdminPopularQuestions',
+          path: '/admin-popular-questions',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Questions'))),
+        ),
+        GoRoute(
+          name: 'AdminUsers',
+          path: '/admin-users',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin User Management'))),
+        ),
+        GoRoute(
+          name: 'AdminDocuments',
+          path: '/admin-documents',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin Document Management'))),
+        ),
+        GoRoute(
+          name: 'AdminAPISettings',
+          path: '/admin-api-settings',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin API Settings'))),
+        ),
+      ],
     ),
-    GoRoute(
-      name: 'facultyManagerDashboard',
-      path: '/faculty-manager-dashboard',
-      builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Dashboard'))),
+
+    // Faculty Manager Shell Route
+    ShellRoute(
+      navigatorKey: _managerShellNavigatorKey,
+      builder: (context, state, child) {
+        return ManagerShellLayout(child: child);
+      },
+      routes: [
+        GoRoute(
+          name: 'ManagerDashboard',
+          path: '/manager-dashboard',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Dashboard'))),
+        ),
+        GoRoute(
+          name: 'ManagerPopularFacultyQuestions',
+          path: '/manager-popular-faculty-questions',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Faculty Questions'))),
+        ),
+        GoRoute(
+          name: 'ManagerFacultyStudents',
+          path: '/manager-faculty-students',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Faculty Students'))),
+        ),
+        GoRoute(
+          name: 'ManagerDocuments',
+          path: '/manager-documents',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Document Management'))),
+        )
+      ],
     ),
+
+    // Normal User Shell Route
+    ShellRoute(
+      navigatorKey: _normalUserShellNavigatorKey,
+      builder: (context, state, child) {
+        return UserShellLayout(child: child);
+      },
+      routes: [
+        GoRoute(
+          name: 'UserQ&A',
+          path: '/qa',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Q&A Page'))),
+        ),
+        GoRoute(
+          name: 'UserDocuments',
+          path: '/user-documents',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Documents Page'))),
+        ),
+        GoRoute(
+          name: 'UserPopularQuestions',
+          path: '/user-popular-questions',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Questions Page'))),
+        )
+      ],
+    ),
+
     GoRoute(
-      name: 'qa',
-      path: '/qa',
-      builder: (context, state) => const Scaffold(body: Center(child: Text('Q&A Page'))),
+      name: 'Information&Logout',
+      path: '/information-and-logout',
+      builder: (context, state) => const Scaffold(body: Center(child: Text('Information and Logout Page'))),
     ),
   ],
 );
