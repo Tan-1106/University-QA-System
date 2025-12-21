@@ -5,13 +5,14 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   await _initCore();
   _initAuth();
+  _initDashboard();
 }
 
 Future<void> _initCore() async {
   // Internet Connection Checker
   serviceLocator.registerFactory(() => InternetConnection());
   serviceLocator.registerFactory<ConnectionChecker>(
-        () => ConnectionCheckerImpl(
+    () => ConnectionCheckerImpl(
       serviceLocator(),
     ),
   );
@@ -19,7 +20,7 @@ Future<void> _initCore() async {
   // Secure Storage Service
   serviceLocator.registerLazySingleton(() => const FlutterSecureStorage());
   serviceLocator.registerLazySingleton(
-        () => SecureStorageService(
+    () => SecureStorageService(
       serviceLocator(),
     ),
   );
@@ -55,14 +56,12 @@ Future<void> _initCore() async {
 }
 
 void _initAuth() {
-  // Auth Remote Data Source
   serviceLocator.registerFactory<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
       serviceLocator(),
     ),
   );
 
-  // Auth Repository
   serviceLocator.registerFactory<AuthRepository>(
     () => AuthRepositoryImpl(
       serviceLocator(),
@@ -70,25 +69,53 @@ void _initAuth() {
     ),
   );
 
-  // Sign In With ELIT Use Case
   serviceLocator.registerFactory(
-    () => SignInWithELIT(
+    () => SignInWithELITUseCase(
       serviceLocator(),
     ),
   );
 
-
-  // Verify User Access Use Case
   serviceLocator.registerFactory(
-    () => VerifyUserAccess(
+    () => VerifyUserAccessUseCase(
       serviceLocator(),
     ),
   );
 
-
-  // Auth Bloc
   serviceLocator.registerLazySingleton(
     () => AuthBloc(
+      serviceLocator(),
+      serviceLocator(),
+    ),
+  );
+}
+
+void _initDashboard() {
+  serviceLocator.registerFactory<DashboardRemoteDataSource>(
+    () => DashboardRemoteDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<DashboardRepository>(
+    () => DashboardRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadDashboardStatisticUseCase>(
+    () => LoadDashboardStatisticUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadDashboardQuestionRecordsUseCase>(
+      () => LoadDashboardQuestionRecordsUseCase(
+        serviceLocator(),
+      )
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DashboardBloc(
       serviceLocator(),
       serviceLocator(),
     ),

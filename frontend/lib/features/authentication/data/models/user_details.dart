@@ -8,7 +8,6 @@ class UserDetails {
   final String imageUrl;
   final String role;
   final String? faculty;
-  final bool isFacultyManager;
   final bool banned;
   final Tokens tokens;
 
@@ -20,7 +19,6 @@ class UserDetails {
     required this.imageUrl,
     required this.role,
     required this.faculty,
-    required this.isFacultyManager,
     required this.banned,
     required this.tokens,
   });
@@ -37,7 +35,6 @@ class UserDetails {
       imageUrl: user['image'] as String,
       role: user['role'] as String,
       faculty: user['faculty'] as String? ?? '',
-      isFacultyManager: user['is_faculty_manager'] as bool,
       banned: user['banned'] as bool,
       tokens: Tokens(
         accessToken: tokensJson['access_token'] as String,
@@ -55,14 +52,13 @@ class UserDetails {
       imageUrl: imageUrl,
       role: role,
       faculty: faculty ?? '',
-      isFacultyManager: isFacultyManager,
       banned: banned,
     );
   }
 
   @override
   String toString() {
-    return 'UserInformationResponse{id: $id, sub: $sub, name: $name, email: $email, imageUrl: $imageUrl, role: $role, faculty: $faculty, isFacultyManager: $isFacultyManager, banned: $banned, tokens: $tokens}';
+    return 'UserInformationResponse{id: $id, sub: $sub, name: $name, email: $email, imageUrl: $imageUrl, role: $role, faculty: $faculty, banned: $banned, tokens: $tokens}';
   }
 }
 

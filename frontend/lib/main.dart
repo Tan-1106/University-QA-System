@@ -1,4 +1,5 @@
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 import 'core/config/theme/theme.dart';
 import 'core/utils/create_theme.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+        BlocProvider(create: (_) => serviceLocator<DashboardBloc>()),
       ],
       child: const MyApp(),
     ),

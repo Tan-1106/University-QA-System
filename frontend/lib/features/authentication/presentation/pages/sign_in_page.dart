@@ -19,7 +19,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(AuthVerifyUserAccess());
+    context.read<AuthBloc>().add(AuthVerifyUserAccessEvent());
   }
 
   void _handleSignInClick(BuildContext context) async {
@@ -41,7 +41,7 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
 
-    context.read<AuthBloc>().add(AuthSignInWithELIT(authCode: serverCode));
+    context.read<AuthBloc>().add(AuthSignInWithELITEvent(authCode: serverCode));
   }
 
 

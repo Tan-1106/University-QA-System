@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
-import 'package:university_qa_system/core/common/widgets/manager_shell_layout.dart';
-import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
+import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
+import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
+import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/elit_login_webview.dart';
@@ -12,7 +12,6 @@ import 'package:university_qa_system/features/authentication/presentation/pages/
 // GoRouter Navigator Keys
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _adminShellNavigatorKey = GlobalKey<NavigatorState>();
-final _managerShellNavigatorKey = GlobalKey<NavigatorState>();
 final _normalUserShellNavigatorKey = GlobalKey<NavigatorState>();
 
 // App Router
@@ -28,10 +27,8 @@ final GoRouter appRouter = GoRouter(
     if (authState is AuthSuccess) {
       if (isSigningIn || isAuthWebview) {
         final role = authState.user.role;
-        final isManager = authState.user.isFacultyManager;
 
         if (role == 'Admin') return '/admin-dashboard';
-        if (isManager) return '/manager-dashboard';
         return '/qa';
       }
       return null;
@@ -68,7 +65,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'AdminDashboard',
           path: '/admin-dashboard',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin Dashboard'))),
+          builder: (context, state) => const AdminDashboardPage(),
         ),
         GoRoute(
           name: 'AdminPopularQuestions',
@@ -90,36 +87,6 @@ final GoRouter appRouter = GoRouter(
           path: '/admin-api-settings',
           builder: (context, state) => const Scaffold(body: Center(child: Text('Admin API Settings'))),
         ),
-      ],
-    ),
-
-    // Faculty Manager Shell Route
-    ShellRoute(
-      navigatorKey: _managerShellNavigatorKey,
-      builder: (context, state, child) {
-        return ManagerShellLayout(child: child);
-      },
-      routes: [
-        GoRoute(
-          name: 'ManagerDashboard',
-          path: '/manager-dashboard',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Dashboard'))),
-        ),
-        GoRoute(
-          name: 'ManagerPopularFacultyQuestions',
-          path: '/manager-popular-faculty-questions',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Faculty Questions'))),
-        ),
-        GoRoute(
-          name: 'ManagerFacultyStudents',
-          path: '/manager-faculty-students',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Faculty Students'))),
-        ),
-        GoRoute(
-          name: 'ManagerDocuments',
-          path: '/manager-documents',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Faculty Manager Document Management'))),
-        )
       ],
     ),
 

@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
-import 'package:university_qa_system/features/authentication/domain/usecases/sign_in_with_elit.dart';
-import 'package:university_qa_system/features/authentication/domain/usecases/verify_user_access.dart';
+import 'package:university_qa_system/features/authentication/domain/use_cases/sign_in_with_elit.dart';
+import 'package:university_qa_system/features/authentication/domain/use_cases/verify_user_access.dart';
 
 part 'auth_event.dart';
 
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final SignInWithELIT _signInWithELIT;
-  final VerifyUserAccess _verifyUserAccess;
+  final SignInWithELITUseCase _signInWithELIT;
+  final VerifyUserAccessUseCase _verifyUserAccess;
 
   AuthBloc(
-    SignInWithELIT signInWithELIT,
-    VerifyUserAccess verifyUserAccess,
+    SignInWithELITUseCase signInWithELIT,
+    VerifyUserAccessUseCase verifyUserAccess,
   ) : _signInWithELIT = signInWithELIT,
       _verifyUserAccess = verifyUserAccess,
       super(AuthInitial()) {
     on<AuthEvent>((_, emit) => emit(AuthLoading()));
-    on<AuthSignInWithELIT>(_onGetUserInformation);
-    on<AuthVerifyUserAccess>(_onVerifyUserAccess);
+    on<AuthSignInWithELITEvent>(_onGetUserInformation);
+    on<AuthVerifyUserAccessEvent>(_onVerifyUserAccess);
   }
 
   void _onGetUserInformation(
-    AuthSignInWithELIT event,
+    AuthSignInWithELITEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
@@ -38,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onVerifyUserAccess(
-    AuthVerifyUserAccess event,
+    AuthVerifyUserAccessEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());

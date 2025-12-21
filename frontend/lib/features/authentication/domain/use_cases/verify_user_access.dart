@@ -4,9 +4,9 @@ import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 import 'package:university_qa_system/features/authentication/domain/repositories/auth_repository.dart';
 
-class VerifyUserAccess implements UseCase<User, NoParams> {
+class VerifyUserAccessUseCase implements UseCase<User, NoParams> {
   final AuthRepository authRepository;
-  const VerifyUserAccess(this.authRepository);
+  const VerifyUserAccessUseCase(this.authRepository);
 
   @override
   Future<Either<Failure, User>> call(NoParams params) {

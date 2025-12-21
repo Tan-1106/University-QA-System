@@ -8,7 +8,6 @@ class CurrentUser {
   final String imageUrl;
   final String role;
   final String? faculty;
-  final bool isFacultyManager;
   final bool banned;
 
   CurrentUser({
@@ -19,7 +18,6 @@ class CurrentUser {
     required this.imageUrl,
     required this.role,
     required this.faculty,
-    required this.isFacultyManager,
     required this.banned,
   });
 
@@ -32,7 +30,6 @@ class CurrentUser {
       imageUrl: json['image'] as String,
       role: json['role'] as String,
       faculty: json['faculty'] as String?,
-      isFacultyManager: json['is_faculty_manager'] as bool,
       banned: json['banned'] as bool,
     );
   }
@@ -46,13 +43,12 @@ class CurrentUser {
       imageUrl: imageUrl,
       role: role,
       faculty: faculty ?? '',
-      isFacultyManager: isFacultyManager,
       banned: banned,
     );
   }
 
   @override
   String toString() {
-    return 'CurrentUser{id: $id, sub: $sub, name: $name, email: $email, imageUrl: $imageUrl, role: $role, faculty: $faculty, isFacultyManager: $isFacultyManager, banned: $banned}';
+    return 'CurrentUser{id: $id, sub: $sub, name: $name, email: $email, imageUrl: $imageUrl, role: $role, faculty: $faculty, banned: $banned}';
   }
 }
