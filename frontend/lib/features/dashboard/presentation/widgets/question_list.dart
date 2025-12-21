@@ -167,9 +167,9 @@ class _QuestionItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(
-                        _getFeedbackIcon(question.feedback),
+                        _getFeedbackIcon(question.feedback ?? 'None'),
                         size: 16,
-                        color: _getFeedbackColor(question.feedback),
+                        color: _getFeedbackColor(question.feedback ?? 'None'),
                       ),
                       const SizedBox(width: 8),
                       Text(

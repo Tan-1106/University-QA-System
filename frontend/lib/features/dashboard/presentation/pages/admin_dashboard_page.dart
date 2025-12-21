@@ -81,13 +81,14 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         Expanded(
                           child: TotalQuestions(quantity: statisticData.total),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(child: TotalLike(quantity: statisticData.like)),
-                        Expanded(child: TotalDislike(quantity: statisticData.dislike)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TotalLike(quantity: statisticData.like),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TotalDislike(quantity: statisticData.dislike),
+                        ),
                       ],
                     ),
                     SizedBox(height: 40),

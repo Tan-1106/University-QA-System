@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
@@ -100,7 +101,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'UserQ&A',
           path: '/qa',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Q&A Page'))),
+          builder: (context, state) => const ChatBoxPage(),
         ),
         GoRoute(
           name: 'UserDocuments',

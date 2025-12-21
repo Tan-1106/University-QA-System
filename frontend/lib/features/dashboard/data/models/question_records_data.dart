@@ -24,7 +24,7 @@ class QuestionRecordsData {
             userFaculty: recordJson['user_faculty'] as String,
             question: recordJson['question'] as String,
             answer: recordJson['answer'] as String,
-            feedback: recordJson['feedback'] as String,
+            feedback: recordJson['feedback'] as String?,
             managerAnswer: recordJson['manager_answer'] as String?,
             createdAt: recordJson['created_at'] as String,
             updatedAt: recordJson['updated_at'] as String,
@@ -62,7 +62,7 @@ class Questions {
   final String userFaculty;
   final String question;
   final String answer;
-  final String feedback;
+  final String? feedback;
   final String? managerAnswer;
   final String createdAt;
   final String updatedAt;
@@ -74,7 +74,7 @@ class Questions {
     required this.userFaculty,
     required this.question,
     required this.answer,
-    required this.feedback,
+    this.feedback,
     this.managerAnswer,
     required this.createdAt,
     required this.updatedAt,

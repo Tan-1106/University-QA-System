@@ -304,6 +304,7 @@ async def generate_answer(api_key: dict, chunks: list[str], question: str, quest
         6. Nếu **không tìm thấy** thông tin phù hợp trong các đoạn văn bản, hãy trả lời rằng không thể tìm được tài liệu trong kho dữ liệu liên quan đến câu hỏi của người dùng, không đề cập đến các tài liệu bạn được cung cấp và không cần dẫn nguồn tham khảo.
         7. Nếu người dùng đặt câu hỏi dựa trên 1 tình huống cụ thể, hãy suy luận câu trả lời dựa trên các đoạn văn bản được cung cấp nếu như các văn bản được cung cấp có thông tin liên quan đến tình huống đó. Không được trả lời dựa trên kiến thức chung hoặc kinh nghiệm cá nhân.
         8. Nếu người dùng cố gắng trò chuyện về các chủ đề không phù hợp hoặc ngoài phạm vi thay vì hỏi về nội dung thuộc phạm vi của Trường Đại học Tôn Đức Thắng, hãy trả lời một cách lịch sự rằng bạn chỉ có thể hỗ trợ các câu hỏi liên quan đến quy định, quy chế của Trường Đại học Tôn Đức Thắng và không được thiết kế để tham gia vào các cuộc trò chuyện ngoài phạm vi này, ngoài ra không cung cấp thông tin gì thêm về tài liệu nhận được từ hệ thống RAG.
+        9. Không trả về các tài liệu tham khảo nếu câu trả lời được sinh ra không dựa trên các đoạn văn bản được cung cấp.
         Ngữ cảnh từ hệ thống RAG:
         {context}
 
@@ -328,6 +329,7 @@ async def generate_answer(api_key: dict, chunks: list[str], question: str, quest
         7. If the user asks a question based on a specific situation, infer the answer based on the provided text passages if the provided texts contain information related to that situation. Do not answer based on general knowledge or personal experience.
         8. If the user tries to chat about inappropriate or out-of-scope topics instead of asking about the scope of Ton Duc Thang University, politely respond that you can only assist with questions related to the scope of Ton Duc Thang University and are not designed to engage in out-of-scope conversations, without providing any additional information about the documents received from the RAG system.
         9. If the question is not in Vietnamese or English, politely inform the user that you can only process questions in Vietnamese or English. This response language is the question language if you can detect it, otherwise respond in English.
+        10. Do not provide references if the generated answer is not based on the provided text passages.
         Context from RAG system:
         {context}
 

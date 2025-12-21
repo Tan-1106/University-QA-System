@@ -1,4 +1,5 @@
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 import 'core/config/theme/theme.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
         BlocProvider(create: (_) => serviceLocator<DashboardBloc>()),
+        BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
       ],
       child: const MyApp(),
     ),

@@ -6,6 +6,7 @@ Future<void> initDependencies() async {
   await _initCore();
   _initAuth();
   _initDashboard();
+  _initChatBox();
 }
 
 Future<void> _initCore() async {
@@ -32,8 +33,8 @@ Future<void> _initCore() async {
 
     dio.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -117,6 +118,32 @@ void _initDashboard() {
   serviceLocator.registerLazySingleton(
     () => DashboardBloc(
       serviceLocator(),
+      serviceLocator(),
+    ),
+  );
+}
+
+void _initChatBox() {
+  serviceLocator.registerFactory<ChatBoxRemoteDataSource>(
+    () => ChatBoxRemoteDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<ChatBoxRepository>(
+    () => ChatBoxRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => AskQuestionUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => ChatBoxBloc(
       serviceLocator(),
     ),
   );
