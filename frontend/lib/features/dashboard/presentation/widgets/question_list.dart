@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/dashboard/data/models/question_records_data.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 class QuestionList extends StatefulWidget {
@@ -148,10 +148,9 @@ class _QuestionItem extends StatelessWidget {
                 children: [
                   Text(
                     'MSSV: $userSub',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer
-                    )
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -179,13 +178,13 @@ class _QuestionItem extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-            IconButton(onPressed: onTap, icon: const Icon(Icons.chevron_right))
+            IconButton(onPressed: onTap, icon: const Icon(Icons.chevron_right)),
           ],
-        )
+        ),
       ),
     );
   }

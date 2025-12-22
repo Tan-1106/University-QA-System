@@ -21,13 +21,9 @@ class QuestionRecordsData {
             id: recordJson['_id'] as String,
             userId: recordJson['user_id'] as String,
             userSub: recordJson['user_sub'] as String,
-            userFaculty: recordJson['user_faculty'] as String,
             question: recordJson['question'] as String,
-            answer: recordJson['answer'] as String,
             feedback: recordJson['feedback'] as String?,
-            managerAnswer: recordJson['manager_answer'] as String?,
             createdAt: recordJson['created_at'] as String,
-            updatedAt: recordJson['updated_at'] as String,
           ),
         )
         .toList();
@@ -53,30 +49,4 @@ class QuestionRecordsData {
   String toString() {
     return 'QuestionRecordsData{total: $total, totalPages: $totalPages, currentPage: $currentPage, questions: $questions}';
   }
-}
-
-class Questions {
-  final String id;
-  final String userId;
-  final String userSub;
-  final String userFaculty;
-  final String question;
-  final String answer;
-  final String? feedback;
-  final String? managerAnswer;
-  final String createdAt;
-  final String updatedAt;
-
-  Questions({
-    required this.id,
-    required this.userId,
-    required this.userSub,
-    required this.userFaculty,
-    required this.question,
-    required this.answer,
-    this.feedback,
-    this.managerAnswer,
-    required this.createdAt,
-    required this.updatedAt,
-  });
 }

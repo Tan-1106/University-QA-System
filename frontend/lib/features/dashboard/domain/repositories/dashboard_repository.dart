@@ -5,6 +5,7 @@ import 'package:university_qa_system/features/dashboard/domain/entities/statisti
 
 abstract interface class DashboardRepository {
   Future<Either<Failure, Statistic>> loadStatisticData();
+
   Future<Either<Failure, QuestionRecords>> loadQuestionRecordsData({
     int page = 1,
     String? feedbackType,

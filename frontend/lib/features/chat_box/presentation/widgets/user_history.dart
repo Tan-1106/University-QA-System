@@ -1,0 +1,132 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/core/common/widgets/loader.dart';
+import 'package:university_qa_system/features/chat_box/domain/entities/qa_history.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
+
+class UserHistory extends StatefulWidget {
+  final void Function(QuestionRecord question)? onTap;
+
+  const UserHistory({super.key, this.onTap});
+
+  @override
+  State<UserHistory> createState() {
+    return _UserHistoryState();
+  }
+}
+
+class _UserHistoryState extends State<UserHistory> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    context.read<ChatBoxBloc>().add(GetQAHistoryEvent(page: 1));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      final state = context.read<ChatBoxBloc>().state;
+      if (state is HistoryLoaded && state.hasMore && !state.isLoadingMore) {
+        context.read<ChatBoxBloc>().add(
+          GetQAHistoryEvent(
+            page: state.currentPage + 1,
+            isLoadMore: true,
+          ),
+        );
+      }
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll - 200);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatBoxBloc, ChatBoxState>(
+      buildWhen: (previous, current) => current is HistoryLoaded || current is HistoryLoading,
+      builder: (context, state) {
+        List<QuestionRecord> history = [];
+        bool isLoadingMore = false;
+
+        if (state is HistoryLoaded) {
+          history = state.history;
+          isLoadingMore = state.isLoadingMore;
+        } else if (state is HistoryLoading) {
+          // TODO: ENHANCE LOADING STATE UI LATER
+          return const Loader();
+        }
+
+        // TODO: Enhance Later
+        if (history.isEmpty) {
+          return const Center(
+            child: Text('No history found.'),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: history.length + (isLoadingMore ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index >= history.length) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: Loader()),
+                );
+              }
+              final record = history[index];
+              return _HistoryItem(
+                record: record,
+                onTap: widget.onTap != null ? () => widget.onTap!(record) : null,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _HistoryItem extends StatelessWidget {
+  final QuestionRecord record;
+  final VoidCallback? onTap;
+
+  const _HistoryItem({required this.record, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          record.question,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}

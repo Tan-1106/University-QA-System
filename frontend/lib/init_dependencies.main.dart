@@ -110,9 +110,9 @@ void _initDashboard() {
   );
 
   serviceLocator.registerFactory<LoadDashboardQuestionRecordsUseCase>(
-      () => LoadDashboardQuestionRecordsUseCase(
-        serviceLocator(),
-      )
+    () => LoadDashboardQuestionRecordsUseCase(
+      serviceLocator(),
+    ),
   );
 
   serviceLocator.registerLazySingleton(
@@ -142,8 +142,15 @@ void _initChatBox() {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => GetQAHistoryUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => ChatBoxBloc(
+      serviceLocator(),
       serviceLocator(),
     ),
   );

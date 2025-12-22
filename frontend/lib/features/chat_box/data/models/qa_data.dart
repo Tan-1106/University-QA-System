@@ -19,8 +19,8 @@ class QAData {
     );
   }
 
-  QaRecord toEntity() {
-    return QaRecord(
+  QARecord toEntity() {
+    return QARecord(
       questionID: questionID,
       question: question,
       answer: answer,

@@ -15,7 +15,7 @@ final class DashboardStatisticLoaded extends DashboardState {
   const DashboardStatisticLoaded(this.statisticData);
 }
 
-final class DashboardDataLoaded extends DashboardState {
+ final class DashboardDataLoaded extends DashboardState {
   final Statistic statisticData;
   final List<Questions> questions;
   final int currentPage;

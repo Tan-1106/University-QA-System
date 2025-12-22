@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/dashboard/data/models/question_records_data.dart';
 import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_question_records.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_statistic.dart';
+
 
 part 'dashboard_event.dart';
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/widgets/user_history.dart';
 
 class UserShellLayout extends StatelessWidget {
   final Widget child;
@@ -60,44 +61,52 @@ class UserShellLayout extends StatelessWidget {
           bottom: false,
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'UniWise',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(),
+              ),
+              ListTile(
+                leading: const Icon(Icons.question_answer),
+                title: const Text('Hỏi đáp'),
+                selected: selectedIndex == 0,
+                onTap: () {
+                  _onItemTapped(0, context);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.document_scanner),
+                title: const Text('Tài liệu'),
+                selected: selectedIndex == 1,
+                onTap: () {
+                  _onItemTapped(1, context);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.star),
+                title: const Text('Câu hỏi phổ biến'),
+                selected: selectedIndex == 2,
+                onTap: () {
+                  _onItemTapped(2, context);
+                  Navigator.pop(context);
+                },
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(),
+              ),
               Expanded(
-                child: NavigationDrawer(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (index) {
-                    _onItemTapped(index, context);
-                    Navigator.pop(context);
-                  },
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'UniWise',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 28),
-                      child: Divider(),
-                    ),
-                    const NavigationDrawerDestination(
-                      icon: Icon(Icons.question_answer),
-                      selectedIcon: Icon(Icons.question_answer_outlined),
-                      label: Text('Hỏi đáp'),
-                    ),
-                    const NavigationDrawerDestination(
-                      icon: Icon(Icons.document_scanner),
-                      selectedIcon: Icon(Icons.document_scanner_outlined),
-                      label: Text('Tài liệu'),
-                    ),
-                    const NavigationDrawerDestination(
-                      icon: Icon(Icons.star),
-                      selectedIcon: Icon(Icons.star_outline),
-                      label: Text('Câu hỏi phổ biến'),
-                    ),
-                  ],
+                child: UserHistory(
+                  onTap: (question) { },
                 ),
               ),
               const Divider(height: 1, thickness: 1),
@@ -124,9 +133,9 @@ class UserShellLayout extends StatelessWidget {
                           children: [
                             userImageUrl != null && userImageUrl.isNotEmpty
                                 ? CircleAvatar(
-                              backgroundImage: NetworkImage(userImageUrl),
-                              onBackgroundImageError: (_, _) => const Icon(Icons.person),
-                            )
+                                    backgroundImage: NetworkImage(userImageUrl),
+                                    onBackgroundImageError: (_, _) => const Icon(Icons.person),
+                                  )
                                 : const CircleAvatar(child: Icon(Icons.person)),
                             const SizedBox(width: 16),
                             Expanded(
