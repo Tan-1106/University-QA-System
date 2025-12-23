@@ -143,7 +143,19 @@ void _initChatBox() {
   );
 
   serviceLocator.registerFactory(
+    () => SendFeedbackUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
     () => GetQAHistoryUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => ViewQARecordDetailsUseCase(
       serviceLocator(),
     ),
   );
@@ -151,6 +163,18 @@ void _initChatBox() {
   serviceLocator.registerLazySingleton(
     () => ChatBoxBloc(
       serviceLocator(),
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => HistoryBloc(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => HistoryDetailsBloc(
       serviceLocator(),
     ),
   );

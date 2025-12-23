@@ -1,29 +1,15 @@
-part of 'chat_box_bloc.dart';
+part of 'history_bloc.dart';
 
 @immutable
-sealed class ChatBoxState {
-  const ChatBoxState();
+sealed class HistoryState {
+  const HistoryState();
 }
 
-final class ChatBoxInitial extends ChatBoxState {}
+final class HistoryInitial extends HistoryState {}
 
-final class ChatBoxLoading extends ChatBoxState {}
+final class HistoryLoading extends HistoryState {}
 
-final class ChatBoxQuestionAnswered extends ChatBoxState {
-  final QARecord qaRecord;
-
-  const ChatBoxQuestionAnswered(this.qaRecord);
-}
-
-final class ChatBoxError extends ChatBoxState {
-  final String message;
-
-  const ChatBoxError(this.message);
-}
-
-final class HistoryLoading extends ChatBoxState {}
-
-final class HistoryLoaded extends ChatBoxState {
+final class HistoryLoaded extends HistoryState {
   final List<QuestionRecord> history;
   final int currentPage;
   final int totalPages;
@@ -55,8 +41,11 @@ final class HistoryLoaded extends ChatBoxState {
   }
 }
 
-final class HistoryError extends ChatBoxState {
+final class HistoryError extends HistoryState {
   final String message;
 
   const HistoryError(this.message);
 }
+
+
+

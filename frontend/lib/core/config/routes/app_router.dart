@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
+import 'package:university_qa_system/features/chat_box/presentation/pages/qa_history_record_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
@@ -112,7 +113,15 @@ final GoRouter appRouter = GoRouter(
           name: 'UserPopularQuestions',
           path: '/user-popular-questions',
           builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Questions Page'))),
-        )
+        ),
+        GoRoute(
+          name: 'QAHistoryDetails',
+          path: '/qa-history/:questionId',
+          builder: (context, state) {
+            final questionId = state.pathParameters['questionId']!;
+            return QaHistoryDetailsPage(questionId: questionId);
+          },
+        ),
       ],
     ),
 

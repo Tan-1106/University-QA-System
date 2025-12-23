@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/features/chat_box/domain/entities/qa_history.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 
 class UserHistory extends StatefulWidget {
   final void Function(QuestionRecord question)? onTap;
@@ -22,7 +22,7 @@ class _UserHistoryState extends State<UserHistory> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    context.read<ChatBoxBloc>().add(GetQAHistoryEvent(page: 1));
+    context.read<HistoryBloc>().add(GetHistoryEvent(page: 1));
   }
 
   @override
@@ -34,10 +34,10 @@ class _UserHistoryState extends State<UserHistory> {
 
   void _onScroll() {
     if (_isBottom) {
-      final state = context.read<ChatBoxBloc>().state;
+      final state = context.read<HistoryBloc>().state;
       if (state is HistoryLoaded && state.hasMore && !state.isLoadingMore) {
-        context.read<ChatBoxBloc>().add(
-          GetQAHistoryEvent(
+        context.read<HistoryBloc>().add(
+          GetHistoryEvent(
             page: state.currentPage + 1,
             isLoadMore: true,
           ),
@@ -55,8 +55,12 @@ class _UserHistoryState extends State<UserHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatBoxBloc, ChatBoxState>(
-      buildWhen: (previous, current) => current is HistoryLoaded || current is HistoryLoading,
+    return BlocBuilder<HistoryBloc, HistoryState>(
+      buildWhen: (previous, current) {
+        return current is HistoryLoading ||
+            current is HistoryLoaded ||
+            current is HistoryError;
+      },
       builder: (context, state) {
         List<QuestionRecord> history = [];
         bool isLoadingMore = false;
@@ -65,7 +69,6 @@ class _UserHistoryState extends State<UserHistory> {
           history = state.history;
           isLoadingMore = state.isLoadingMore;
         } else if (state is HistoryLoading) {
-          // TODO: ENHANCE LOADING STATE UI LATER
           return const Loader();
         }
 

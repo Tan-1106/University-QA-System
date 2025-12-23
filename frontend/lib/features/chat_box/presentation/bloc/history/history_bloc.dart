@@ -1,49 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/chat_box/domain/entities/qa_history.dart';
-import 'package:university_qa_system/features/chat_box/domain/entities/qa_record.dart';
-import 'package:university_qa_system/features/chat_box/domain/use_cases/ask_question.dart';
 import 'package:university_qa_system/features/chat_box/domain/use_cases/get_qa_history.dart';
 
-part 'chat_box_event.dart';
+part 'history_event.dart';
 
-part 'chat_box_state.dart';
+part 'history_state.dart';
 
-class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
-  final AskQuestionUseCase _askQuestion;
+class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   final GetQAHistoryUseCase _getQAHistory;
 
   List<QuestionRecord> _qaHistory = [];
   int _currentPage = 0;
   int _totalPages = 1;
 
-  ChatBoxBloc(
-    AskQuestionUseCase askQuestion,
+  HistoryBloc(
     GetQAHistoryUseCase getQAHistory,
-  ) : _askQuestion = askQuestion,
-      _getQAHistory = getQAHistory,
-      super(
-        ChatBoxInitial(),
-      ) {
-    on<AskQuestionEvent>(_onAskQuestion);
-    on<GetQAHistoryEvent>(_onGetQAHistory);
+  ) : _getQAHistory = getQAHistory,
+      super(HistoryInitial()) {
+    on<GetHistoryEvent>(_onGetHistory);
   }
 
-  void _onAskQuestion(AskQuestionEvent event, Emitter<ChatBoxState> emit) async {
-    emit(ChatBoxLoading());
-
-    final result = await _askQuestion(AskQuestionParams(question: event.question));
-
-    result.fold(
-      (failure) => emit(ChatBoxError(failure.message)),
-      (qaRecord) => emit(ChatBoxQuestionAnswered(qaRecord)),
-    );
-  }
-
-  void _onGetQAHistory(
-    GetQAHistoryEvent event,
-    Emitter<ChatBoxState> emit,
+  void _onGetHistory(
+    GetHistoryEvent event,
+    Emitter<HistoryState> emit,
   ) async {
     if (event.isLoadMore) {
       if (state is HistoryLoaded) {

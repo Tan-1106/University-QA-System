@@ -25,7 +25,12 @@ import 'package:university_qa_system/features/chat_box/data/data_sources/chat_bo
 import 'package:university_qa_system/features/chat_box/data/repositories/chat_box_repository_impl.dart';
 import 'package:university_qa_system/features/chat_box/domain/repositories/chat_box_repository.dart';
 import 'package:university_qa_system/features/chat_box/domain/use_cases/ask_question.dart';
+import 'package:university_qa_system/features/chat_box/domain/use_cases/send_feedback.dart';
 import 'package:university_qa_system/features/chat_box/domain/use_cases/get_qa_history.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/domain/use_cases/view_qa_record_details.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
+
 
 part 'init_dependencies.main.dart';

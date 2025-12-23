@@ -3,14 +3,24 @@ import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
 import 'package:university_qa_system/features/chat_box/data/models/qa_data.dart';
 import 'package:university_qa_system/features/chat_box/data/models/qa_history_data.dart';
+import 'package:university_qa_system/features/chat_box/data/models/qa_record_details_data.dart';
 
 abstract interface class ChatBoxRemoteDataSource {
   Future<QAData> askQuestion({
     required String question,
   });
 
+  Future<bool> sendFeedback({
+    required String questionID,
+    required String feedback,
+  });
+
   Future<QAHistoryData> getQAHistory({
     required int page,
+  });
+
+  Future<QARecordDetailsData> getQARecordDetails({
+    required String questionID,
   });
 }
 
@@ -53,6 +63,33 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
   }
 
   @override
+  Future<bool> sendFeedback({
+    required String questionID,
+    required String feedback,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/api/qa/feedback/$questionID',
+        data: {'feedback': feedback},
+      );
+
+      if (response.statusCode != 200) {
+        throw ServerException('Failed to send feedback');
+      }
+
+      return true;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
   Future<QAHistoryData> getQAHistory({required int page}) async {
     try {
       final response = await _dio.get(
@@ -73,6 +110,40 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
         }
       } else {
         throw ServerException('Failed to retrieve QA history data');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<QARecordDetailsData> getQARecordDetails({
+    required String questionID,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '/api/qa/$questionID',
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        final apiResponse = ApiResponse<QARecordDetailsData>.fromJson(
+          response.data as Map<String, dynamic>,
+          (json) => QARecordDetailsData.fromJson(json as Map<String, dynamic>),
+        );
+
+        if (apiResponse.details != null) {
+          return apiResponse.details!;
+        } else {
+          throw ServerException('QA record details are missing in the response');
+        }
+      } else {
+        throw ServerException('Failed to retrieve QA record details');
       }
     } on DioException catch (e) {
       if (e.response != null) {

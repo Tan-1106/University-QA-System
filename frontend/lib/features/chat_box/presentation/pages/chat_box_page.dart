@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/widgets/system_answer.dart';
 import 'package:university_qa_system/features/chat_box/presentation/widgets/system_thinking.dart';
 import 'package:university_qa_system/features/chat_box/presentation/widgets/user_question.dart';
@@ -17,6 +17,13 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
   String _submittedQuestion = '';
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _submittedQuestion = '';
+    context.read<ChatBoxBloc>().add(ResetChatBoxEvent());
+  }
 
   @override
   void dispose() {
@@ -72,7 +79,17 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
                         if (state is ChatBoxQuestionAnswered)
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: SystemAnswer(answer: state.qaRecord.answer),
+                            child: SystemAnswer(
+                              answer: state.qaRecord.answer,
+                              onFeedbackTap: (feedback) {
+                                context.read<ChatBoxBloc>().add(
+                                  SendFeedbackEvent(
+                                    questionID: state.qaRecord.questionID,
+                                    feedback: feedback,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                       ],
                     ),

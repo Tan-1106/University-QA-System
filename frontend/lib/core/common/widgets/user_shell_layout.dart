@@ -106,7 +106,10 @@ class UserShellLayout extends StatelessWidget {
               ),
               Expanded(
                 child: UserHistory(
-                  onTap: (question) { },
+                  onTap: (question) {
+                    context.go('/qa-history/${question.id}');
+                    Navigator.pop(context);
+                  },
                 ),
               ),
               const Divider(height: 1, thickness: 1),

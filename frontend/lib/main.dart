@@ -1,5 +1,6 @@
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
+import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 import 'core/config/theme/theme.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/config/routes/app_router.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
+
+import 'features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +26,8 @@ Future<void> main() async {
         BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
         BlocProvider(create: (_) => serviceLocator<DashboardBloc>()),
         BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
+        BlocProvider(create: (_) => serviceLocator<HistoryBloc>()),
+        BlocProvider(create: (_) => serviceLocator<HistoryDetailsBloc>()),
       ],
       child: const MyApp(),
     ),

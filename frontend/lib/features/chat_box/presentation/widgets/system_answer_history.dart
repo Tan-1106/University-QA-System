@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 
-class SystemAnswer extends StatefulWidget {
+class SystemAnswerHistory extends StatelessWidget {
   final String answer;
-  final Function(String feedback)? onFeedbackTap;
+  final String? feedback;
 
-  const SystemAnswer({
+  const SystemAnswerHistory({
     super.key,
     required this.answer,
-    required this.onFeedbackTap,
+    required this.feedback,
   });
-
-  @override
-  State<SystemAnswer> createState() {
-    return _SystemAnswerState();
-  }
-}
-
-class _SystemAnswerState extends State<SystemAnswer> {
-  String currentFeedback = '';
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +40,7 @@ class _SystemAnswerState extends State<SystemAnswer> {
                     vertical: 12,
                   ),
                   child: Text(
-                    widget.answer,
-                    softWrap: true,
+                    answer,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
@@ -60,39 +50,21 @@ class _SystemAnswerState extends State<SystemAnswer> {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              onPressed: () {
-                if (widget.onFeedbackTap != null) {
-                  setState(() {
-                    currentFeedback = 'Like';
-                  });
-                  widget.onFeedbackTap!('Like');
-                }
-              },
-              icon: Icon(
-                Icons.thumb_up,
-                color: currentFeedback == 'Like' ? Colors.green : Colors.grey,
+        if (feedback != null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Phản hồi của bạn: ',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                if (widget.onFeedbackTap != null) {
-                  setState(() {
-                    currentFeedback = 'Dislike';
-                  });
-                  widget.onFeedbackTap!('Dislike');
-                }
-              },
-              icon: Icon(
-                Icons.thumb_down,
-                color: currentFeedback == 'Dislike' ? Colors.red : Colors.grey,
+              Icon(
+                feedback == 'Like' ? Icons.thumb_up : Icons.thumb_down,
+                color: feedback == 'Like' ? Colors.green : Colors.red,
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
       ],
     );
   }
