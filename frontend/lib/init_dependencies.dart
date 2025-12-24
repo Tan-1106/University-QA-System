@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/get_general_documents.dart';
 import 'core/network/auth_interceptor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:university_qa_system/core/network/connection_checker.dart';
@@ -15,7 +16,7 @@ import 'package:university_qa_system/features/authentication/domain/use_cases/ve
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
 import 'package:university_qa_system/features/dashboard/data/data_sources/dashboard_remote_data_source.dart';
-import 'package:university_qa_system/features/dashboard/data/repository/dashboard_repository_impl.dart';
+import 'package:university_qa_system/features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import 'package:university_qa_system/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_question_records.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_statistic.dart';
@@ -32,5 +33,13 @@ import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/ch
 import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
 
+import 'package:university_qa_system/features/document/data/data_sources/document_remote_data_source.dart';
+import 'package:university_qa_system/features/document/data/repositories/document_repository_impl.dart';
+import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
+
+import 'features/document/domain/use_cases/get_faculty_documents.dart';
 
 part 'init_dependencies.main.dart';

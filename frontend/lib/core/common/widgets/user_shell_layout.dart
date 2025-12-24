@@ -34,7 +34,7 @@ class UserShellLayout extends StatelessWidget {
   String _getTitle(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
-        return 'Hỏi đáp';
+        return 'Đặt câu hỏi';
       case 1:
         return 'Tài liệu';
       case 2:
@@ -75,7 +75,7 @@ class UserShellLayout extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.question_answer),
-                title: const Text('Hỏi đáp'),
+                title: const Text('Đặt câu hỏi'),
                 selected: selectedIndex == 0,
                 onTap: () {
                   _onItemTapped(0, context);

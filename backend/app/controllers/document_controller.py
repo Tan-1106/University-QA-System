@@ -358,7 +358,7 @@ async def view_document_file(doc_id: str, current_user: dict = None):
         if document["faculty"] is not None and document["faculty"] != current_user["faculty"]:
             raise AuthException("You do not have permission to view this document.")
     
-    file_name, file_content = await document_service.view_document_file(doc_id)
+    file_name, file_path, file_size = await document_service.view_document_file(doc_id)
     base_name = os.path.splitext(file_name)[0]
     
     display_name = f"{base_name}.pdf"
@@ -366,11 +366,20 @@ async def view_document_file(doc_id: str, current_user: dict = None):
     utf8_encoded = quote(display_name)
     content_disposition = f"inline; filename=\"{ascii_fallback}\"; filename*=UTF-8''{utf8_encoded}"
 
+    # Generator function for streaming file content
+    async def file_iterator():
+        chunk_size = 64 * 1024  # 64KB chunks for efficient streaming
+        with open(file_path, "rb") as f:
+            while chunk := f.read(chunk_size):
+                yield chunk
+
     return StreamingResponse(
-        file_content,
+        file_iterator(),
         media_type="application/pdf",
         headers={
             "Content-Disposition": content_disposition,
+            "Content-Length": str(file_size),
+            "Accept-Ranges": "bytes",
             "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
             "Pragma": "no-cache",
             "Expires": "0",

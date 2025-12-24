@@ -7,6 +7,7 @@ Future<void> initDependencies() async {
   _initAuth();
   _initDashboard();
   _initChatBox();
+  _initDocument();
 }
 
 Future<void> _initCore() async {
@@ -175,6 +176,51 @@ void _initChatBox() {
 
   serviceLocator.registerLazySingleton(
     () => HistoryDetailsBloc(
+      serviceLocator(),
+    ),
+  );
+}
+
+void _initDocument() {
+  serviceLocator.registerFactory<DocumentRemoteDataSource>(
+    () => DocumentRemoteDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<DocumentRepository>(
+    () => DocumentRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<GetExistingFiltersUseCase>(
+    () => GetExistingFiltersUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<GetGeneralDocumentsUseCase>(
+    () => GetGeneralDocumentsUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<GetFacultyDocumentsUseCase>(
+    () => GetFacultyDocumentsUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DocumentFilterBloc(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DocumentListBloc(
+      serviceLocator(),
       serviceLocator(),
     ),
   );

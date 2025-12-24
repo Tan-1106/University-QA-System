@@ -2,6 +2,7 @@ import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 
 import 'core/config/theme/theme.dart';
 import 'core/utils/create_theme.dart';
@@ -13,6 +14,7 @@ import 'package:university_qa_system/core/config/routes/app_router.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
 import 'features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
+import 'features/document/presentation/bloc/document_list/document_list_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +30,13 @@ Future<void> main() async {
         BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
         BlocProvider(create: (_) => serviceLocator<HistoryBloc>()),
         BlocProvider(create: (_) => serviceLocator<HistoryDetailsBloc>()),
+        BlocProvider(create: (_) => serviceLocator<DocumentFilterBloc>()),
+        BlocProvider(create: (_) => serviceLocator<DocumentListBloc>()),
       ],
       child: const MyApp(),
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -187,7 +187,7 @@ async def update_document_record(doc_id: str, data: dict):
     return jsonable_encoder(updated_document)
 
 
-# View document file
+# View document file - returns file info for streaming
 async def view_document_file(doc_id: str):
     doc = await DocumentDAO().get_document_by_id(doc_id)
     doc = jsonable_encoder(doc)
@@ -198,10 +198,6 @@ async def view_document_file(doc_id: str):
     if not os.path.exists(file_path):
         raise FileNotFoundError("Document file not found")
     
-    loop = asyncio.get_event_loop()
-    file_content = await loop.run_in_executor(
-        None,
-        lambda: open(file_path, "rb").read()
-    )
-    
-    return file_name, BytesIO(file_content)
+    file_size = os.path.getsize(file_path)
+
+    return file_name, file_path, file_size

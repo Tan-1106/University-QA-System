@@ -1,4 +1,4 @@
-part of 'dashboard_bloc.dart';
+ part of 'dashboard_bloc.dart';
 
 @immutable
 sealed class DashboardState {
