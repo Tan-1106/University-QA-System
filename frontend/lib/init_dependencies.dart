@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_general_documents.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/view_document.dart';
 import 'core/network/auth_interceptor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:university_qa_system/core/network/connection_checker.dart';
@@ -41,5 +42,6 @@ import 'package:university_qa_system/features/document/presentation/bloc/documen
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 
 import 'features/document/domain/use_cases/get_faculty_documents.dart';
+import 'features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
 
 part 'init_dependencies.main.dart';

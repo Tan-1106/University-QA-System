@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/features/document/domain/entities/documents.dart';
 import 'package:university_qa_system/features/document/domain/entities/filters.dart';
+import 'package:university_qa_system/features/document/domain/entities/pdf_bytes.dart';
 
 abstract interface class DocumentRepository {
   Future<Either<Failure, Filters>> loadDocumentFilters();
@@ -14,4 +15,5 @@ abstract interface class DocumentRepository {
     String? documentType,
     String? keyword,
   });
+  Future<Either<Failure, PDFBytes>> viewDocument(String documentId);
 }

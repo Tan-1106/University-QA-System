@@ -212,6 +212,12 @@ void _initDocument() {
     ),
   );
 
+  serviceLocator.registerFactory<ViewDocumentUseCase>(
+    () => ViewDocumentUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => DocumentFilterBloc(
       serviceLocator(),
@@ -221,6 +227,12 @@ void _initDocument() {
   serviceLocator.registerLazySingleton(
     () => DocumentListBloc(
       serviceLocator(),
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DocumentViewerBloc(
       serviceLocator(),
     ),
   );

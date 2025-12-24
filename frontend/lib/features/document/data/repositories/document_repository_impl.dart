@@ -2,9 +2,11 @@ import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/features/document/domain/entities/filters.dart';
+import 'package:university_qa_system/features/document/domain/entities/pdf_bytes.dart';
 import 'package:university_qa_system/features/document/domain/entities/documents.dart';
-import 'package:university_qa_system/features/document/data/data_sources/document_remote_data_source.dart';
 import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
+import 'package:university_qa_system/features/document/data/data_sources/document_remote_data_source.dart';
+
 
 
 class DocumentRepositoryImpl implements DocumentRepository {
@@ -51,6 +53,16 @@ class DocumentRepositoryImpl implements DocumentRepository {
         keyword: keyword,
       );
       return right(documentsData.toEntity());
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PDFBytes>> viewDocument(String documentId) async {
+    try {
+      final pdfBytesData = await remoteDataSource.viewDocument(documentId);
+      return right(pdfBytesData.toEntity());
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

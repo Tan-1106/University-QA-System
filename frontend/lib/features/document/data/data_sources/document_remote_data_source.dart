@@ -1,9 +1,10 @@
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/document/data/models/documents_data.dart';
-import 'package:university_qa_system/features/document/data/models/filters_data.dart';
-
 import 'package:university_qa_system/core/common/api_response.dart';
+import 'package:university_qa_system/features/document/data/models/filters_data.dart';
+import 'package:university_qa_system/features/document/data/models/documents_data.dart';
+import 'package:university_qa_system/features/document/data/models/pdf_bytes_data.dart';
 
 abstract interface class DocumentRemoteDataSource {
   Future<FiltersData> fetchDocumentFilters();
@@ -20,6 +21,8 @@ abstract interface class DocumentRemoteDataSource {
     String? docType,
     String? keyword,
   });
+
+  Future<PDFBytesData> viewDocument(String documentId);
 }
 
 class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
@@ -137,6 +140,33 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         }
       } else {
         throw ServerException('Failed to retrieve documents data');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<PDFBytesData> viewDocument(String documentId) async {
+    try {
+      final response = await _dio.get(
+        '/api/documents/view/$documentId',
+        options: Options(
+          responseType: ResponseType.bytes,
+        ),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        final bytes = Uint8List.fromList(response.data);
+        return PDFBytesData(bytes);
+      } else {
+        throw ServerException('Failed to retrieve document bytes');
       }
     } on DioException catch (e) {
       if (e.response != null) {

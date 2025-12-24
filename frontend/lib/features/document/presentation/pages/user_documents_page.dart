@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/department_filter.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/document_list.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
@@ -187,7 +189,8 @@ class _UserDocumentsPageState extends State<UserDocumentsPage> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: DocumentList(
                 onDocumentTap: (documentId) {
-
+                  context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));
+                  context.push('/document-viewer');
                 },
                 selectedOption: _selectedType,
               ),
