@@ -4,6 +4,7 @@ import 'package:university_qa_system/features/chat_box/presentation/bloc/history
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
+import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq_bloc.dart';
 
 import 'core/config/theme/theme.dart';
 import 'core/utils/create_theme.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => serviceLocator<DocumentFilterBloc>()),
         BlocProvider(create: (_) => serviceLocator<DocumentListBloc>()),
         BlocProvider(create: (_) => serviceLocator<DocumentViewerBloc>()),
+        BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),
       ],
       child: const MyApp(),
     ),
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
       routerConfig: appRouter,
       theme: theme.light(),
       darkTheme: theme.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
     );
   }

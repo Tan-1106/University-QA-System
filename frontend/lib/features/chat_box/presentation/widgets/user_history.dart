@@ -114,8 +114,7 @@ class _HistoryItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Text(
           record.question,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(

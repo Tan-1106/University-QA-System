@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/core/utils/format_date.dart';
 import 'package:university_qa_system/features/document/domain/entities/documents.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
@@ -73,7 +74,7 @@ class _DocumentListState extends State<DocumentList> {
           documents = state.documents;
           isLoadingMore = state.isLoadingMore;
         } else if (state is DocumentListLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: Loader());
         }
 
         if (documents.isEmpty) {
@@ -87,7 +88,7 @@ class _DocumentListState extends State<DocumentList> {
             if (index >= documents.length) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(child: Loader()),
               );
             }
             final document = documents[index];

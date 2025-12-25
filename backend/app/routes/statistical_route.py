@@ -52,6 +52,23 @@ async def get_popular_questions(
         message="Get popular questions statistics records successfully.",
         details=result   
     )
+
+
+# Get popular question statistics records for student
+@router.get("/popular-questions-student")
+async def get_popular_questions_student(
+        page: int = Query(1, ge=1),
+        limit: int = Query(10, ge=1, le=100),
+        faculty_only: bool = False,
+        current_user=Depends(auth_service.get_current_user)
+):
+    current_user = jsonable_encoder(current_user)
+    result = await statistical_controller.get_popular_questions_student(page, limit, faculty_only, current_user)
+    return api_response(
+        status_code=200,
+        message="Get popular questions statistics records successfully.",
+        details=result
+    )
     
 
 # Toggle popular question display status

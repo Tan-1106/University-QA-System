@@ -8,6 +8,7 @@ Future<void> initDependencies() async {
   _initDashboard();
   _initChatBox();
   _initDocument();
+  _initPopularQuestions();
 }
 
 Future<void> _initCore() async {
@@ -233,6 +234,32 @@ void _initDocument() {
 
   serviceLocator.registerLazySingleton(
     () => DocumentViewerBloc(
+      serviceLocator(),
+    ),
+  );
+}
+
+void _initPopularQuestions() {
+  serviceLocator.registerFactory<PopularQuestionDataSource>(
+    () => PopularQuestionDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<PopularQuestionsRepository>(
+    () => PopularQuestionsRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadStudentPopularQuestionsUseCase>(
+    () => LoadStudentPopularQuestionsUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => StudentPQBloc(
       serviceLocator(),
     ),
   );

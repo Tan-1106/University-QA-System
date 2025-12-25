@@ -10,14 +10,14 @@ import 'package:university_qa_system/features/document/presentation/widgets/docu
 import 'package:university_qa_system/features/document/presentation/widgets/document_type_filter.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/keyword_textfield.dart';
 
-class UserDocumentsPage extends StatefulWidget {
-  const UserDocumentsPage({super.key});
+class DocumentsPage extends StatefulWidget {
+  const DocumentsPage({super.key});
 
   @override
-  State<UserDocumentsPage> createState() => _UserDocumentsPageState();
+  State<DocumentsPage> createState() => _DocumentsPageState();
 }
 
-class _UserDocumentsPageState extends State<UserDocumentsPage> {
+class _DocumentsPageState extends State<DocumentsPage> {
   DocumentSegmentedButtonOptions _selectedType = DocumentSegmentedButtonOptions.general;
   String? _selectedDepartment;
   String? _selectedDocumentType;

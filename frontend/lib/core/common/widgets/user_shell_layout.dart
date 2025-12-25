@@ -14,6 +14,7 @@ class UserShellLayout extends StatelessWidget {
 
     if (location.startsWith('/user-documents')) return 1;
     if (location.startsWith('/user-popular-questions')) return 2;
+    if (location.startsWith('/document-viewer')) return 3;
     return 0;
   }
 
@@ -28,6 +29,9 @@ class UserShellLayout extends StatelessWidget {
       case 2:
         context.go('/user-popular-questions');
         break;
+      case 3:
+        context.go('/document-viewer');
+        break;
     }
   }
 
@@ -39,6 +43,8 @@ class UserShellLayout extends StatelessWidget {
         return 'Tài liệu';
       case 2:
         return 'Câu hỏi phổ biến';
+      case 3:
+        return 'Xem tài liệu';
       default:
         return 'User Panel';
     }

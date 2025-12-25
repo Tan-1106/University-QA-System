@@ -3,6 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_general_documents.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/view_document.dart';
+import 'package:university_qa_system/features/popular_question/data/data_sources/popular_question_data_source.dart';
+import 'package:university_qa_system/features/popular_question/data/repositories/popular_questions_repository_impl.dart';
+import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
+import 'package:university_qa_system/features/popular_question/domain/use_cases/load_student_popular_questions.dart';
 import 'core/network/auth_interceptor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:university_qa_system/core/network/connection_checker.dart';
@@ -43,5 +47,6 @@ import 'package:university_qa_system/features/document/presentation/bloc/documen
 
 import 'features/document/domain/use_cases/get_faculty_documents.dart';
 import 'features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
+import 'features/popular_question/presentation/bloc/student_pq_bloc.dart';
 
 part 'init_dependencies.main.dart';

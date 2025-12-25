@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/qa_history_record_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
-import 'package:university_qa_system/features/document/presentation/pages/user_documents_page.dart';
+import 'package:university_qa_system/features/document/presentation/pages/documents_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
+import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
 import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
@@ -109,12 +110,12 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'UserDocuments',
           path: '/user-documents',
-          builder: (context, state) => const UserDocumentsPage(),
+          builder: (context, state) => const DocumentsPage(),
         ),
         GoRoute(
           name: 'UserPopularQuestions',
           path: '/user-popular-questions',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Popular Questions Page'))),
+          builder: (context, state) => const StudentPopularQuestionsPage(),
         ),
         GoRoute(
           name: 'QAHistoryDetails',
