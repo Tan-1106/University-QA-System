@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/widgets/sign_in_button.dart';
+import 'package:university_qa_system/features/authentication/presentation/widgets/elit_sign_in_button.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -22,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
     context.read<AuthBloc>().add(AuthVerifyUserAccessEvent());
   }
 
-  void _handleSignInClick(BuildContext context) async {
+  void _handleELITSignInClick(BuildContext context) async {
     final result = await context.pushNamed<Map<String, dynamic>>('authWebview');
 
     if (!context.mounted) return;
@@ -44,7 +44,6 @@ class _SignInPageState extends State<SignInPage> {
     context.read<AuthBloc>().add(AuthSignInWithELITEvent(authCode: serverCode));
   }
 
-
   @override
   Widget build(context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
@@ -56,11 +55,7 @@ class _SignInPageState extends State<SignInPage> {
           horizontal: 20,
         ),
         child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthFailure) {
-              showSnackBar(context, state.message);
-            }
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             if (state is AuthLoading) return Loader();
             return Center(
@@ -85,7 +80,13 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(
                     width: 340,
                     child: SignInButton(
-                      onSignInClick: () => _handleSignInClick(context),
+                      onSignInClick: () { context.push('/system-sign-in'); },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 340,
+                    child: ElitSignInButton(
+                      onSignInClick: () => _handleELITSignInClick(context),
                     ),
                   ),
                 ],

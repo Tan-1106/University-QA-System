@@ -62,7 +62,8 @@ class AdminShellLayout extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_getTitle(selectedIndex),
+        title: Text(
+          _getTitle(selectedIndex),
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -137,7 +138,10 @@ class AdminShellLayout extends StatelessWidget {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.go('/information-and-logout');
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         width: double.infinity,

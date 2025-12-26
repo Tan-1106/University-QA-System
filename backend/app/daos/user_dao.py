@@ -271,3 +271,45 @@ class UserDAO:
             raise DatabaseException("User not found")
         updated_user = await self.users_collection.find_one({"_id": ObjectId(user_id)})
         return user_schema.UserRecord(**serializer.user_serialize(updated_user))
+    
+    
+    # Register user
+    async def register_user(self, register_data: dict) -> user_schema.UserRecord:
+        existing_user = await self.users_collection.find_one({
+            "$or": [
+                {"sub": register_data["student_id"]},
+                {"email": register_data["email"]}
+            ]
+        })
+
+        if existing_user:
+            raise DatabaseException("User with the given student ID or email already exists")
+        
+        new_user_record = {
+            "sub": register_data["student_id"],
+            "name": register_data["name"],
+            "email": register_data["email"],
+            "image": "https://placehold.co/400",
+            "role": Role.STUDENT.value,
+            "faculty": register_data["faculty"],
+            "is_faculty_manager": False,
+            "system_role_assigned": True,
+            "banned": False,
+            "created_at": datetime.now(timezone.utc),
+            "password": register_data["password"]
+        }
+        
+        result = await self.users_collection.insert_one(new_user_record)
+        created_user = await self.users_collection.find_one({"_id": result.inserted_id})
+        if not created_user:
+            raise DatabaseException("Failed to create user")
+            
+        return user_schema.UserRecord(**serializer.user_serialize(created_user))
+    
+    
+    # Get user by email
+    async def get_user_by_email(self, email: str) -> user_schema.UserRecord:
+        user = await self.users_collection.find_one({"email": email})
+        if not user:
+            raise DatabaseException("User not found")
+        return user_schema.UserRecord(**serializer.user_serialize(user))

@@ -16,6 +16,7 @@ class UserRecord(BaseModel):
     is_faculty_manager: bool
     system_role_assigned: bool
     banned: bool
+    password: Optional[str] = None
     created_at: datetime
     class Config:
         from_attributes = True

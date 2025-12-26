@@ -31,7 +31,16 @@ Future<void> _initCore() async {
   // Dio Client
   serviceLocator.registerLazySingleton<Dio>(() {
     final dio = Dio();
-    final baseUrl = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+    var envBaseUrl = dotenv.env['BASE_URL'];
+    String baseUrl;
+    if (envBaseUrl != null && envBaseUrl.isNotEmpty) {
+      if (!envBaseUrl.startsWith('http')) {
+        envBaseUrl = 'https://$envBaseUrl';
+      }
+      baseUrl = envBaseUrl.endsWith('/') ? envBaseUrl.substring(0, envBaseUrl.length - 1) : envBaseUrl;
+    } else {
+      baseUrl = Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+    }
 
     dio.options = BaseOptions(
       baseUrl: baseUrl,
@@ -73,6 +82,18 @@ void _initAuth() {
   );
 
   serviceLocator.registerFactory(
+    () => SystemAccountRegistrationUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
+    () => SignInWithSystemAccountUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory(
     () => SignInWithELITUseCase(
       serviceLocator(),
     ),
@@ -84,8 +105,17 @@ void _initAuth() {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => LogOutUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => AuthBloc(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
     ),
@@ -258,9 +288,22 @@ void _initPopularQuestions() {
     ),
   );
 
+  serviceLocator.registerFactory<LoadAdminPopularQuestionsUseCase>(
+    () => LoadAdminPopularQuestionsUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => StudentPQBloc(
       serviceLocator(),
     ),
+  );
+
+  serviceLocator.registerLazySingleton(
+      () => AdminPQBloc(
+        serviceLocator(),
+        serviceLocator(),
+      )
   );
 }

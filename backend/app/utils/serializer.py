@@ -11,6 +11,7 @@ def user_serialize(user) -> dict:
         "is_faculty_manager": user.get("is_faculty_manager", False),
         "system_role_assigned": user.get("system_role_assigned", False),
         "banned": user.get("banned", False),
+        "password": user.get("password"),
         "created_at": user.get("created_at").isoformat() if user.get("created_at") else None
     }
     

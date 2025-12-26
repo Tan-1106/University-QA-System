@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/popular_question/domain/entities/popular_questions.dart';
-import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq_bloc.dart';
+import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/student_pq_list.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/student_pq_segmented_button.dart';
 

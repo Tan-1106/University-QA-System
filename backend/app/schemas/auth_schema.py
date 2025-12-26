@@ -45,3 +45,22 @@ class RefreshTokensRequest(BaseModel):
     refresh_token: str = Field(..., description="JWT refresh token")
     class Config:
         extra = "forbid"
+        
+        
+# Register Schema
+class RegisterRequest(BaseModel):
+    name: str = Field(..., description="Full name of the user")
+    email: EmailStr = Field(..., description="Email address of the user")
+    student_id: str = Field(..., description="Student ID of the user")
+    faculty: str = Field(..., description="Faculty name of the user")
+    password: str = Field(..., description="Password for the user account")
+    class Config:
+        extra = "forbid"
+        
+        
+# Login Schema
+class LoginRequest(BaseModel):
+    email: str = Field(..., description="Email address of the user")
+    password: str = Field(..., description="Password for the user account")
+    class Config:
+        extra = "forbid"

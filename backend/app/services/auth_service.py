@@ -266,3 +266,41 @@ def has_faculty_access(required_faculty: str):
             raise AuthException("Permission denied: User does not have access to this faculty.")
         return current_user
     return permission_checker
+
+
+# Register user
+async def register_user(register_data: dict) -> dict:
+    register_data["password"] = await asyncio.to_thread(hasher.hash, register_data["password"])
+    user = await UserDAO().register_user(register_data)
+    user = jsonable_encoder(user)
+    return user
+
+
+# Login user
+async def login_user(email: str, password: str) -> dict:
+    user = await UserDAO().get_user_by_email(email)
+    if not user:
+        raise AuthException("Invalid email or password.")
+    
+    password_valid = await asyncio.to_thread(hasher.verify, password, user.password)
+    if not password_valid:
+        raise AuthException("Invalid email or password.")
+    
+    user = jsonable_encoder(user)
+    
+    if user["banned"]:
+        raise AuthException("User is banned from the system.")
+    
+    access_token, refresh_token = await generate_tokens(user)
+    
+    # Hash tokens in thread pool to avoid blocking
+    hashed_access, hashed_refresh = await asyncio.gather(
+        asyncio.to_thread(hasher.hash, access_token),
+        asyncio.to_thread(hasher.hash, refresh_token)
+    )
+    await TokenDAO().create_tokens(user["sub"], hashed_access, hashed_refresh)
+    
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    }

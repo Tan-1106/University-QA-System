@@ -134,7 +134,10 @@ class UserShellLayout extends StatelessWidget {
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.go('/information-and-logout');
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         width: double.infinity,

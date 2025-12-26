@@ -49,3 +49,26 @@ async def refresh_tokens(refresh_token: auth_schema.RefreshTokensRequest):
         message="Refresh tokens successful.",
         details=tokens
     )
+
+# Register
+@router.post("/register")
+async def register_user(register_request: auth_schema.RegisterRequest):
+    register_data = jsonable_encoder(register_request)
+    user = await auth_controller.register_user(register_data)
+    return api_response(
+        status_code=201,
+        message="User registration successful.",
+        details=user
+    )
+    
+    
+# Login with username and password
+@router.post("/login")
+async def login_user(login_request: auth_schema.LoginRequest):
+    login_data = jsonable_encoder(login_request)
+    tokens = await auth_controller.login_user(login_data)
+    return api_response(
+        status_code=200,
+        message="User login successful.",
+        details=tokens
+    )

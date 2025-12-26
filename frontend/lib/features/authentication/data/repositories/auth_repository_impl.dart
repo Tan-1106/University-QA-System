@@ -16,6 +16,49 @@ class AuthRepositoryImpl implements AuthRepository {
   );
 
   @override
+  Future<Either<Failure, bool>> registerSystemAccount(
+    String name,
+    String email,
+    String studentId,
+    String faculty,
+    String password,
+  ) async {
+    try {
+      await remoteDataSource.registerSystemAccount(
+        name,
+        email,
+        studentId,
+        faculty,
+        password,
+      );
+      return right(true);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> signInWithSystemAccount(
+    String email,
+    String password,
+  ) async {
+    try {
+      final tokens = await remoteDataSource.signInWithSystemAccount(email, password);
+      if (tokens.accessToken.isEmpty || tokens.refreshToken.isEmpty) {
+        return left(Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
+      } else {
+        await secureStorageService.saveTokens(tokens.accessToken, tokens.refreshToken);
+      }
+
+      final currentUser = await remoteDataSource.getUserInformation();
+      final userEntity = currentUser.toEntity();
+      return right(userEntity);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, User>> signInWithELIT(String authCode) async {
     try {
       final userDetails = await remoteDataSource.signInWithELIT(authCode);
@@ -41,6 +84,23 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final userEntity = currentUser.toEntity();
       return right(userEntity);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> signOut() async {
+    try {
+      final refreshToken = await secureStorageService.getRefreshToken();
+
+      final result = await remoteDataSource.signOut(refreshToken!);
+      if (result) {
+        await secureStorageService.deleteAll();
+        return right(true);
+      } else {
+        return left(Failure('Đăng xuất thất bại'));
+      }
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
