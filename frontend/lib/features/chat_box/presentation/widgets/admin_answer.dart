@@ -26,19 +26,19 @@ class _SystemAnswerState extends State<AdminAnswer> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              backgroundImage: const AssetImage('assets/images/admin.png'),
+            const CircleAvatar(
+              backgroundImage: AssetImage('assets/images/admin.png'),
               radius: 20,
             ),
             Flexible(
               child: Card(
                 color: Theme.of(context).colorScheme.tertiaryContainer,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadiusGeometry.directional(
-                    bottomEnd: const Radius.circular(20),
-                    bottomStart: const Radius.circular(20),
-                    topEnd: const Radius.circular(20),
-                    topStart: const Radius.circular(0),
+                    bottomEnd: Radius.circular(20),
+                    bottomStart: Radius.circular(20),
+                    topEnd: Radius.circular(20),
+                    topStart: Radius.circular(0),
                   ),
                 ),
                 child: Padding(

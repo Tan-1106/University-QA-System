@@ -44,6 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _systemAccountRegistration(
       SystemAccountRegistrationParams(
         name: event.name,
@@ -65,6 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _signInWithSystemAccount(
       SignInWithSystemAccountParams(
         email: event.email,
@@ -83,6 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _signInWithELIT(VerifyParams(authCode: event.authCode));
 
     result.fold(
@@ -96,6 +99,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _verifyUserAccess.call(NoParams());
 
     result.fold(
@@ -116,6 +120,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
+
     final result = await _logOut.call(NoParams());
 
     result.fold(

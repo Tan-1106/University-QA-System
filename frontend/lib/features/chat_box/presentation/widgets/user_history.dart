@@ -57,24 +57,29 @@ class _UserHistoryState extends State<UserHistory> {
   Widget build(BuildContext context) {
     return BlocBuilder<HistoryBloc, HistoryState>(
       buildWhen: (previous, current) {
-        return current is HistoryLoading ||
-            current is HistoryLoaded ||
-            current is HistoryError;
+        return current is HistoryLoading || current is HistoryLoaded || current is HistoryError;
       },
       builder: (context, state) {
         List<QuestionRecord> history = [];
         bool isLoadingMore = false;
 
-        if (state is HistoryLoaded) {
-          history = state.history;
-          isLoadingMore = state.isLoadingMore;
-        } else if (state is HistoryLoading) {
+        if (state is HistoryLoading) {
           return const Loader();
         }
 
+        if (state is HistoryLoaded) {
+          history = state.history;
+          isLoadingMore = state.isLoadingMore;
+        }
+
         if (history.isEmpty) {
-          return const Center(
-            child: Text('No history found.'),
+          return Center(
+            child: Text(
+              'Không có lịch sử hỏi đáp nào.',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
           );
         }
 

@@ -19,15 +19,17 @@ class _DocumentSegmentedButtonState extends State<DocumentSegmentedButton> {
     return SizedBox(
       width: double.infinity,
       child: SegmentedButton<DocumentSegmentedButtonOptions>(
-        style: ButtonStyle(backgroundColor: WidgetStateProperty.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.selected)) {
-              return Theme.of(context).colorScheme.primaryContainer;
-            }
-            return Theme.of(context).colorScheme.surface;
-          },
-        )),
-        segments: [
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (states) {
+              if (states.contains(WidgetState.selected)) {
+                return Theme.of(context).colorScheme.primaryContainer;
+              }
+              return Theme.of(context).colorScheme.surface;
+            },
+          ),
+        ),
+        segments: const [
           ButtonSegment(
             value: DocumentSegmentedButtonOptions.general,
             label: Text(

@@ -18,6 +18,10 @@ class ElitSignInButton extends StatelessWidget {
       ),
       child: Text(
         'Đăng nhập với ELIT',
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.onTertiaryContainer,
+        ),
       ),
     );
   }

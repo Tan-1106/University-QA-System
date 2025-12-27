@@ -45,7 +45,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final tokens = await remoteDataSource.signInWithSystemAccount(email, password);
       if (tokens.accessToken.isEmpty || tokens.refreshToken.isEmpty) {
-        return left(Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
+        return left(const Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
       } else {
         await secureStorageService.saveTokens(tokens.accessToken, tokens.refreshToken);
       }
@@ -65,7 +65,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final tokens = userDetails.tokens;
       if (tokens.accessToken.isEmpty || tokens.refreshToken.isEmpty) {
-        return left(Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
+        return left(const Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
       } else {
         await secureStorageService.saveTokens(tokens.accessToken, tokens.refreshToken);
       }
@@ -99,7 +99,7 @@ class AuthRepositoryImpl implements AuthRepository {
         await secureStorageService.deleteAll();
         return right(true);
       } else {
-        return left(Failure('Đăng xuất thất bại'));
+        return left(const Failure('Đăng xuất thất bại'));
       }
     } on ServerException catch (e) {
       return left(Failure(e.message));

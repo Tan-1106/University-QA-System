@@ -29,10 +29,11 @@ class _SignInPageState extends State<SignInPage> {
     if (result == null) return;
     if (result.containsKey('error')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lỗi đăng nhập: ${result['error']}')),
+        const SnackBar(content: Text('Lỗi đăng nhập với ELIT.')),
       );
       return;
     }
+
     final String? serverCode = result['code'];
     if (serverCode == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,10 +55,9 @@ class _SignInPageState extends State<SignInPage> {
           vertical: 40,
           horizontal: 20,
         ),
-        child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {},
+        child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthLoading) return Loader();
+            if (state is AuthLoading) return const Loader();
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -71,16 +71,18 @@ class _SignInPageState extends State<SignInPage> {
                     'Chào mừng!',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     'Vui lòng đăng nhập để tiếp tục',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   SizedBox(
                     width: 340,
                     child: SignInButton(
-                      onSignInClick: () { context.push('/system-sign-in'); },
+                      onSignInClick: () {
+                        context.push('/system-sign-in');
+                      },
                     ),
                   ),
                   SizedBox(

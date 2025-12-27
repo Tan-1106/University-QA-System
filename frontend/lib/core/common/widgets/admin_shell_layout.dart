@@ -140,7 +140,7 @@ class AdminShellLayout extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         Navigator.pop(context);
-                        context.go('/information-and-logout');
+                        context.push('/information-and-logout');
                       },
                       child: Container(
                         padding: const EdgeInsets.all(20),

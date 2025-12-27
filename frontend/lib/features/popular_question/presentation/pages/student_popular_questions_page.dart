@@ -38,9 +38,9 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
               children: [
                 Text(
                   question.question,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('Trả lời: ${question.answer}'),
               ],
             ),
@@ -48,7 +48,7 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Đóng'),
+              child: const Text('Đóng'),
             ),
           ],
         );
@@ -63,7 +63,10 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
             child: StudentPqSegmentedButton(
               onTypeSelected: (type) {
                 setState(() {
@@ -73,10 +76,12 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
               },
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: StudentPQList(
                 onQuestionTap: (question) {
                   _showQuestionDetailsDialog(context, question);

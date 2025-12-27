@@ -29,7 +29,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 40,
           horizontal: 20,
         ),
@@ -47,12 +47,17 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 current is DashboardDataLoaded ||
                 (current is DashboardError && previous is! DashboardQuestionRecordsLoaded && previous is! DashboardDataLoaded),
             builder: (context, state) {
-              if (state is DashboardLoading) return Loader();
-
               Statistic? statisticData;
+
+              if (state is DashboardLoading) {
+                return const Loader();
+              }
+
               if (state is DashboardStatisticLoaded) {
                 statisticData = state.statisticData;
-              } else if (state is DashboardDataLoaded) {
+              }
+
+              if (state is DashboardDataLoaded) {
                 statisticData = state.statisticData;
               }
 
@@ -68,14 +73,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         child: Text(
                           'Thống kê theo tháng',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onTertiary
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
@@ -91,7 +95,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     Card(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                       color: Theme.of(context).colorScheme.tertiary,
@@ -101,10 +105,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         child: Text(
                           'Câu hỏi từ người dùng',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onTertiary
-                          ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
                         ),
                       ),
                     ),
@@ -116,7 +119,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ],
                 );
               }
-              return Text('Không thể tải dữ liệu thống kê', style: Theme.of(context).textTheme.labelMedium?.copyWith(fontStyle: FontStyle.italic));
+
+              return Text(
+                'Không thể tải dữ liệu thống kê',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+              );
             },
           ),
         ),

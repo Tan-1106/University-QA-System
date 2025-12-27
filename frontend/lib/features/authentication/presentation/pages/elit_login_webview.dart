@@ -16,7 +16,7 @@ class ElitLoginWebview extends StatefulWidget {
 class _ElitLoginWebViewState extends State<ElitLoginWebview> {
   bool _isLoading = true;
   late final WebViewController _controller;
-  final String clientState = Uuid().v4();
+  final String clientState = const Uuid().v4();
   final String clientId = dotenv.env['ELIT_CLIENT_ID'] ?? '';
   final String redirectUrl = dotenv.env['ELIT_CALLBACK_URL'] ?? '';
   final String authorizeEndpoint = '${dotenv.env['ELIT_BASE_URL']}/oauth2/v1/authorize';
@@ -76,7 +76,11 @@ class _ElitLoginWebViewState extends State<ElitLoginWebview> {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đăng nhập với ELIT'),
+        centerTitle: true,
+        title: Text(
+          'Đăng nhập với ELIT',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Stack(
         children: [

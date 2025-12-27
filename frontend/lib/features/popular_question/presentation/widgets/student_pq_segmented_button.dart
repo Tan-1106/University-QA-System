@@ -27,7 +27,7 @@ class _StudentPqSegmentedButtonState extends State<StudentPqSegmentedButton> {
             return Theme.of(context).colorScheme.surface;
           },
         )),
-        segments: [
+        segments: const [
           ButtonSegment(
             value: StudentPQSegmentedButtonOptions.all,
             label: Text(

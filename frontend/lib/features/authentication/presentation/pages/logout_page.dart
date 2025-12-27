@@ -10,8 +10,13 @@ class LogoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thông tin người dùng'),
         centerTitle: true,
+        title: Text(
+          'Thông tin người dùng',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         buildWhen: (previous, current) => current is AuthLoading || current is AuthSuccess || current is AuthFailure,
@@ -21,11 +26,13 @@ class LogoutPage extends StatelessWidget {
             child: Column(
               children: [
                 if (state is AuthLoading) const Loader(),
+
                 if (state is AuthFailure)
                   Text(
                     'Không thể tải thông tin người dùng.',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
+
                 if (state is AuthSuccess)
                   Expanded(
                     child: Column(
@@ -111,12 +118,16 @@ class LogoutPage extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                                 foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Đăng xuất',
-                                style: TextStyle(fontSize: 16),
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                ),
                               ),
                             ),
                           ),

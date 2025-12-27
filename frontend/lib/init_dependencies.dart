@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'core/network/auth_interceptor.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+
+import 'package:university_qa_system/core/network/auth_interceptor.dart';
 import 'package:university_qa_system/core/network/connection_checker.dart';
 import 'package:university_qa_system/core/services/secure_storage_service.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import 'package:university_qa_system/features/authentication/data/data_sources/auth_remote_data_source.dart';
 import 'package:university_qa_system/features/authentication/data/repositories/auth_repository_impl.dart';

@@ -46,10 +46,10 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('QA data is missing in the response');
+          throw const ServerException('QA data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve QA data');
+        throw const ServerException('Failed to retrieve QA data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -74,7 +74,7 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        throw ServerException('Failed to send feedback');
+        throw const ServerException('Failed to send feedback');
       }
 
       return true;
@@ -106,10 +106,10 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('QA history data is missing in the response');
+          throw const ServerException('QA history data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve QA history data');
+        throw const ServerException('Failed to retrieve QA history data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -140,10 +140,10 @@ class ChatBoxRemoteDataSourceImpl implements ChatBoxRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('QA record details are missing in the response');
+          throw const ServerException('QA record details are missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve QA record details');
+        throw const ServerException('Failed to retrieve QA record details');
       }
     } on DioException catch (e) {
       if (e.response != null) {

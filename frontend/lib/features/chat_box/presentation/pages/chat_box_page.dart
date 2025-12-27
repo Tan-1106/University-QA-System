@@ -70,9 +70,9 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
                             alignment: Alignment.centerRight,
                             child: UserQuestion(question: _submittedQuestion),
                           ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         if (state is ChatBoxLoading)
-                          Align(
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: SystemThinking(),
                           ),
@@ -96,16 +96,16 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: TextField(
                     controller: _textController,
                     focusNode: _focusNode,
-                    onChanged: (value) {},
+                    onChanged: (_) {},
                     enabled: state is! ChatBoxLoading,
                     decoration: InputDecoration(
                       hintText: 'Nhập câu hỏi của bạn...',
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                         onPressed: _handleSendQuestion,
                       ),
                       border: OutlineInputBorder(

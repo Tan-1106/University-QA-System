@@ -50,7 +50,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.statusCode == 201) {
         return true;
       } else {
-        throw ServerException('Failed to register user');
+        throw const ServerException('Failed to register user');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -71,7 +71,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: {
           'email': email,
           'password': password,
-        }
+        },
       );
 
       if (response.statusCode == 200 && response.data != null) {
@@ -83,10 +83,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('Tokens are missing in the response');
+          throw const ServerException('Tokens are missing in the response');
         }
       } else {
-        throw ServerException('Failed to sign in');
+        throw const ServerException('Failed to sign in');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -118,10 +118,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('User details are missing in the response');
+          throw const ServerException('User details are missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve user information');
+        throw const ServerException('Failed to retrieve user information');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -148,10 +148,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('User details are missing in the response');
+          throw const ServerException('User details are missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve user information');
+        throw const ServerException('Failed to retrieve user information');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -175,7 +175,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       if (response.statusCode != 200) {
-        throw ServerException('Failed to sign out');
+        throw const ServerException('Failed to sign out');
       }
 
       return true;

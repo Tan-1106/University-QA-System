@@ -31,6 +31,8 @@ class DocumentListBloc extends Bloc<DocumentListEvent, DocumentListState> {
       LoadGeneralDocumentsEvent event,
       Emitter<DocumentListState> emit,
   ) async {
+    emit(DocumentListLoading());
+
     if (event.isLoadMore) {
       if (state is DocumentListLoaded) {
         final currentState = state as DocumentListLoaded;
@@ -79,6 +81,8 @@ class DocumentListBloc extends Bloc<DocumentListEvent, DocumentListState> {
       LoadFacultyDocumentsEvent event,
       Emitter<DocumentListState> emit,
   ) async {
+    emit (DocumentListLoading());
+
     if (event.isLoadMore) {
       if (state is DocumentListLoaded) {
         final currentState = state as DocumentListLoaded;

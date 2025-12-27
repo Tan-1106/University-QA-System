@@ -106,7 +106,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                           Navigator.of(context).pop();
                           _triggerSearch();
                         },
-                        child: Text('Áp dụng bộ lọc'),
+                        child: const Text('Áp dụng bộ lọc'),
                       ),
                     ),
                     SizedBox(
@@ -126,7 +126,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                           Navigator.of(context).pop();
                           _triggerSearch();
                         },
-                        child: Text('Hủy lọc'),
+                        child: const Text('Hủy lọc'),
                       ),
                     ),
                   ],
@@ -164,12 +164,15 @@ class _DocumentsPageState extends State<DocumentsPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showFilterSheet(context),
         label: const Text('Lọc & tìm kiếm'),
-        icon: Icon(Icons.filter_list),
+        icon: const Icon(Icons.filter_list),
       ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
             child: DocumentSegmentedButton(
               onTypeSelected: (selectedType) {
                 setState(() {
@@ -183,10 +186,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
               },
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: DocumentList(
                 onDocumentTap: (documentId) {
                   context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));

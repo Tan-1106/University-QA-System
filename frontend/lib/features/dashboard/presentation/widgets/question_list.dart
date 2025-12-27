@@ -71,10 +71,14 @@ class _QuestionListState extends State<QuestionList> {
         if (state is DashboardDataLoaded) {
           questions = state.questions;
           isLoadingMore = state.isLoadingMore;
-        } else if (state is DashboardQuestionRecordsLoaded) {
+        }
+
+        if (state is DashboardQuestionRecordsLoaded) {
           questions = state.questions;
           isLoadingMore = state.isLoadingMore;
-        } else if (state is DashboardLoading) {
+        }
+
+        if (state is DashboardLoading) {
           return const SizedBox(
             height: 200,
             child: Center(child: Loader()),
@@ -86,8 +90,8 @@ class _QuestionListState extends State<QuestionList> {
             height: 200,
             child: Center(
               child: Text(
-                'Không có câu hỏi nào',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                'Không có câu hỏi nào.',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -104,7 +108,7 @@ class _QuestionListState extends State<QuestionList> {
               if (index >= questions.length) {
                 return const Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: Loader()),
                 );
               }
 
@@ -148,9 +152,10 @@ class _QuestionItem extends StatelessWidget {
                 children: [
                   Text(
                     'MSSV: $userSub',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(

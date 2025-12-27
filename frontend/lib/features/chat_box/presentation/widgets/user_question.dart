@@ -16,12 +16,12 @@ class UserQuestion extends StatelessWidget {
         Flexible(
           child: Card(
             color: Theme.of(context).colorScheme.primary,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadiusGeometry.directional(
-                bottomEnd: const Radius.circular(20),
-                bottomStart: const Radius.circular(20),
-                topEnd: const Radius.circular(0),
-                topStart: const Radius.circular(20),
+                bottomEnd: Radius.circular(20),
+                bottomStart: Radius.circular(20),
+                topEnd: Radius.circular(0),
+                topStart: Radius.circular(20),
               ),
             ),
             child: Padding(

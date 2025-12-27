@@ -56,7 +56,7 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
           existingDocumentTypes: documentTypesResponse.details ?? [],
         );
       } else {
-        throw ServerException('Failed to retrieve document filters');
+        throw const ServerException('Failed to retrieve document filters');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -96,10 +96,10 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('Documents data is missing in the response');
+          throw const ServerException('Documents data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve documents data');
+        throw const ServerException('Failed to retrieve documents data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -136,10 +136,10 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('Documents data is missing in the response');
+          throw const ServerException('Documents data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve documents data');
+        throw const ServerException('Failed to retrieve documents data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -166,7 +166,7 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         final bytes = Uint8List.fromList(response.data);
         return PDFBytesData(bytes);
       } else {
-        throw ServerException('Failed to retrieve document bytes');
+        throw const ServerException('Failed to retrieve document bytes');
       }
     } on DioException catch (e) {
       if (e.response != null) {

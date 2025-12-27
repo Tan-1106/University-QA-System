@@ -70,16 +70,23 @@ class _StudentPQListState extends State<StudentPQList> {
         List<PopularQuestion> popularQuestions = [];
         bool isLoadingMore = false;
 
-        if (state is StudentPQLoaded) {
-          popularQuestions = state.questions;
-          isLoadingMore = state.isLoadingMore;
-        } else if (state is StudentPQLoading) {
+        if (state is StudentPQLoading) {
           return const Center(child: Loader());
         }
 
+        if (state is StudentPQLoaded) {
+          popularQuestions = state.questions;
+          isLoadingMore = state.isLoadingMore;
+        }
+
         if (popularQuestions.isEmpty) {
-          return const Center(
-            child: Text('Không có dữ liệu.'),
+          return Center(
+            child: Text(
+              'Không có dữ liệu.',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
           );
         }
 
@@ -93,6 +100,7 @@ class _StudentPQListState extends State<StudentPQList> {
                 child: Center(child: Loader()),
               );
             }
+
             final question = popularQuestions[index];
             return Column(
               children: [

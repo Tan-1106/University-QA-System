@@ -18,6 +18,10 @@ class SignInButton extends StatelessWidget {
       ),
       child: Text(
         'Đăng nhập',
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
       ),
     );
   }

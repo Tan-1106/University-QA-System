@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/features/popular_question/data/models/existing_faculties_data.dart';
 import 'package:university_qa_system/features/popular_question/data/models/popular_questions_data.dart';
 
-import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/popular_question/domain/entities/existing_faculties.dart';
 
 abstract interface class PopularQuestionDataSource {
   Future<PopularQuestionsData> fetchPopularQuestionsForStudent({
@@ -43,13 +42,13 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
         final details = data['details'] as Map<String, dynamic>;
         return PopularQuestionsData.fromJson(details);
       } else {
-        throw ServerException('Failed to retrieve popular questions');
+        throw const ServerException('Failed to retrieve popular questions');
       }
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
-        throw ServerException('Network Error');
+        throw const ServerException('Network Error');
       }
     }
   }
@@ -77,13 +76,13 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
         final details = data['details'] as Map<String, dynamic>;
         return PopularQuestionsData.fromJson(details);
       } else {
-        throw ServerException('Failed to retrieve popular questions');
+        throw const ServerException('Failed to retrieve popular questions');
       }
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
-        throw ServerException('Network Error');
+        throw const ServerException('Network Error');
       }
     }
   }
@@ -98,13 +97,13 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
         final details = data['details'] as Map<String, dynamic>;
         return ExistingFacultiesData.fromJson(details);
       } else {
-        throw ServerException('Failed to retrieve faculties');
+        throw const ServerException('Failed to retrieve faculties');
       }
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
-        throw ServerException('Network Error');
+        throw const ServerException('Network Error');
       }
     }
   }

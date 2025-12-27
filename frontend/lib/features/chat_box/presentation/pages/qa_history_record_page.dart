@@ -44,11 +44,11 @@ class _QaHistoryDetailsPageState extends State<QaHistoryDetailsPage> {
     return BlocBuilder<HistoryDetailsBloc, HistoryDetailsState>(
       builder: (context, state) {
         if (state is HistoryDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: Loader());
         }
 
         if (state is HistoryDetailsError) {
-          return Center(child: Text('Không thể tải lịch sử câu hỏi.'));
+          return const Center(child: Text('Không thể tải lịch sử câu hỏi.'));
         }
 
         if (state is HistoryDetailsLoaded) {
@@ -63,23 +63,20 @@ class _QaHistoryDetailsPageState extends State<QaHistoryDetailsPage> {
                         alignment: Alignment.centerRight,
                         child: UserQuestion(question: state.recordDetails.question),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: SystemAnswerHistory(
-                          answer: state.recordDetails.answer,
-                          feedback: state.recordDetails.feedback
-                        ),
+                        child: SystemAnswerHistory(answer: state.recordDetails.answer, feedback: state.recordDetails.feedback),
                       ),
                       if (state.recordDetails.managerAnswer != null) ...[
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: AdminAnswer(
                             answer: state.recordDetails.managerAnswer!,
-                          )
+                          ),
                         ),
-                      ]
+                      ],
                     ],
                   ),
                 ),
@@ -87,7 +84,8 @@ class _QaHistoryDetailsPageState extends State<QaHistoryDetailsPage> {
             ],
           );
         }
-        return Center(
+
+        return const Center(
           child: Loader(),
         );
       },

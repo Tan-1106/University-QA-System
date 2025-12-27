@@ -40,6 +40,17 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _studentIdController.dispose();
+    _facultyController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -53,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
                 Text(
                   'Đăng ký tài khoản',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),

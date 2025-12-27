@@ -73,12 +73,21 @@ class _DocumentListState extends State<DocumentList> {
         if (state is DocumentListLoaded) {
           documents = state.documents;
           isLoadingMore = state.isLoadingMore;
-        } else if (state is DocumentListLoading) {
+        }
+
+        if (state is DocumentListLoading) {
           return const Center(child: Loader());
         }
 
         if (documents.isEmpty) {
-          return const Center(child: Text('Không có tài liệu nào'));
+          return Center(
+            child: Text(
+              'Không có tài liệu nào',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          );
         }
 
         return ListView.builder(
@@ -91,6 +100,7 @@ class _DocumentListState extends State<DocumentList> {
                 child: Center(child: Loader()),
               );
             }
+
             final document = documents[index];
             return Column(
               children: [
@@ -113,7 +123,6 @@ class _DocumentListState extends State<DocumentList> {
                             'Phòng ban: ${document.department}',
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
-
                         Text(
                           'Loại tài liệu: ${document.docType}',
                           style: Theme.of(context).textTheme.labelMedium,

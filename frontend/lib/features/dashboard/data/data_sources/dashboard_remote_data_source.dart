@@ -35,10 +35,10 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('Dashboard data is missing in the response');
+          throw const ServerException('Dashboard data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve dashboard data');
+        throw const ServerException('Failed to retrieve dashboard data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -71,10 +71,10 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
         if (apiResponse.details != null) {
           return apiResponse.details!;
         } else {
-          throw ServerException('Question records data is missing in the response');
+          throw const ServerException('Question records data is missing in the response');
         }
       } else {
-        throw ServerException('Failed to retrieve question records data');
+        throw const ServerException('Failed to retrieve question records data');
       }
     } on DioException catch (e) {
       if (e.response != null) {
