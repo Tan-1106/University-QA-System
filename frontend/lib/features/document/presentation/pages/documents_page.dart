@@ -60,7 +60,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                   children: [
                     Text(
                       'Bộ lọc tài liệu',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -88,7 +88,7 @@ class _DocumentsPageState extends State<DocumentsPage> {
                         });
                       },
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(

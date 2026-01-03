@@ -44,8 +44,8 @@ Future<void> _initCore() async {
 
     dio.options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 60),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 180),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -282,6 +282,18 @@ void _initPopularQuestions() {
     ),
   );
 
+  serviceLocator.registerFactory<GeneratePopularQuestionsUseCase>(
+    () => GeneratePopularQuestionsUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadExistingFacultiesUseCase>(
+        () => LoadExistingFacultiesUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerFactory<LoadStudentPopularQuestionsUseCase>(
     () => LoadStudentPopularQuestionsUseCase(
       serviceLocator(),
@@ -302,6 +314,7 @@ void _initPopularQuestions() {
 
   serviceLocator.registerLazySingleton(
       () => AdminPQBloc(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
       )

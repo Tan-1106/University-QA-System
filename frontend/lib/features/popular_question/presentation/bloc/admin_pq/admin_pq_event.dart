@@ -3,17 +3,15 @@ part of 'admin_pq_bloc.dart';
 @immutable
 sealed class AdminPQEvent {}
 
+final class GeneratePotentialQuestionsEvent extends AdminPQEvent {}
+
 final class GetAdminPopularQuestionsEvent extends AdminPQEvent {
-  final int page;
-  final bool isDisplay;
   final String? faculty;
-  final bool isLoadMore;
+  final bool isDisplay;
 
   GetAdminPopularQuestionsEvent({
-    this.page = 1,
-    this.isDisplay = true,
     this.faculty,
-    this.isLoadMore = false,
+    this.isDisplay = true,
   });
 }
 

@@ -12,7 +12,6 @@ class LoadAdminPopularQuestionsUseCase implements UseCase<PopularQuestions, Load
   @override
   Future<Either<Failure, PopularQuestions>> call(LoadAdminPopularQuestionsParams params) {
     return repository.loadAdminPopularQuestions(
-      page: params.page,
       isDisplay: params.isDisplay,
       faculty: params.faculty,
     );
@@ -20,12 +19,10 @@ class LoadAdminPopularQuestionsUseCase implements UseCase<PopularQuestions, Load
 }
 
 class LoadAdminPopularQuestionsParams {
-  final int page;
   final bool isDisplay;
   final String? faculty;
 
   LoadAdminPopularQuestionsParams({
-    this.page = 1,
     this.isDisplay = true,
     this.faculty,
   });

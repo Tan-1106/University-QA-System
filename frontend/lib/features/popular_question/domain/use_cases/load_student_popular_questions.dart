@@ -12,18 +12,15 @@ class LoadStudentPopularQuestionsUseCase implements UseCase<PopularQuestions, Lo
   @override
   Future<Either<Failure, PopularQuestions>> call(LoadStudentPopularQuestionsParams params) {
     return repository.loadStudentPopularQuestions(
-      page: params.page,
       facultyOnly: params.facultyOnly,
     );
   }
 }
 
 class LoadStudentPopularQuestionsParams {
-  final int page;
   final bool facultyOnly;
 
   LoadStudentPopularQuestionsParams({
-    this.page = 1,
     this.facultyOnly = false,
   });
 }

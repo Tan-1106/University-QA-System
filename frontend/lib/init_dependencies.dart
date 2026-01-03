@@ -51,9 +51,12 @@ import 'package:university_qa_system/features/document/presentation/bloc/documen
 import 'package:university_qa_system/features/popular_question/data/data_sources/popular_question_data_source.dart';
 import 'package:university_qa_system/features/popular_question/data/repositories/popular_questions_repository_impl.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
+import 'package:university_qa_system/features/popular_question/domain/use_cases/generate_popular_questions.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/load_admin_popular_questions.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/load_student_popular_questions.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
+
+import 'features/popular_question/domain/use_cases/load_existing_faculties.dart';
 
 part 'init_dependencies.main.dart';

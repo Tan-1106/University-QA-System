@@ -1,55 +1,40 @@
 part of 'admin_pq_bloc.dart';
 
 @immutable
-sealed class AdminPQState {
+class AdminPQState {
   const AdminPQState();
 }
 
-final class AdminPQInitial extends AdminPQState {}
-
-final class AdminPQLoading extends AdminPQState {}
-
-final class AdminPQFacultiesLoaded extends AdminPQState {
-  final List<String> faculties;
-
-  const AdminPQFacultiesLoaded({required this.faculties});
+class AdminPQInitial extends AdminPQState {
+  const AdminPQInitial();
 }
 
-final class AdminPQLoaded extends AdminPQState {
-  final List<PopularQuestion> questions;
-  final int currentPage;
-  final int totalPages;
-  final bool hasMore;
-  final bool isLoadingMore;
+class AdminPQLoading extends AdminPQState {
+  const AdminPQLoading();
+}
 
-  const AdminPQLoaded({
+class AdminPQDataState extends AdminPQState {
+  final List<PopularQuestion> questions;
+  final List<String> faculties;
+
+  const AdminPQDataState({
     required this.questions,
-    required this.currentPage,
-    required this.totalPages,
-    required this.hasMore,
-    this.isLoadingMore = false,
+    required this.faculties,
   });
 
-  AdminPQLoaded copyWith({
+  AdminPQDataState copyWith({
     List<PopularQuestion>? questions,
-    int? currentPage,
-    int? totalPages,
-    bool? hasMore,
-    bool? isLoadingMore,
+    List<String>? faculties,
   }) {
-    return AdminPQLoaded(
+    return AdminPQDataState(
       questions: questions ?? this.questions,
-      currentPage: currentPage ?? this.currentPage,
-      totalPages: totalPages ?? this.totalPages,
-      hasMore: hasMore ?? this.hasMore,
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      faculties: faculties ?? this.faculties,
     );
   }
 }
 
-final class AdminPQError extends AdminPQState {
+class AdminPQError extends AdminPQState {
   final String message;
 
   const AdminPQError(this.message);
 }
-

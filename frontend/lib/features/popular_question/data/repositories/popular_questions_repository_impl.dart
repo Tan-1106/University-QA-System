@@ -13,13 +13,21 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
   const PopularQuestionsRepositoryImpl(this.remoteDataSource);
 
   @override
+  Future<Either<Failure, bool>> generatePopularQuestions() async {
+    try {
+      final result = await remoteDataSource.generatePopularQuestions();
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, PopularQuestions>> loadStudentPopularQuestions({
-    int page = 1,
     bool facultyOnly = false,
   }) async {
     try {
       final popularQuestionsData = await remoteDataSource.fetchPopularQuestionsForStudent(
-        page: page,
         facultyOnly: facultyOnly,
       );
       return right(popularQuestionsData.toEntity());
@@ -30,15 +38,13 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
 
   @override
   Future<Either<Failure, PopularQuestions>> loadAdminPopularQuestions({
-    int page = 1,
     bool isDisplay = true,
     String? faculty,
   }) async {
     try {
       final popularQuestionsData = await remoteDataSource.fetchPopularQuestionsForAdmin(
-        page: page,
-        isDisplay: isDisplay,
         faculty: faculty,
+        isDisplay: isDisplay,
       );
       return right(popularQuestionsData.toEntity());
     } on ServerException catch (e) {

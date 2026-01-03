@@ -86,7 +86,6 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
                 onQuestionTap: (question) {
                   _showQuestionDetailsDialog(context, question);
                 },
-                selectedOption: _showFacultyOnly ? StudentPQSegmentedButtonOptions.faculty : StudentPQSegmentedButtonOptions.all,
               ),
             ),
           ),
