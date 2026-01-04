@@ -22,7 +22,7 @@ class TotalDislike extends StatelessWidget {
               'Số lượt dislike',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
             const SizedBox(height: 10),
@@ -30,7 +30,7 @@ class TotalDislike extends StatelessWidget {
               quantity.toString(),
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
           ],

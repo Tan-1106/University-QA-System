@@ -60,6 +60,25 @@ class AdminPQItem extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Row(
+                    spacing: 10,
+                    children: [
+                      const Text(
+                        'Phạm vi: ',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        question.summary.facultyScope ?? 'Chung',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Câu trả lời: ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   Text(
                     question.answer,
                     style: TextStyle(

@@ -33,7 +33,9 @@ class _AdminPQGenerateButtonState extends State<AdminPQGenerateButton> {
             alignment: Alignment.centerLeft,
             child: Text(
               'Thống kê câu hỏi phổ biến:',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(

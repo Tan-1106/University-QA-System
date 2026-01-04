@@ -16,3 +16,33 @@ final class GetAdminPopularQuestionsEvent extends AdminPQEvent {
 }
 
 final class LoadExistingFacultiesEvent extends AdminPQEvent {}
+
+final class AssignFacultyScopeEvent extends AdminPQEvent {
+  final String questionId;
+  final String? faculty;
+
+  AssignFacultyScopeEvent({
+    required this.questionId,
+    required this.faculty,
+  });
+}
+
+final class UpdateQuestionEvent extends AdminPQEvent {
+  final String questionId;
+  final String? question;
+  final String? answer;
+
+  UpdateQuestionEvent({
+    required this.questionId,
+    this.question,
+    this.answer,
+  });
+}
+
+final class ToggleQuestionDisplayEvent extends AdminPQEvent {
+  final String questionId;
+
+  ToggleQuestionDisplayEvent({
+    required this.questionId,
+  });
+}

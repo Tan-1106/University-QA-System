@@ -94,6 +94,7 @@ async def assign_faculty_scope_to_popular_question(
     require_admin = Depends(auth_service.require_role([Role.ADMIN.value]))
 ):
     faculty = None if faculty is None else jsonable_encoder(faculty)["faculty"]
+    print('faculty: ', faculty)
     result = await statistical_controller.assign_faculty_scope_to_popular_question(question_id, faculty)
     return api_response(
         status_code=200,

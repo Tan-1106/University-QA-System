@@ -23,48 +23,41 @@ class _AdminFacultyFilterState extends State<AdminFacultyFilter> {
       existingFaculties = existingFaculties + adminBlocState.faculties;
     }
 
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Lọc theo khoa:',
-            style: Theme.of(context).textTheme.bodyMedium,
+    String? currentValue = widget.selectedFaculty;
+    if (currentValue != null && ! existingFaculties.contains(currentValue)) {
+      currentValue = 'Tất cả';
+    }
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          value: currentValue ?? 'Tất cả',
+          hint: const Text('Chọn khoa'),
+          elevation: 16,
+          isExpanded: true,
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            child: const Icon(Icons.arrow_drop_down),
           ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-              value: widget.selectedFaculty ?? 'Tất cả',
-              hint: const Text('Chọn khoa'),
-              elevation: 16,
-              isExpanded: true,
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                child: const Icon(Icons.arrow_drop_down),
+          items: existingFaculties.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(value),
               ),
-              items: existingFaculties.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(value),
-                  ),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                widget.onFacultySelected(newValue!);
-              },
-            ),
-          ),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            widget.onFacultySelected(newValue!);
+          },
         ),
-      ],
+      ),
     );
   }
 }

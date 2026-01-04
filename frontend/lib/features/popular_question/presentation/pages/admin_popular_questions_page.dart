@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/admin_faculty_filter.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/admin_pq_generate_button.dart';
@@ -33,6 +34,33 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
       GetAdminPopularQuestionsEvent(
         faculty: _faculty,
         isDisplay: _isDisplay,
+      ),
+    );
+  }
+
+  void _assignFacultyScope(String questionId, String? faculty) {
+    context.read<AdminPQBloc>().add(
+      AssignFacultyScopeEvent(
+        questionId: questionId,
+        faculty: faculty,
+      ),
+    );
+  }
+
+  void _updateQuestion(String questionId, String? question, String? answer) {
+    context.read<AdminPQBloc>().add(
+      UpdateQuestionEvent(
+        questionId: questionId,
+        question: question,
+        answer: answer,
+      ),
+    );
+  }
+
+  void _toggleQuestionDisplay(String questionId) {
+    context.read<AdminPQBloc>().add(
+      ToggleQuestionDisplayEvent(
+        questionId: questionId,
       ),
     );
   }
@@ -81,6 +109,12 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
                           _triggerGeneratePotentialQuestions();
                         },
                       ),
+                      Text(
+                        'Phạm vi câu hỏi:',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       AdminFacultyFilter(
                         selectedFaculty: tempFaculty,
                         onFacultySelected: (faculty) {
@@ -94,7 +128,9 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
                         children: [
                           Text(
                             'Chỉ hiển thị các câu hỏi đã duyệt:',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Switch(
                             value: tempIsDisplay,
@@ -160,6 +196,7 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
   Widget build(BuildContext context) {
     String questionValue = '';
     String answerValue = '';
+    String? facultyValue = '';
     bool isDisplay = true;
 
     return Scaffold(
@@ -202,109 +239,219 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
                 horizontal: 20,
                 vertical: 10,
               ),
-              child: ListView.builder(
-                itemCount: state.questions.length,
-                itemBuilder: (context, index) {
-                  final question = state.questions[index];
-                  return Column(
-                    children: [
-                      AdminPQItem(
-                        question: question,
-                        onEditPressed: () {
-                          questionValue = question.question;
-                          answerValue = question.answer;
-                          isDisplay = question.isDisplay;
-
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            useSafeArea: true,
-                            shape: const Border(),
-                            builder: (ctx) {
-                              return StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setSheetState) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                      top: 20,
-                                      bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                                    ),
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            'Câu hỏi:',
-                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextFormField(
-                                            initialValue: questionValue,
-                                            maxLines: null,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            onChanged: (value) {
-                                              setSheetState(() {
-                                                questionValue = value;
-                                              });
-                                            },
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Text(
-                                            'Câu trả lời:',
-                                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextFormField(
-                                            initialValue: answerValue,
-                                            maxLines: null,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            onChanged: (value) {
-                                              setSheetState(() {
-                                                answerValue = value;
-                                              });
-                                            },
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Trạng thái hiển thị: ',
-                                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Switch(
-                                                value: isDisplay,
-                                                onChanged: (value) {
-                                                  setSheetState(() {
-                                                    isDisplay = value;
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
+              child: Column(
+                children: [
+                  Card(
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        spacing: 10,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Trạng thái: ',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(_isDisplay ? 'Đang hiển thị' : 'Đang ẩn'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Phạm vi câu hỏi: ',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(_faculty ?? 'Tất cả'),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.questions.length,
+                      itemBuilder: (context, index) {
+                        final question = state.questions[index];
+                        return Column(
+                          children: [
+                            AdminPQItem(
+                              question: question,
+                              onEditPressed: () {
+                                questionValue = question.question;
+                                answerValue = question.answer;
+                                facultyValue = question.summary.facultyScope ?? 'Tất cả';
+                                isDisplay = question.isDisplay;
+
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  useSafeArea: true,
+                                  shape: const Border(),
+                                  builder: (ctx) {
+                                    return StatefulBuilder(
+                                      builder: (BuildContext context, StateSetter setSheetState) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 20,
+                                            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                                          ),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              children: [
+                                                Text(
+                                                  'Câu hỏi:',
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextFormField(
+                                                  initialValue: questionValue,
+                                                  maxLines: null,
+                                                  decoration: const InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                  ),
+                                                  onChanged: (value) {
+                                                    setSheetState(() {
+                                                      questionValue = value;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Text(
+                                                  'Câu trả lời:',
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextFormField(
+                                                  initialValue: answerValue,
+                                                  maxLines: null,
+                                                  decoration: const InputDecoration(
+                                                    border: OutlineInputBorder(),
+                                                  ),
+                                                  onChanged: (value) {
+                                                    setSheetState(() {
+                                                      answerValue = value;
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Text(
+                                                  'Phạm vi câu hỏi:',
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                AdminFacultyFilter(
+                                                  selectedFaculty: facultyValue,
+                                                  onFacultySelected: (faculty) {
+                                                    setSheetState(() {
+                                                      facultyValue = faculty != 'Tất cả' ? faculty : 'Tất cả';
+                                                    });
+                                                  },
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Trạng thái hiển thị: ',
+                                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Switch(
+                                                      value: isDisplay,
+                                                      onChanged: (value) {
+                                                        setSheetState(() {
+                                                          isDisplay = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 20),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      if (questionValue != question.question || answerValue != question.answer) {
+                                                        _updateQuestion(
+                                                          question.id,
+                                                          questionValue,
+                                                          answerValue,
+                                                        );
+                                                      }
+
+                                                      if (facultyValue != (question.summary.facultyScope ?? 'Tất cả')) {
+                                                        logger.i('Assign faculty scope: $facultyValue');
+                                                        _assignFacultyScope(
+                                                          question.id,
+                                                          facultyValue == 'Tất cả' ? null : facultyValue,
+                                                        );
+                                                      }
+
+                                                      if (isDisplay != question.isDisplay) {
+                                                        _toggleQuestionDisplay(
+                                                          question.id,
+                                                        );
+                                                      }
+
+                                                      Navigator.of(context).pop();
+                                                      await Future.delayed(const Duration(milliseconds: 500));
+                                                      _triggerSearch();
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                                      foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                                                    ),
+                                                    child: const Text('Lưu thay đổi'),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                                      foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                                                    ),
+                                                    child: const Text('Hủy'),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           }

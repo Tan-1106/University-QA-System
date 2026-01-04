@@ -61,4 +61,34 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
       return left(Failure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> toggleQuestionDisplayStatus(String questionId) async {
+    try {
+      final result = await remoteDataSource.toggleQuestionDisplayStatus(questionId);
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> assignFacultyScopeToQuestion(String questionId, String? faculty) async {
+    try {
+      final result = await remoteDataSource.assignFacultyScopeToQuestion(questionId, faculty);
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateQuestion(String questionId, String? question, String? answer) async {
+    try {
+      final result = await remoteDataSource.updateQuestion(questionId, question, answer);
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
 }

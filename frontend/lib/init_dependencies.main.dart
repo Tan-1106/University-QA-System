@@ -306,6 +306,24 @@ void _initPopularQuestions() {
     ),
   );
 
+  serviceLocator.registerFactory<AssignFacultyScopeToQuestionUseCase>(
+    () => AssignFacultyScopeToQuestionUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<UpdateQuestionUseCase>(
+    () => UpdateQuestionUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<ToggleQuestionDisplayStatusUseCase>(
+    () => ToggleQuestionDisplayStatusUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => StudentPQBloc(
       serviceLocator(),
@@ -314,6 +332,9 @@ void _initPopularQuestions() {
 
   serviceLocator.registerLazySingleton(
       () => AdminPQBloc(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

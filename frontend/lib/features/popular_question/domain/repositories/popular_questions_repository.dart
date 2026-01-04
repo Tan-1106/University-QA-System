@@ -17,4 +17,10 @@ abstract interface class PopularQuestionsRepository {
   });
 
   Future<Either<Failure, ExistingFaculties>> loadExistingFaculties();
+
+  Future<Either<Failure, bool>> toggleQuestionDisplayStatus(String questionId);
+
+  Future<Either<Failure, bool>> assignFacultyScopeToQuestion(String questionId, String? faculty);
+
+  Future<Either<Failure, bool>> updateQuestion(String questionId, String? question, String? answer);
 }

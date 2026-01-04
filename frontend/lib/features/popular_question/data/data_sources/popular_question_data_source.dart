@@ -19,7 +19,7 @@ abstract interface class PopularQuestionDataSource {
 
   Future<bool> toggleQuestionDisplayStatus(String questionId);
 
-  Future<bool> assignFacultyScopeToQuestions(String faculty);
+  Future<bool> assignFacultyScopeToQuestion(String questionId, String? faculty);
 
   Future<bool> updateQuestion(String questionId, String? question, String? answer);
 }
@@ -165,18 +165,21 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
   }
 
   @override
-  Future<bool> assignFacultyScopeToQuestions(String faculty) async {
+  Future<bool> assignFacultyScopeToQuestion(String questionId, String? faculty) async {
     try {
-      final queryParameters = <String, dynamic>{
-        'faculty': faculty,
-      };
-      final response = await _dio.post(
-        '/api/statistics/popular-questions/assign-faculty',
-        queryParameters: queryParameters,
-      );
+      final response = (faculty != null)
+          ? await _dio.patch(
+              '/api/statistics/popular-questions/$questionId/assign-faculty',
+              data: {'faculty': faculty},
+            )
+          : await _dio.patch(
+              '/api/statistics/popular-questions/$questionId/assign-faculty',
+            );
+
       if (response.statusCode != 200) {
         throw const ServerException('Failed to assign faculty scope to questions');
       }
+
       return true;
     } on DioException catch (e) {
       if (e.response != null) {
@@ -194,7 +197,7 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
         if (question != null) 'question': question,
         if (answer != null) 'answer': answer,
       };
-      final response = await _dio.put(
+      final response = await _dio.patch(
         '/api/statistics/popular-questions/$questionId/update',
         data: body,
       );
