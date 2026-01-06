@@ -11,6 +11,7 @@ import 'package:university_qa_system/features/document/presentation/pages/docume
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
+import 'package:university_qa_system/features/user_management/presentation/pages/user_management_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
 import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
@@ -108,12 +109,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'AdminUsers',
           path: '/admin-users',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin User Management'))),
-        ),
-        GoRoute(
-          name: 'AdminDocuments',
-          path: '/admin-documents',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin Document Management'))),
+          builder: (context, state) => const UserManagementPage(),
         ),
         GoRoute(
           name: 'AdminAPISettings',

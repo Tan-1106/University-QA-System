@@ -9,6 +9,7 @@ Future<void> initDependencies() async {
   _initChatBox();
   _initDocument();
   _initPopularQuestions();
+  _initUserManagement();
 }
 
 Future<void> _initCore() async {
@@ -339,5 +340,59 @@ void _initPopularQuestions() {
         serviceLocator(),
         serviceLocator(),
       )
+  );
+}
+
+void _initUserManagement() {
+  serviceLocator.registerFactory<UserManagementRemoteDataSource>(
+    () => UserManagementDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<UserManagementRepository>(
+    () => UserManagementRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadAllRolesUseCase>(
+    () => LoadAllRolesUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadAllFacultiesUseCase>(
+    () => LoadAllFacultiesUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadUsersUseCase>(
+    () => LoadUsersUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<AssignRoleUseCase>(
+    () => AssignRoleUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<ChangeBanStatusUseCase>(
+    () => ChangeBanStatusUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => UserManagementBloc(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
 }

@@ -57,9 +57,18 @@ import 'package:university_qa_system/features/popular_question/domain/use_cases/
 import 'package:university_qa_system/features/popular_question/domain/use_cases/load_student_popular_questions.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
+import 'package:university_qa_system/features/user_management/data/repositories/user_management_repository_impl.dart';
+import 'package:university_qa_system/features/user_management/domain/repositories/user_management_repository.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/assign_role.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/change_ban_status.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_faculties.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_roles.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/load_users.dart';
 
 import 'features/popular_question/domain/use_cases/load_existing_faculties.dart';
 import 'features/popular_question/domain/use_cases/toggle_question_display_status.dart';
 import 'features/popular_question/domain/use_cases/update_question.dart';
+import 'features/user_management/data/data_sources/user_management_remote_data_source.dart';
+import 'features/user_management/presentation/bloc/user_management_bloc.dart';
 
 part 'init_dependencies.main.dart';

@@ -16,7 +16,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final LoadDashboardQuestionRecordsUseCase _loadDashboardQuestionRecords;
 
   Statistic? _statisticData;
-  List<Questions> _allQuestions = [];
+  List<Question> _allQuestions = [];
   int _currentPage = 0;
   int _totalPages = 1;
 

@@ -13,6 +13,7 @@ class GetFacultyDocumentsUseCase implements UseCase<Documents, GetFacultyDocumen
   @override
   Future<Either<Failure, Documents>> call(GetFacultyDocumentsParams params) {
     return documentRepository.loadFacultyDocuments(
+      page: params.page,
       keyword: params.keyword,
       documentType: params.documentType,
     );

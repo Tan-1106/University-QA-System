@@ -17,7 +17,7 @@ final class DashboardStatisticLoaded extends DashboardState {
 
  final class DashboardDataLoaded extends DashboardState {
   final Statistic statisticData;
-  final List<Questions> questions;
+  final List<Question> questions;
   final int currentPage;
   final int totalPages;
   final bool hasMore;
@@ -34,7 +34,7 @@ final class DashboardStatisticLoaded extends DashboardState {
 
   DashboardDataLoaded copyWith({
     Statistic? statisticData,
-    List<Questions>? questions,
+    List<Question>? questions,
     int? currentPage,
     int? totalPages,
     bool? hasMore,
@@ -52,7 +52,7 @@ final class DashboardStatisticLoaded extends DashboardState {
 }
 
 final class DashboardQuestionRecordsLoaded extends DashboardState {
-  final List<Questions> questions;
+  final List<Question> questions;
   final int currentPage;
   final int totalPages;
   final bool hasMore;
@@ -67,7 +67,7 @@ final class DashboardQuestionRecordsLoaded extends DashboardState {
   });
 
   DashboardQuestionRecordsLoaded copyWith({
-    List<Questions>? questions,
+    List<Question>? questions,
     int? currentPage,
     int? totalPages,
     bool? hasMore,

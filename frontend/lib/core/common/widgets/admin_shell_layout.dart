@@ -13,8 +13,7 @@ class AdminShellLayout extends StatelessWidget {
 
     if (location.startsWith('/admin-popular-questions')) return 1;
     if (location.startsWith('/admin-users')) return 2;
-    if (location.startsWith('/admin-documents')) return 3;
-    if (location.startsWith('/admin-api-settings')) return 4;
+    if (location.startsWith('/admin-api-settings')) return 3;
     return 0;
   }
 
@@ -30,9 +29,6 @@ class AdminShellLayout extends StatelessWidget {
         context.go('/admin-users');
         break;
       case 3:
-        context.go('/admin-documents');
-        break;
-      case 4:
         context.go('/admin-api-settings');
         break;
     }
@@ -47,8 +43,6 @@ class AdminShellLayout extends StatelessWidget {
       case 2:
         return 'Quản lý người dùng';
       case 3:
-        return 'Quản lý tài liệu';
-      case 4:
         return 'Cài đặt API';
       default:
         return 'Admin Panel';
@@ -108,11 +102,6 @@ class AdminShellLayout extends StatelessWidget {
                       icon: Icon(Icons.people_outline),
                       selectedIcon: Icon(Icons.people),
                       label: Text('Quản lý người dùng'),
-                    ),
-                    const NavigationDrawerDestination(
-                      icon: Icon(Icons.document_scanner_outlined),
-                      selectedIcon: Icon(Icons.document_scanner),
-                      label: Text('Quản lý tài liệu'),
                     ),
                     const NavigationDrawerDestination(
                       icon: Icon(Icons.settings_outlined),

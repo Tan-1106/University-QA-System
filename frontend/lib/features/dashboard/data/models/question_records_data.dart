@@ -1,7 +1,7 @@
 import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 
 class QuestionRecordsData {
-  final List<Questions> questions;
+  final List<Question> questions;
   final int total;
   final int totalPages;
   final int currentPage;
@@ -15,9 +15,9 @@ class QuestionRecordsData {
 
   factory QuestionRecordsData.fromJson(Map<String, dynamic> json) {
     var recordsJson = json['questions'] as List<dynamic>;
-    List<Questions> recordsList = recordsJson
+    List<Question> recordsList = recordsJson
         .map(
-          (recordJson) => Questions(
+          (recordJson) => Question(
             id: recordJson['_id'] as String,
             userId: recordJson['user_id'] as String,
             userSub: recordJson['user_sub'] as String,

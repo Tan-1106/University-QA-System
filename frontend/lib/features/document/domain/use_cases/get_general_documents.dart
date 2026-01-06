@@ -13,6 +13,7 @@ class GetGeneralDocumentsUseCase implements UseCase<Documents, GetGeneralDocumen
   @override
   Future<Either<Failure, Documents>> call(GetGeneralDocumentsParams params) {
     return documentRepository.loadGeneralDocuments(
+      page: params.page,
       keyword: params.keyword,
       department: params.department,
       documentType: params.documentType,

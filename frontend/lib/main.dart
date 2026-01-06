@@ -18,6 +18,7 @@ import 'package:university_qa_system/features/authentication/presentation/bloc/a
 
 import 'features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
 import 'features/document/presentation/bloc/document_list/document_list_bloc.dart';
+import 'features/user_management/presentation/bloc/user_management_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => serviceLocator<DocumentViewerBloc>()),
         BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),
         BlocProvider(create: (_) => serviceLocator<AdminPQBloc>()),
+        BlocProvider(create: (_) => serviceLocator<UserManagementBloc>()),
       ],
       child: const MyApp(),
     ),

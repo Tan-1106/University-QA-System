@@ -5,7 +5,7 @@ import 'package:university_qa_system/features/dashboard/domain/entities/question
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 class QuestionList extends StatefulWidget {
-  final void Function(Questions question)? onTap;
+  final void Function(Question question)? onTap;
 
   const QuestionList({super.key, this.onTap});
 
@@ -65,7 +65,7 @@ class _QuestionListState extends State<QuestionList> {
     return BlocBuilder<DashboardBloc, DashboardState>(
       buildWhen: (previous, current) => current is DashboardDataLoaded || current is DashboardQuestionRecordsLoaded || current is DashboardLoading,
       builder: (context, state) {
-        List<Questions> questions = [];
+        List<Question> questions = [];
         bool isLoadingMore = false;
 
         if (state is DashboardDataLoaded) {
@@ -128,7 +128,7 @@ class _QuestionListState extends State<QuestionList> {
 
 class _QuestionItem extends StatelessWidget {
   final String userSub;
-  final Questions question;
+  final Question question;
   final VoidCallback? onTap;
 
   const _QuestionItem({

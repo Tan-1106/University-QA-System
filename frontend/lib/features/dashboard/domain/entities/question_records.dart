@@ -1,5 +1,5 @@
 class QuestionRecords {
-  final List<Questions> questions;
+  final List<Question> questions;
   final int total;
   final int totalPages;
   final int currentPage;
@@ -12,7 +12,7 @@ class QuestionRecords {
   });
 }
 
-class Questions {
+class Question {
   final String id;
   final String userId;
   final String userSub;
@@ -20,7 +20,7 @@ class Questions {
   final String? feedback;
   final String createdAt;
 
-  Questions({
+  Question({
     required this.id,
     required this.userId,
     required this.userSub,

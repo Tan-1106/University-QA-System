@@ -26,12 +26,14 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<Either<Failure, Documents>> loadGeneralDocuments({
+    int page = 1,
     String? department,
     String? documentType,
     String? keyword,
   }) async {
     try {
       final documentsData = await remoteDataSource.fetchGeneralDocuments(
+        page: page,
         department: department,
         docType: documentType,
         keyword: keyword,
@@ -44,11 +46,13 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<Either<Failure, Documents>> loadFacultyDocuments({
+    int page = 1,
     String? documentType,
     String? keyword,
   }) async {
     try {
       final documentsData = await remoteDataSource.fetchFacultyDocuments(
+        page: page,
         docType: documentType,
         keyword: keyword,
       );
