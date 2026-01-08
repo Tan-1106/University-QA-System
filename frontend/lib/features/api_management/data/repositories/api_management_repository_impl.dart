@@ -43,7 +43,7 @@ class APIManagementRepositoryImpl implements APIManagementRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> addAPIKey({
+  Future<Either<Failure, String>> addAPIKey({
     required String name,
     String? description,
     required String provider,

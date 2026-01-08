@@ -9,7 +9,6 @@ import 'package:university_qa_system/core/network/auth_interceptor.dart';
 import 'package:university_qa_system/core/network/connection_checker.dart';
 import 'package:university_qa_system/core/services/secure_storage_service.dart';
 import 'package:university_qa_system/features/api_management/data/data_sources/api_management_remote_data_source.dart';
-import 'package:university_qa_system/features/api_management/domain/use_cases/toggle_using_key.dart';
 
 import 'package:university_qa_system/features/authentication/data/data_sources/auth_remote_data_source.dart';
 import 'package:university_qa_system/features/authentication/data/repositories/auth_repository_impl.dart';
@@ -71,6 +70,9 @@ import 'features/api_management/data/repositories/api_management_repository_impl
 import 'features/api_management/domain/repositories/api_management_repository.dart';
 import 'features/api_management/domain/use_cases/load_api_keys.dart';
 import 'features/api_management/domain/use_cases/delete_api_key.dart';
+import 'features/api_management/domain/use_cases/get_key_models.dart';
+import 'features/api_management/domain/use_cases/add_api_key.dart';
+import 'features/api_management/domain/use_cases/add_key_model.dart';
 import 'features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
 import 'features/popular_question/domain/use_cases/load_existing_faculties.dart';
 import 'features/popular_question/domain/use_cases/toggle_question_display_status.dart';

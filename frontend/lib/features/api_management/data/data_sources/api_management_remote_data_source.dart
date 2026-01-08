@@ -14,7 +14,7 @@ abstract interface class APIManagementRemoteDataSource {
     required String id,
   });
 
-  Future<bool> addAPIKey({
+  Future<String> addAPIKey({
     required String name,
     String? description,
     required String provider,
@@ -115,7 +115,7 @@ class APIManagementRemoteDataSourceImpl implements APIManagementRemoteDataSource
   }
 
   @override
-  Future<bool> addAPIKey({
+  Future<String> addAPIKey({
     required String name,
     String? description,
     required String provider,
@@ -133,7 +133,8 @@ class APIManagementRemoteDataSourceImpl implements APIManagementRemoteDataSource
       );
 
       if (response.statusCode == 201 && response.data != null) {
-        return true;
+        final details = response.data['details'] as Map<String, dynamic>;
+        return details['_id'] as String;
       } else {
         throw const ServerException('Failed to add API key');
       }

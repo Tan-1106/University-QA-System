@@ -13,7 +13,7 @@ abstract interface class APIManagementRepository {
     required String id,
   });
 
-  Future<Either<Failure, bool>> addAPIKey({
+  Future<Either<Failure, String>> addAPIKey({
     required String name,
     String? description,
     required String provider,

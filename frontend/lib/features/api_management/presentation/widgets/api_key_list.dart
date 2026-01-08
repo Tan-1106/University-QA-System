@@ -130,6 +130,10 @@ class _ApiKeyListState extends State<ApiKeyList> {
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       Text(
+                        'Model: ${apiKey.usingModel}',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      Text(
                         apiKey.isUsing ? 'Đang sử dụng' : 'Không sử dụng',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: apiKey.isUsing ? Colors.green : Colors.red,

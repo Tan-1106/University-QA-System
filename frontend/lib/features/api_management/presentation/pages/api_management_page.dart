@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
+import 'package:university_qa_system/features/api_management/presentation/widgets/add_api_key_bottom_sheet.dart';
 import 'package:university_qa_system/features/api_management/presentation/widgets/api_key_list.dart';
 
 class APIManagementPage extends StatefulWidget {
@@ -104,19 +105,23 @@ class _APIManagementPageState extends State<APIManagementPage> {
     );
   }
 
-  // void _showAddKeyBottomSheet(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     useSafeArea: true,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-  //     ),
-  //     builder: (ctx) {
-  //
-  //     },
-  //   );
-  // }
+  void _showAddKeyBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return AddApiKeyBottomSheet(
+          onSuccess: () {
+            _triggerSearch();
+          },
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -127,7 +132,10 @@ class _APIManagementPageState extends State<APIManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddKeyBottomSheet(context),
+        child: const Icon(Icons.add),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

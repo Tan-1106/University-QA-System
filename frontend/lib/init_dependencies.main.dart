@@ -417,19 +417,29 @@ void _initAPIKeyListManagement() {
     ),
   );
 
-  serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
+serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
     () => DeleteAPIKeyUseCase(
       repository: serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<ToggleUsingKeyUseCase>(
-    () => ToggleUsingKeyUseCase(
+  serviceLocator.registerFactory<GetKeyModelsUseCase>(
+    () => GetKeyModelsUseCase(
       repository: serviceLocator(),
     ),
   );
 
+serviceLocator.registerFactory<AddAPIKeyUseCase>(
+    () => AddAPIKeyUseCase(
+      repository: serviceLocator(),
+    ),
+  );
 
+  serviceLocator.registerFactory<AddKeyModelUseCase>(
+    () => AddKeyModelUseCase(
+      repository: serviceLocator(),
+    ),
+  );
 
   serviceLocator.registerLazySingleton(
     () => ApiKeysBloc(
