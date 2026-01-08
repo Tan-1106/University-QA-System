@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:university_qa_system/features/api_management/presentation/pages/api_management_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/logout_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/register_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/system_sign_in_page.dart';
@@ -114,7 +115,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'AdminAPISettings',
           path: '/admin-api-settings',
-          builder: (context, state) => const Scaffold(body: Center(child: Text('Admin API Settings'))),
+          builder: (context, state) => const APIManagementPage(),
         ),
       ],
     ),

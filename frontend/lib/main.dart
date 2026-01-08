@@ -1,4 +1,5 @@
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),
         BlocProvider(create: (_) => serviceLocator<AdminPQBloc>()),
         BlocProvider(create: (_) => serviceLocator<UserManagementBloc>()),
+        BlocProvider(create: (_) => serviceLocator<ApiKeysBloc>()),
       ],
       child: const MyApp(),
     ),

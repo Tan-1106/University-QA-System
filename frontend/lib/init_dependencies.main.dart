@@ -10,6 +10,7 @@ Future<void> initDependencies() async {
   _initDocument();
   _initPopularQuestions();
   _initUserManagement();
+  _initAPIKeyListManagement();
 }
 
 Future<void> _initCore() async {
@@ -392,6 +393,46 @@ void _initUserManagement() {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+    ),
+  );
+}
+
+void _initAPIKeyListManagement() {
+  serviceLocator.registerFactory<APIManagementRemoteDataSource>(
+    () => APIManagementRemoteDataSourceImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<APIManagementRepository>(
+    () => APIManagementRepositoryImpl(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<LoadAPIKeysUseCase>(
+    () => LoadAPIKeysUseCase(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
+    () => DeleteAPIKeyUseCase(
+      repository: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerFactory<ToggleUsingKeyUseCase>(
+    () => ToggleUsingKeyUseCase(
+      repository: serviceLocator(),
+    ),
+  );
+
+
+
+  serviceLocator.registerLazySingleton(
+    () => ApiKeysBloc(
       serviceLocator(),
     ),
   );
