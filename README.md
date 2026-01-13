@@ -33,6 +33,10 @@
 
 ---
 
+### Video Demo
+https://drive.google.com/file/d/1WOpQhMdRMpa5lw2iYpUWVpM-yY5sWYAe/view?usp=sharing
+
+
 ## 🛠 Công nghệ sử dụng
 
 ### Frontend (Mobile App)
