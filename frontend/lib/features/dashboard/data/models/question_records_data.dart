@@ -22,7 +22,9 @@ class QuestionRecordsData {
             userId: recordJson['user_id'] as String,
             userSub: recordJson['user_sub'] as String,
             question: recordJson['question'] as String,
+            answer: recordJson['answer'] as String?,
             feedback: recordJson['feedback'] as String?,
+            managerAnswer: recordJson['manager_answer'] as String?,
             createdAt: recordJson['created_at'] as String,
           ),
         )

@@ -5,6 +5,7 @@ import 'package:university_qa_system/features/dashboard/domain/entities/statisti
 import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_question_records.dart';
 import 'package:university_qa_system/features/dashboard/domain/use_cases/load_dashboard_statistic.dart';
+import 'package:university_qa_system/features/dashboard/domain/use_cases/respond_to_question.dart';
 
 
 part 'dashboard_event.dart';
@@ -14,6 +15,7 @@ part 'dashboard_state.dart';
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final LoadDashboardStatisticUseCase _loadDashboardStatistic;
   final LoadDashboardQuestionRecordsUseCase _loadDashboardQuestionRecords;
+  final RespondToQuestionUseCase _loadRespondToQuestion;
 
   Statistic? _statisticData;
   List<Question> _allQuestions = [];
@@ -23,11 +25,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc(
     LoadDashboardStatisticUseCase loadDashboardStatistic,
     LoadDashboardQuestionRecordsUseCase loadDashboardQuestionRecords,
+    RespondToQuestionUseCase respondToQuestion,
   ) : _loadDashboardStatistic = loadDashboardStatistic,
       _loadDashboardQuestionRecords = loadDashboardQuestionRecords,
+      _loadRespondToQuestion = respondToQuestion,
       super(DashboardInitial()) {
     on<LoadDashboardStatisticEvent>(_onLoadDashboardStatisticData);
     on<LoadDashboardQuestionRecordsEvent>(_onLoadDashboardQuestionRecordsData);
+    on<RespondToQuestionEvent>(_onRespondToQuestion);
   }
 
   void _onLoadDashboardStatisticData(
@@ -98,6 +103,27 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             isLoadingMore: false,
           ));
         }
+      },
+    );
+  }
+
+  void _onRespondToQuestion(
+    RespondToQuestionEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
+    emit(DashboardLoading());
+
+    final result = await _loadRespondToQuestion(
+      RespondToQuestionUseCaseParams(
+        questionId: event.questionId,
+        response: event.response,
+      ),
+    );
+
+    result.fold(
+      (failure) => emit(DashboardError(failure.message)),
+      (_) {
+        add(LoadDashboardQuestionRecordsEvent());
       },
     );
   }

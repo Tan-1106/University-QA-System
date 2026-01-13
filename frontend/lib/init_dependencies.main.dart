@@ -149,8 +149,15 @@ void _initDashboard() {
     ),
   );
 
+  serviceLocator.registerFactory<RespondToQuestionUseCase>(
+    () => RespondToQuestionUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => DashboardBloc(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
     ),

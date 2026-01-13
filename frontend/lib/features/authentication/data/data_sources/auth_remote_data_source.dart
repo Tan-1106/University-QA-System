@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/authentication/data/models/current_user.dart';
 import 'package:university_qa_system/features/authentication/data/models/user_details.dart';
 
@@ -36,6 +37,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String password,
   ) async {
     try {
+      logger.i('Attempting to register user with email: $email');
       final response = await _dio.post(
         '/api/auth/register',
         data: {

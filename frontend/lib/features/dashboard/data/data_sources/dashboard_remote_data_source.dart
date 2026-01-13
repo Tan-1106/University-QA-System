@@ -11,6 +11,11 @@ abstract interface class DashboardRemoteDataSource {
     int page = 1,
     String? feedbackType,
   });
+
+  Future<bool> respondToQuestion({
+    required String questionId,
+    required String res,
+  });
 }
 
 class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
@@ -76,6 +81,36 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
       } else {
         throw const ServerException('Failed to retrieve question records data');
       }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> respondToQuestion({
+    required String questionId,
+    required String res,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/api/qa/$questionId/reply',
+        data: {
+          'manager_answer': res,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw const ServerException('Failed to send response to question');
+      }
+
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');

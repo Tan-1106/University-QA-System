@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
@@ -113,7 +114,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     ),
                     QuestionList(
                       onTap: (question) {
-                        // TODO: Handle question tap - show details
+                        context.push(
+                          '/admin-dashboard-question-details',
+                          extra: question,
+                        );
                       },
                     ),
                   ],

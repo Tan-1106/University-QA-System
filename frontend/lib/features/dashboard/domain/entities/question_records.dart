@@ -17,7 +17,9 @@ class Question {
   final String userId;
   final String userSub;
   final String question;
+  final String? answer;
   final String? feedback;
+  final String? managerAnswer;
   final String createdAt;
 
   Question({
@@ -25,7 +27,9 @@ class Question {
     required this.userId,
     required this.userSub,
     required this.question,
+    this.answer,
     this.feedback,
+    this.managerAnswer,
     required this.createdAt,
   });
 }

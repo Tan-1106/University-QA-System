@@ -7,7 +7,9 @@ import 'package:university_qa_system/features/authentication/presentation/pages/
 import 'package:university_qa_system/features/authentication/presentation/pages/system_sign_in_page.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/qa_history_record_page.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
+import 'package:university_qa_system/features/dashboard/presentation/pages/question_details_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/documents_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
@@ -97,6 +99,14 @@ final GoRouter appRouter = GoRouter(
         return AdminShellLayout(child: child);
       },
       routes: [
+        GoRoute(
+          name: 'AdminDashboardQuestionDetails',
+          path: '/admin-dashboard-question-details',
+          builder: (context, state) {
+            final question = state.extra as Question;
+            return QuestionDetailsPage(question: question);
+          },
+        ),
         GoRoute(
           name: 'AdminDashboard',
           path: '/admin-dashboard',

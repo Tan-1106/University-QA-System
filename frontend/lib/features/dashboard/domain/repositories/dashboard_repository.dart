@@ -10,4 +10,9 @@ abstract interface class DashboardRepository {
     int page = 1,
     String? feedbackType,
   });
+
+  Future<Either<Failure, bool>> respondToQuestion({
+    required String questionId,
+    required String response,
+  });
 }

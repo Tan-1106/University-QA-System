@@ -18,3 +18,13 @@ final class LoadDashboardQuestionRecordsEvent extends DashboardEvent {
     this.isLoadMore = false,
   });
 }
+
+final class RespondToQuestionEvent extends DashboardEvent {
+  final String questionId;
+  final String response;
+
+  RespondToQuestionEvent({
+    required this.questionId,
+    required this.response,
+  });
+}
