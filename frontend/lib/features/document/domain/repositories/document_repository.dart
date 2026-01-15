@@ -20,6 +20,7 @@ abstract interface class DocumentRepository {
     int page = 1,
     String? documentType,
     String? keyword,
+    String? faculty,
   });
 
   Future<Either<Failure, PDFBytes>> viewDocument(String documentId);

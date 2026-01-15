@@ -59,12 +59,14 @@ class DocumentRepositoryImpl implements DocumentRepository {
     int page = 1,
     String? documentType,
     String? keyword,
+    String? faculty,
   }) async {
     try {
       final documentsData = await remoteDataSource.fetchFacultyDocuments(
         page: page,
         docType: documentType,
         keyword: keyword,
+        faculty: faculty,
       );
       return right(documentsData.toEntity());
     } on ServerException catch (e) {

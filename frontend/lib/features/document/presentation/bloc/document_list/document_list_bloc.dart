@@ -103,6 +103,7 @@ class DocumentListBloc extends Bloc<DocumentListEvent, DocumentListState> {
         page: event.page,
         keyword: event.keyword,
         documentType: event.documentType,
+        faculty: event.faculty,
       ),
     );
 

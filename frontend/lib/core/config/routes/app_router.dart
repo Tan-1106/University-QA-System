@@ -10,6 +10,7 @@ import 'package:university_qa_system/features/chat_box/presentation/pages/qa_his
 import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/question_details_page.dart';
+import 'package:university_qa_system/features/document/presentation/pages/documents_management_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/documents_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
@@ -122,7 +123,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'AdminDocumentsManagement',
           path: '/admin-documents-management',
-          builder: (context, state) => const DocumentsPage(),
+          builder: (context, state) => const DocumentsManagementPage(),
         ),
         GoRoute(
           name: 'AdminAPISettings',

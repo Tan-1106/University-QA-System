@@ -23,12 +23,14 @@ final class LoadFacultyDocumentsEvent extends DocumentListEvent {
   final int page;
   final String? keyword;
   final String? documentType;
+  final String? faculty;
   final bool isLoadMore;
 
   LoadFacultyDocumentsEvent({
     this.page = 1,
     this.keyword,
     this.documentType,
+    this.faculty,
     this.isLoadMore = false,
   });
 }

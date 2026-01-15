@@ -240,6 +240,12 @@ void _initDocument() {
     ),
   );
 
+  serviceLocator.registerFactory<GetAllFacultiesUseCase>(
+    () => GetAllFacultiesUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerFactory<GetGeneralDocumentsUseCase>(
     () => GetGeneralDocumentsUseCase(
       serviceLocator(),

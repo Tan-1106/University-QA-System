@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/document/data/models/filters_data.dart';
 import 'package:university_qa_system/features/document/data/models/documents_data.dart';
 import 'package:university_qa_system/features/document/data/models/pdf_bytes_data.dart';
@@ -22,6 +23,7 @@ abstract interface class DocumentRemoteDataSource {
     int page = 1,
     String? docType,
     String? keyword,
+    String? faculty,
   });
 
   Future<PDFBytesData> viewDocument(String documentId);
@@ -81,10 +83,13 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         final apiResponse = ApiResponse<List<String>>.fromJson(
           response.data as Map<String, dynamic>,
           (json) {
-            return (json as List).map((e) => e as String).toList();
+            if (json is Map<String, dynamic> && json.containsKey('faculties')) {
+              final faculties = List<String>.from(json['faculties'] as List);
+              return faculties;
+            }
+            throw const ServerException('Invalid faculties data structure');
           },
         );
-
         return apiResponse.details ?? [];
       } else {
         throw const ServerException('Failed to retrieve faculties');
@@ -96,6 +101,7 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         throw ServerException('Network Error: ${e.message}');
       }
     } catch (e) {
+      logger.e('Exception while fetching faculties: $e');
       throw ServerException(e.toString());
     }
   }
@@ -148,14 +154,20 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
     int page = 1,
     String? docType,
     String? keyword,
+    String? faculty,
   }) async {
     try {
+      logger.i(
+        'Fetching faculty documents with page: $page, docType: $docType, keyword: $keyword, faculty: $faculty',
+      );
+
       final response = await _dio.get(
         '/api/documents/faculty',
         queryParameters: {
           'page': page,
           if (keyword != null) 'keyword': keyword,
           if (docType != null) 'doc_type': docType,
+          if (faculty != null) 'faculty': faculty,
         },
       );
       if (response.statusCode == 200 && response.data != null) {

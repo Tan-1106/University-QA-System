@@ -32,7 +32,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_) => serviceLocator<DocumentProvider>()),
+        ChangeNotifierProvider(create: (_) => serviceLocator<DocumentProvider>()),
       ],
       child: MultiBlocProvider(
         providers: [

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/document_list.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/department_filter.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/keyword_textfield.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/document_type_filter.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/department_filter.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/document_list.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/document_type_filter.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/keyword_textfield.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 
 class DocumentsPage extends StatefulWidget {
   const DocumentsPage({super.key});
@@ -22,6 +22,25 @@ class _DocumentsPageState extends State<DocumentsPage> {
   String? _selectedDepartment;
   String? _selectedDocumentType;
   String? _keyword;
+
+  void _triggerSearch() {
+    if (_selectedType == DocumentSegmentedButtonOptions.general) {
+      context.read<DocumentListBloc>().add(
+        LoadGeneralDocumentsEvent(
+          department: _selectedDepartment,
+          documentType: _selectedDocumentType,
+          keyword: _keyword,
+        ),
+      );
+    } else {
+      context.read<DocumentListBloc>().add(
+        LoadFacultyDocumentsEvent(
+          documentType: _selectedDocumentType,
+          keyword: _keyword,
+        ),
+      );
+    }
+  }
 
   void _showFilterSheet(BuildContext context) {
     String? tempDepartment = _selectedDepartment;
@@ -130,25 +149,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
         );
       },
     );
-  }
-
-  void _triggerSearch() {
-    if (_selectedType == DocumentSegmentedButtonOptions.general) {
-      context.read<DocumentListBloc>().add(
-        LoadGeneralDocumentsEvent(
-          department: _selectedDepartment,
-          documentType: _selectedDocumentType,
-          keyword: _keyword,
-        ),
-      );
-    } else {
-      context.read<DocumentListBloc>().add(
-        LoadFacultyDocumentsEvent(
-          documentType: _selectedDocumentType,
-          keyword: _keyword,
-        ),
-      );
-    }
   }
 
   @override
