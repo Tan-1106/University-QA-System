@@ -82,10 +82,15 @@ class _StudentPopularQuestionsPageState extends State<StudentPopularQuestionsPag
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
               ),
-              child: StudentPQList(
-                onQuestionTap: (question) {
-                  _showQuestionDetailsDialog(context, question);
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<StudentPQBloc>().add(GetStudentPopularQuestionsEvent(facultyOnly: _showFacultyOnly));
                 },
+                child: StudentPQList(
+                  onQuestionTap: (question) {
+                    _showQuestionDetailsDialog(context, question);
+                  },
+                ),
               ),
             ),
           ),

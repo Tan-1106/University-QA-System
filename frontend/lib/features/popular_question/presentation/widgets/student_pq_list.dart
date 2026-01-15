@@ -20,15 +20,26 @@ class StudentPQList extends StatelessWidget {
 
         if (state is StudentPQLoaded) {
           final popularQuestions = state.questions;
-
           if (popularQuestions.isEmpty) {
-            return Center(
-              child: Text(
-                'Không có dữ liệu.',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontStyle: FontStyle.italic,
+            return ListView(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+                Center(
+                  child: Column(
+                    children: [
+                      Icon(Icons.search_off, size: 48, color: Theme.of(context).hintColor),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Không tìm thấy câu hỏi phổ biến nào.',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             );
           }
 

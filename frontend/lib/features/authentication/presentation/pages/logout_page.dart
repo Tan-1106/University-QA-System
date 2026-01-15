@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
 class LogoutPage extends StatelessWidget {
   const LogoutPage({super.key});
+
+  void _onLogout(BuildContext context) {
+    context.read<AuthBloc>().add(LogOutEvent());
+    context.go('/sign-in');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +118,7 @@ class LogoutPage extends StatelessWidget {
                           child: SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
-                                context.read<AuthBloc>().add(LogOutEvent());
-                              },
+                              onPressed: () => _onLogout(context),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                                 foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,

@@ -116,12 +116,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     LogOutEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-
+    emit(AuthLoggedOut());
     final result = await _logOut.call(NoParams());
-
     result.fold(
-      (failure) => emit(AuthFailure(failure.message)),
+      (failure) => {},
       (_) => emit(AuthLoggedOut()),
     );
   }

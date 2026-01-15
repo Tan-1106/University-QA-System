@@ -90,17 +90,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> signOut() async {
+  Future<Either<Failure, void>> signOut() async {
     try {
       final refreshToken = await secureStorageService.getRefreshToken();
-
-      final result = await remoteDataSource.signOut(refreshToken!);
-      if (result) {
-        await secureStorageService.deleteAll();
-        return right(true);
-      } else {
-        return left(const Failure('Đăng xuất thất bại'));
-      }
+      await secureStorageService.deleteAll();
+      await remoteDataSource.signOut(refreshToken!);
+      return right(null);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

@@ -20,5 +20,5 @@ abstract interface class AuthRepository {
 
   Future<Either<Failure, User>> getUserInformation();
 
-  Future<Either<Failure, bool>> signOut();
+  Future<Either<Failure, void>> signOut();
 }
