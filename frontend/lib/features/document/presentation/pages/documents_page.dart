@@ -23,13 +23,6 @@ class _DocumentsPageState extends State<DocumentsPage> {
   String? _selectedDocumentType;
   String? _keyword;
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<DocumentFilterBloc>().add(GetDocumentFiltersEvent());
-    _triggerSearch();
-  }
-
   void _showFilterSheet(BuildContext context) {
     String? tempDepartment = _selectedDepartment;
     String? tempDocumentType = _selectedDocumentType;
@@ -52,85 +45,85 @@ class _DocumentsPageState extends State<DocumentsPage> {
                 top: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: 10,
-                  children: [
-                    Text(
-                      'Bộ lọc tài liệu',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10,
+                children: [
+                  Text(
+                    'Bộ lọc tài liệu',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Divider(),
-                    if (_selectedType == DocumentSegmentedButtonOptions.general)
-                      DepartmentFilter(
-                        onDepartmentSelected: (department) {
-                          setSheetState(() {
-                            tempDepartment = department != 'Tất cả' ? department : null;
-                          });
-                        },
-                      ),
-                    DocumentTypeFilter(
-                      onDocumentTypeSelected: (documentType) {
+                    textAlign: TextAlign.center,
+                  ),
+                  const Divider(),
+                  if (_selectedType == DocumentSegmentedButtonOptions.general)
+                    DepartmentFilter(
+                      selectedDepartment: tempDepartment,
+                      onDepartmentSelected: (department) {
                         setSheetState(() {
-                          tempDocumentType = documentType != 'Tất cả' ? documentType : null;
+                          tempDepartment = department != 'Tất cả' ? department : null;
                         });
                       },
                     ),
-                    KeywordTextfield(
-                      onKeywordChanged: (keyword) {
-                        setSheetState(() {
-                          tempKeyword = keyword.isNotEmpty ? keyword : null;
+                  DocumentTypeFilter(
+                    selectedDocumentType: tempDocumentType,
+                    onDocumentTypeSelected: (documentType) {
+                      setSheetState(() {
+                        tempDocumentType = documentType != 'Tất cả' ? documentType : null;
+                      });
+                    },
+                  ),
+                  KeywordTextfield(
+                    currentSearchKeyword: tempKeyword,
+                    onKeywordChanged: (keyword) {
+                      setSheetState(() {
+                        tempKeyword = keyword.isNotEmpty ? keyword : null;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _selectedDepartment = tempDepartment;
+                          _selectedDocumentType = tempDocumentType;
+                          _keyword = tempKeyword;
                         });
+                        Navigator.of(context).pop();
+                        _triggerSearch();
                       },
+                      child: const Text('Áp dụng bộ lọc'),
                     ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _selectedDepartment = tempDepartment;
-                            _selectedDocumentType = tempDocumentType;
-                            _keyword = tempKeyword;
-                          });
-                          Navigator.of(context).pop();
-                          _triggerSearch();
-                        },
-                        child: const Text('Áp dụng bộ lọc'),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                        foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
+                      onPressed: () {
+                        setState(() {
+                          _selectedDepartment = null;
+                          _selectedDocumentType = null;
+                          _keyword = null;
+                        });
+                        Navigator.of(context).pop();
+                        _triggerSearch();
+                      },
+                      child: const Text('Hủy lọc'),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                          foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _selectedDepartment = null;
-                            _selectedDocumentType = null;
-                            _keyword = null;
-                          });
-                          Navigator.of(context).pop();
-                          _triggerSearch();
-                        },
-                        child: const Text('Hủy lọc'),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
@@ -156,6 +149,13 @@ class _DocumentsPageState extends State<DocumentsPage> {
         ),
       );
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<DocumentFilterBloc>().add(GetDocumentFiltersEvent());
+    _triggerSearch();
   }
 
   @override
@@ -192,12 +192,15 @@ class _DocumentsPageState extends State<DocumentsPage> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
               ),
-              child: DocumentList(
-                onDocumentTap: (documentId) {
-                  context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));
-                  context.push('/document-viewer');
-                },
-                selectedOption: _selectedType,
+              child: RefreshIndicator(
+                onRefresh: () async => _triggerSearch(),
+                child: DocumentList(
+                  onDocumentTap: (documentId) {
+                    context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));
+                    context.push('/document-viewer');
+                  },
+                  selectedOption: _selectedType,
+                ),
               ),
             ),
           ),

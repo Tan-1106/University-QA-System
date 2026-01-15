@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
 import 'package:university_qa_system/features/dashboard/domain/repositories/dashboard_repository.dart';
 
 class RespondToQuestionUseCase implements UseCase<bool, RespondToQuestionUseCaseParams> {

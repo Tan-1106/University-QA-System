@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 
 class DocumentTypeFilter extends StatefulWidget {
+  final String? selectedDocumentType;
   final Function(String type) onDocumentTypeSelected;
-  const DocumentTypeFilter({super.key, required this.onDocumentTypeSelected});
+  const DocumentTypeFilter({super.key, this.selectedDocumentType, required this.onDocumentTypeSelected});
 
   @override
   State<DocumentTypeFilter> createState() => _DocumentTypeFilterState();
 }
 
 class _DocumentTypeFilterState extends State<DocumentTypeFilter> {
-  String selectedDocumentType = 'Tất cả';
+  late String selectedDocumentType = widget.selectedDocumentType ?? 'Tất cả';
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,7 @@ class _DocumentTypeFilterState extends State<DocumentTypeFilter> {
                 setState(() {
                   selectedDocumentType = newValue!;
                 });
-                widget.onDocumentTypeSelected(selectedDocumentType);
+                widget.onDocumentTypeSelected(newValue!);
               },
             ),
           ),

@@ -31,15 +31,18 @@ class DocumentListBloc extends Bloc<DocumentListEvent, DocumentListState> {
       LoadGeneralDocumentsEvent event,
       Emitter<DocumentListState> emit,
   ) async {
-    emit(DocumentListLoading());
-
     if (event.isLoadMore) {
       if (state is DocumentListLoaded) {
         final currentState = state as DocumentListLoaded;
         if (currentState.isLoadingMore || !currentState.hasMore) return;
         emit(currentState.copyWith(isLoadingMore: true));
+      } else {
+        emit(DocumentListLoading());
+        _allDocuments = [];
+        _currentPage = 0;
       }
     } else {
+      emit(DocumentListLoading());
       _allDocuments = [];
       _currentPage = 0;
     }
@@ -81,15 +84,18 @@ class DocumentListBloc extends Bloc<DocumentListEvent, DocumentListState> {
       LoadFacultyDocumentsEvent event,
       Emitter<DocumentListState> emit,
   ) async {
-    emit (DocumentListLoading());
-
     if (event.isLoadMore) {
       if (state is DocumentListLoaded) {
         final currentState = state as DocumentListLoaded;
         if (currentState.isLoadingMore || !currentState.hasMore) return;
         emit(currentState.copyWith(isLoadingMore: true));
+      } else {
+        emit(DocumentListLoading());
+        _allDocuments = [];
+        _currentPage = 0;
       }
     } else {
+      emit(DocumentListLoading());
       _allDocuments = [];
       _currentPage = 0;
     }

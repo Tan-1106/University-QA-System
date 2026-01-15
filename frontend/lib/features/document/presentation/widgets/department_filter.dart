@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 
 class DepartmentFilter extends StatefulWidget {
+  final String? selectedDepartment;
   final Function(String deparment) onDepartmentSelected;
-  const DepartmentFilter({super.key, required this.onDepartmentSelected});
+  const DepartmentFilter({super.key, this.selectedDepartment, required this.onDepartmentSelected});
 
   @override
   State<DepartmentFilter> createState() => _DepartmentFilterState();
 }
 
 class _DepartmentFilterState extends State<DepartmentFilter> {
-  String selectedDepartment = 'Tất cả';
+  late String selectedDepartment = widget.selectedDepartment ?? 'Tất cả';
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,7 @@ class _DepartmentFilterState extends State<DepartmentFilter> {
                 setState(() {
                   selectedDepartment = newValue!;
                 });
-                widget.onDepartmentSelected(selectedDepartment);
+                widget.onDepartmentSelected(newValue!);
               },
             ),
           ),

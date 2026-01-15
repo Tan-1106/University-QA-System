@@ -19,17 +19,11 @@ class DocumentList extends StatefulWidget {
 class _DocumentListState extends State<DocumentList> {
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll - 200);
   }
 
   void _onScroll() {
@@ -45,7 +39,7 @@ class _DocumentListState extends State<DocumentList> {
           );
         } else if (widget.selectedOption == DocumentSegmentedButtonOptions.faculty) {
           context.read<DocumentListBloc>().add(
-            LoadGeneralDocumentsEvent(
+            LoadFacultyDocumentsEvent(
               page: state.currentPage + 1,
               isLoadMore: true,
             ),
@@ -55,11 +49,17 @@ class _DocumentListState extends State<DocumentList> {
     }
   }
 
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll - 200);
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,18 +75,31 @@ class _DocumentListState extends State<DocumentList> {
           isLoadingMore = state.isLoadingMore;
         }
 
-        if (state is DocumentListLoading) {
+        if (state is DocumentListLoading && documents.isEmpty) {
           return const Center(child: Loader());
         }
 
-        if (documents.isEmpty) {
-          return Center(
-            child: Text(
-              'Không có tài liệu nào',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                fontStyle: FontStyle.italic,
+        if (documents.isEmpty && state is DocumentListLoaded) {
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+              Center(
+                child: Column(
+                  children: [
+                    Icon(Icons.search_off, size: 48, color: Theme.of(context).hintColor),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Không tìm thấy tài liệu nào.',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontStyle: FontStyle.italic,
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           );
         }
 

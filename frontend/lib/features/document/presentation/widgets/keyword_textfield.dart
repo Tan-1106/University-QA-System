@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class KeywordTextfield extends StatefulWidget {
+  final String? currentSearchKeyword;
   final Function(String keyword)? onKeywordChanged;
 
-  const KeywordTextfield({super.key, required this.onKeywordChanged});
+  const KeywordTextfield({super.key, this.currentSearchKeyword, required this.onKeywordChanged});
 
   @override
   State<KeywordTextfield> createState() => _KeywordTextfieldState();
@@ -11,6 +12,12 @@ class KeywordTextfield extends StatefulWidget {
 
 class _KeywordTextfieldState extends State<KeywordTextfield> {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.currentSearchKeyword ?? '';
+  }
 
   @override
   void dispose() {
