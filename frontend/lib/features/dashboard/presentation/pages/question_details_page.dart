@@ -27,6 +27,12 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _responseController.text = widget.question.managerAnswer ?? '';
+  }
+
+  @override
   void dispose() {
     _responseController.dispose();
     super.dispose();
@@ -77,53 +83,14 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Phản hồi từ sinh viên:',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (widget.question.feedback == 'Like')
-                    Icon(
-                      Icons.thumb_up,
-                      color: Colors.green[700],
-                      size: 30,
-                    ),
-                  if (widget.question.feedback == 'Dislike')
-                    Icon(
-                      Icons.thumb_down,
-                      color: Colors.red[700],
-                      size: 30,
-                    ),
-                  if (widget.question.feedback == null)
-                    Text(
-                      'Chưa có phản hồi.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                ],
-              ),
-              const SizedBox(height: 20),
               Text(
-                'Phản hồi từ Admin:',
+                'Phản hồi từ sinh viên:',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.question.managerAnswer ?? 'Chưa có phản hồi.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
+              Text(
+                (widget.question.feedback != null) ? (widget.question.feedback! == 'Like') ? 'Tích cực.' : 'Không tích cực.' : 'Chưa có phản hồi.',
               ),
               const SizedBox(height: 20),
               Text(
@@ -151,7 +118,7 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
                     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                     foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer
                   ),
-                  child: const Text('Gửi phản hồi'),
+                  child: const Text('Lưu phản hồi'),
                 ),
               ),
             ],

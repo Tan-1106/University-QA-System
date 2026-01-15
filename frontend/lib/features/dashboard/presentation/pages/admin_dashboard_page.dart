@@ -63,64 +63,69 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               }
 
               if (statisticData != null) {
-                return ListView(
-                  children: [
-                    Card(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                      color: Theme.of(context).colorScheme.tertiary,
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Thống kê theo tháng',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<DashboardBloc>().add(LoadDashboardStatisticEvent());
+                  },
+                  child: ListView(
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Thống kê theo tháng',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TotalQuestions(quantity: statisticData.total),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: TotalLike(quantity: statisticData.like),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: TotalDislike(quantity: statisticData.dislike),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Card(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                      color: Theme.of(context).colorScheme.tertiary,
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Câu hỏi từ người dùng',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TotalQuestions(quantity: statisticData.total),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TotalLike(quantity: statisticData.like),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TotalDislike(quantity: statisticData.dislike),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Câu hỏi từ người dùng',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                          ),
                         ),
                       ),
-                    ),
-                    QuestionList(
-                      onTap: (question) {
-                        context.push(
-                          '/admin-dashboard-question-details',
-                          extra: question,
-                        );
-                      },
-                    ),
-                  ],
+                      QuestionList(
+                        onTap: (question) {
+                          context.push(
+                            '/admin-dashboard-question-details',
+                            extra: question,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 );
               }
 
