@@ -34,3 +34,9 @@ final class LoadFacultyDocumentsEvent extends DocumentListEvent {
 }
 
 final class ResetDocumentListEvent extends DocumentListEvent {}
+
+final class DeleteDocumentEvent extends DocumentListEvent {
+  final String documentId;
+
+  DeleteDocumentEvent(this.documentId);
+}

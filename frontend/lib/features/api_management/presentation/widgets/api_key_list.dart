@@ -114,10 +114,11 @@ class _ApiKeyListState extends State<ApiKeyList> {
             final apiKey = apiKeys[index];
             return Column(
               children: [
+                const Divider(),
                 ListTile(
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(
-                    apiKey.name,
+                    'Key: ${apiKey.name}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -125,23 +126,31 @@ class _ApiKeyListState extends State<ApiKeyList> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Trạng thái: ',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Text(
+                            apiKey.isUsing ? 'Đang sử dụng' : 'Không sử dụng',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: apiKey.isUsing ? Colors.green : Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
                         'Nhà cung cấp: ${apiKey.provider}',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                      Text(
-                        'Model: ${apiKey.usingModel}',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                      Text(
-                        apiKey.isUsing ? 'Đang sử dụng' : 'Không sử dụng',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: apiKey.isUsing ? Colors.green : Colors.red,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       Text(
                         apiKey.key,
-                        style: Theme.of(context).textTheme.labelMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ],
                   ),

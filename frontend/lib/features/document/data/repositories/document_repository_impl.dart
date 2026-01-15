@@ -25,6 +25,16 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
+  Future<Either<Failure, List<String>>> loadAllFaculties() async {
+    try {
+      final faculties = await remoteDataSource.fetchAllFaculties();
+      return right(faculties);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, Documents>> loadGeneralDocuments({
     int page = 1,
     String? department,
@@ -67,6 +77,16 @@ class DocumentRepositoryImpl implements DocumentRepository {
     try {
       final pdfBytesData = await remoteDataSource.viewDocument(documentId);
       return right(pdfBytesData.toEntity());
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteDocument(String documentId) async {
+    try {
+      final result = await remoteDataSource.deleteDocument(documentId);
+      return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

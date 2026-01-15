@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
-import 'package:university_qa_system/features/dashboard/presentation/widgets/total_like.dart';
+import 'package:university_qa_system/features/dashboard/presentation/widgets/statistic_box.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/widgets/question_list.dart';
-import 'package:university_qa_system/features/dashboard/presentation/widgets/total_dislike.dart';
-import 'package:university_qa_system/features/dashboard/presentation/widgets/total_question.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -70,49 +68,73 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: ListView(
                     children: [
                       Card(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                        color: Theme.of(context).colorScheme.tertiary,
-                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
                             'Thống kê theo tháng',
                             textAlign: TextAlign.center,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                            style:
+                                Theme.of(
+                                  context,
+                                ).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Expanded(
-                            child: TotalQuestions(quantity: statisticData.total),
+                            child: StatisticBox(
+                              quantity: statisticData.total,
+                              title: 'Tổng số\n câu hỏi',
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              textColor: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: TotalLike(quantity: statisticData.like),
+                            child: StatisticBox(
+                              quantity: statisticData.like,
+                              title: 'Phản hồi tích cực',
+                              backgroundColor: Colors.green,
+                              textColor: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: TotalDislike(quantity: statisticData.dislike),
+                            child: StatisticBox(
+                              quantity: statisticData.dislike,
+                              title: 'Phản hồi tiêu cực',
+                              backgroundColor: Colors.red,
+                              textColor: Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
                       Card(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                        color: Theme.of(context).colorScheme.tertiary,
-                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
                             'Câu hỏi từ người dùng',
                             textAlign: TextAlign.center,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onTertiary),
+                            style:
+                                Theme.of(
+                                  context,
+                                ).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                ),
                           ),
                         ),
                       ),

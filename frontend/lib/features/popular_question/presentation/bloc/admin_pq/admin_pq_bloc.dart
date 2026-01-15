@@ -49,7 +49,7 @@ class AdminPQBloc extends Bloc<AdminPQEvent, AdminPQState> {
     GeneratePotentialQuestionsEvent event,
     Emitter<AdminPQState> emit,
   ) async {
-    emit(const AdminPQLoading());
+    emit(const AdminPQGenerating());
 
     final result = await _generatePopularQuestionsUseCase(NoParams());
 

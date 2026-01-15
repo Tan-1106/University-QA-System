@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
@@ -5,6 +6,7 @@ import 'package:university_qa_system/features/chat_box/presentation/bloc/history
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 
@@ -28,23 +30,28 @@ Future<void> main() async {
   Bloc.observer = AppBlocObserver();
 
   runApp(
-    MultiBlocProvider(
+    MultiProvider(
       providers: [
-        BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
-        BlocProvider(create: (_) => serviceLocator<DashboardBloc>()),
-        BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
-        BlocProvider(create: (_) => serviceLocator<HistoryBloc>()),
-        BlocProvider(create: (_) => serviceLocator<HistoryDetailsBloc>()),
-        BlocProvider(create: (_) => serviceLocator<DocumentFilterBloc>()),
-        BlocProvider(create: (_) => serviceLocator<DocumentListBloc>()),
-        BlocProvider(create: (_) => serviceLocator<DocumentViewerBloc>()),
-        BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),
-        BlocProvider(create: (_) => serviceLocator<AdminPQBloc>()),
-        BlocProvider(create: (_) => serviceLocator<UserManagementBloc>()),
-        BlocProvider(create: (_) => serviceLocator<ApiKeysBloc>()),
+        Provider(create: (_) => serviceLocator<DocumentProvider>()),
       ],
-      child: const MyApp(),
-    ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => serviceLocator<AuthBloc>()),
+          BlocProvider(create: (_) => serviceLocator<DashboardBloc>()),
+          BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
+          BlocProvider(create: (_) => serviceLocator<HistoryBloc>()),
+          BlocProvider(create: (_) => serviceLocator<HistoryDetailsBloc>()),
+          BlocProvider(create: (_) => serviceLocator<DocumentFilterBloc>()),
+          BlocProvider(create: (_) => serviceLocator<DocumentListBloc>()),
+          BlocProvider(create: (_) => serviceLocator<DocumentViewerBloc>()),
+          BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),
+          BlocProvider(create: (_) => serviceLocator<AdminPQBloc>()),
+          BlocProvider(create: (_) => serviceLocator<UserManagementBloc>()),
+          BlocProvider(create: (_) => serviceLocator<ApiKeysBloc>()),
+        ],
+        child: const MyApp(),
+      ),
+    )
   );
 }
 

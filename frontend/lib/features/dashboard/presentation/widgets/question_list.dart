@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/dashboard/presentation/widgets/question_item.dart';
 
 class QuestionList extends StatefulWidget {
   final void Function(Question question)? onTap;
@@ -17,20 +18,6 @@ class QuestionList extends StatefulWidget {
 
 class _QuestionListState extends State<QuestionList> {
   final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    context.read<DashboardBloc>().add(LoadDashboardQuestionRecordsEvent(page: 1));
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   void _onScroll() {
     if (_isBottom) {
@@ -58,6 +45,20 @@ class _QuestionListState extends State<QuestionList> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll - 200);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    context.read<DashboardBloc>().add(LoadDashboardQuestionRecordsEvent(page: 1));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -100,7 +101,7 @@ class _QuestionListState extends State<QuestionList> {
         }
 
         return SizedBox(
-          height: 400,
+          height: 500,
           child: ListView.builder(
             controller: _scrollController,
             itemCount: questions.length + (isLoadingMore ? 1 : 0),
@@ -113,7 +114,7 @@ class _QuestionListState extends State<QuestionList> {
               }
 
               final question = questions[index];
-              return _QuestionItem(
+              return QuestionItem(
                 userSub: question.userSub,
                 question: question,
                 onTap: () => widget.onTap?.call(question),
@@ -123,96 +124,5 @@ class _QuestionListState extends State<QuestionList> {
         );
       },
     );
-  }
-}
-
-class _QuestionItem extends StatelessWidget {
-  final String userSub;
-  final Question question;
-  final VoidCallback? onTap;
-
-  const _QuestionItem({
-    required this.userSub,
-    required this.question,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'MSSV: $userSub',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    question.question,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        _getFeedbackIcon(question.feedback ?? 'None'),
-                        size: 16,
-                        color: _getFeedbackColor(question.feedback ?? 'None'),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        question.createdAt,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            IconButton(onPressed: onTap, icon: const Icon(Icons.chevron_right)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconData _getFeedbackIcon(String feedback) {
-    switch (feedback.toLowerCase()) {
-      case 'like':
-        return Icons.thumb_up;
-      case 'dislike':
-        return Icons.thumb_down;
-      default:
-        return Icons.remove;
-    }
-  }
-
-  Color _getFeedbackColor(String feedback) {
-    switch (feedback.toLowerCase()) {
-      case 'like':
-        return Colors.green;
-      case 'dislike':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
   }
 }

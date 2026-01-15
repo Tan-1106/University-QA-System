@@ -258,6 +258,12 @@ void _initDocument() {
     ),
   );
 
+  serviceLocator.registerFactory<DeleteDocumentUseCase>(
+    () => DeleteDocumentUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => DocumentFilterBloc(
       serviceLocator(),
@@ -268,11 +274,18 @@ void _initDocument() {
     () => DocumentListBloc(
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
     ),
   );
 
   serviceLocator.registerLazySingleton(
     () => DocumentViewerBloc(
+      serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => DocumentProvider(
       serviceLocator(),
     ),
   );
@@ -298,7 +311,7 @@ void _initPopularQuestions() {
   );
 
   serviceLocator.registerFactory<LoadExistingFacultiesUseCase>(
-        () => LoadExistingFacultiesUseCase(
+    () => LoadExistingFacultiesUseCase(
       serviceLocator(),
     ),
   );
@@ -340,14 +353,14 @@ void _initPopularQuestions() {
   );
 
   serviceLocator.registerLazySingleton(
-      () => AdminPQBloc(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      )
+    () => AdminPQBloc(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+    ),
   );
 }
 
@@ -424,7 +437,7 @@ void _initAPIKeyListManagement() {
     ),
   );
 
-serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
+  serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
     () => DeleteAPIKeyUseCase(
       repository: serviceLocator(),
     ),
@@ -436,7 +449,7 @@ serviceLocator.registerFactory<DeleteAPIKeyUseCase>(
     ),
   );
 
-serviceLocator.registerFactory<AddAPIKeyUseCase>(
+  serviceLocator.registerFactory<AddAPIKeyUseCase>(
     () => AddAPIKeyUseCase(
       repository: serviceLocator(),
     ),

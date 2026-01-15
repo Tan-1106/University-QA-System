@@ -13,6 +13,10 @@ class AdminPQLoading extends AdminPQState {
   const AdminPQLoading();
 }
 
+class AdminPQGenerating extends AdminPQState {
+  const AdminPQGenerating();
+}
+
 class AdminPQDataState extends AdminPQState {
   final List<PopularQuestion> questions;
   final List<String> faculties;

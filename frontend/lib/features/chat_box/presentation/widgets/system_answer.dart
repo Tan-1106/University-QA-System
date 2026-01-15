@@ -25,10 +25,12 @@ class _SystemAnswerState extends State<SystemAnswer> {
   int _currentIndex = 0;
 
   void _startTypingEffect() {
+    final answer = widget.answer.replaceAll('\\n', '\n');
+
     _timer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
-      if (_currentIndex < widget.answer.length) {
+      if (_currentIndex < answer.length) {
         setState(() {
-          _displayedText += widget.answer[_currentIndex];
+          _displayedText += answer[_currentIndex];
           _currentIndex++;
         });
       } else {

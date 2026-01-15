@@ -120,6 +120,11 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const UserManagementPage(),
         ),
         GoRoute(
+          name: 'AdminDocumentsManagement',
+          path: '/admin-documents-management',
+          builder: (context, state) => const DocumentsPage(),
+        ),
+        GoRoute(
           name: 'AdminAPISettings',
           path: '/admin-api-settings',
           builder: (context, state) => const APIManagementPage(),

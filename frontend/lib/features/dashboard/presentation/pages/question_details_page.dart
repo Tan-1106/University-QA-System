@@ -76,7 +76,7 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.question.answer ?? 'Chưa có hoặc lỗi trong quá trình tạo câu trả lời.',
+                      (widget.question.answer ?? 'Chưa có hoặc lỗi trong quá trình tạo câu trả lời.').replaceAll('\\n', '\n'),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -90,7 +90,11 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
                 ),
               ),
               Text(
-                (widget.question.feedback != null) ? (widget.question.feedback! == 'Like') ? 'Tích cực.' : 'Không tích cực.' : 'Chưa có phản hồi.',
+                (widget.question.feedback != null)
+                    ? (widget.question.feedback! == 'Like')
+                          ? 'Tích cực.'
+                          : 'Không tích cực.'
+                    : 'Chưa có phản hồi.',
               ),
               const SizedBox(height: 20),
               Text(
@@ -116,7 +120,7 @@ class _QuestionDetailsPageState extends State<QuestionDetailsPage> {
                   onPressed: _submitResponse,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer
+                    foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
                   child: const Text('Lưu phản hồi'),
                 ),
