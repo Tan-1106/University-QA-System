@@ -52,36 +52,39 @@ class _QaHistoryDetailsPageState extends State<QaHistoryDetailsPage> {
         }
 
         if (state is HistoryDetailsLoaded) {
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: ListView(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: UserQuestion(question: state.recordDetails.question),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: SystemAnswerHistory(answer: state.recordDetails.answer, feedback: state.recordDetails.feedback),
-                      ),
-                      if (state.recordDetails.managerAnswer != null) ...[
+          return RefreshIndicator(
+            onRefresh: () async => _loadRecordDetails(),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ListView(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: UserQuestion(question: state.recordDetails.question),
+                        ),
                         const SizedBox(height: 10),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: AdminAnswer(
-                            answer: state.recordDetails.managerAnswer!,
-                          ),
+                          child: SystemAnswerHistory(answer: state.recordDetails.answer, feedback: state.recordDetails.feedback),
                         ),
+                        if (state.recordDetails.managerAnswer != null) ...[
+                          const SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: AdminAnswer(
+                              answer: state.recordDetails.managerAnswer!,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
 

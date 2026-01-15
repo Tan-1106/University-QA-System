@@ -14,6 +14,7 @@ class SystemAnswerHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,

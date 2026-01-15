@@ -14,9 +14,22 @@ class ChatBoxPage extends StatefulWidget {
 }
 
 class _ChatBoxPageState extends State<ChatBoxPage> {
-  String _submittedQuestion = '';
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
+  String _submittedQuestion = '';
+
+  void _handleSendQuestion() {
+    final text = _textController.text.trim();
+    if (text.isNotEmpty) {
+      setState(() {
+        _submittedQuestion = text;
+      });
+
+      context.read<ChatBoxBloc>().add(AskQuestionEvent(question: _submittedQuestion));
+      _focusNode.unfocus();
+      _textController.clear();
+    }
+  }
 
   @override
   void initState() {
@@ -30,20 +43,6 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
     _textController.dispose();
     _focusNode.dispose();
     super.dispose();
-  }
-
-  void _handleSendQuestion() {
-    final text = _textController.text.trim();
-    if (text.isNotEmpty) {
-      setState(() {
-        _submittedQuestion = text;
-      });
-
-      context.read<ChatBoxBloc>().add(AskQuestionEvent(question: _submittedQuestion));
-
-      _textController.clear();
-      _focusNode.unfocus();
-    }
   }
 
   @override

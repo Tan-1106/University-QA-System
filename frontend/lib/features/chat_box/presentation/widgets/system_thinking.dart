@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:university_qa_system/core/common/widgets/typing_indicator.dart';
 
 class SystemThinking extends StatelessWidget {
   const SystemThinking({super.key});
@@ -15,6 +16,7 @@ class SystemThinking extends StatelessWidget {
         ),
         Flexible(
           child: Card(
+            elevation: 0,
             color: Theme.of(context).colorScheme.primaryContainer,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadiusGeometry.directional(
@@ -32,23 +34,14 @@ class SystemThinking extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
                   Text(
-                    'Đang suy nghĩ...',
+                    'Đang suy nghĩ',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
+                  const SizedBox(width: 12),
+                  TypingIndicator(dotColor: Theme.of(context).colorScheme.onPrimaryContainer),
                 ],
               ),
             ),

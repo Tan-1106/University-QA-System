@@ -23,6 +23,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
     on<ResetChatBoxEvent>(_onResetChatBox);
   }
 
+  // Send question and get answer
   void _onAskQuestion(AskQuestionEvent event, Emitter<ChatBoxState> emit) async {
     emit(ChatBoxLoading());
 

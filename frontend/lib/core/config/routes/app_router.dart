@@ -39,12 +39,13 @@ final GoRouter appRouter = GoRouter(
     final publicRoutes = ['/sign-in', '/auth-webview', '/system-sign-in', '/register'];
     final isPublicRoute = publicRoutes.contains(currentLocation);
 
-    if (authState is AuthLoggedOut) {
+    if (authState is AuthLoggedOut || authState is AuthUnauthenticated || authState is AuthFailure || authState is AuthInitial) {
       if (!isPublicRoute) {
         return '/sign-in';
       }
       return null;
     }
+
     if (authState is AuthSuccess) {
       if (isPublicRoute) {
         final role = authState.user.role;
@@ -54,11 +55,7 @@ final GoRouter appRouter = GoRouter(
       }
       return null;
     }
-    if (authState is AuthFailure || authState is AuthInitial) {
-      if (!isPublicRoute) {
-        return '/sign-in';
-      }
-    }
+
     if (authState is AuthRegistered) {
       if (currentLocation != '/system-sign-in') {
         return '/system-sign-in';
@@ -164,7 +161,7 @@ final GoRouter appRouter = GoRouter(
           name: 'DocumentViewer',
           path: '/document-viewer',
           builder: (context, state) => const ViewDocumentPage(),
-        )
+        ),
       ],
     ),
 

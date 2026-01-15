@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class SystemAnswer extends StatefulWidget {
@@ -18,6 +20,34 @@ class SystemAnswer extends StatefulWidget {
 
 class _SystemAnswerState extends State<SystemAnswer> {
   String currentFeedback = '';
+  String _displayedText = '';
+  Timer? _timer;
+  int _currentIndex = 0;
+
+  void _startTypingEffect() {
+    _timer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (_currentIndex < widget.answer.length) {
+        setState(() {
+          _displayedText += widget.answer[_currentIndex];
+          _currentIndex++;
+        });
+      } else {
+        _timer?.cancel();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startTypingEffect();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +66,7 @@ class _SystemAnswerState extends State<SystemAnswer> {
               child: Card(
                 color: Theme.of(context).colorScheme.primaryContainer,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.directional(
+                  borderRadius: BorderRadiusDirectional.only(
                     bottomEnd: Radius.circular(20),
                     bottomStart: Radius.circular(20),
                     topEnd: Radius.circular(20),
@@ -49,7 +79,7 @@ class _SystemAnswerState extends State<SystemAnswer> {
                     vertical: 12,
                   ),
                   child: Text(
-                    widget.answer,
+                    _displayedText,
                     softWrap: true,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
