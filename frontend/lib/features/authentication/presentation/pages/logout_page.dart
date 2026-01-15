@@ -113,7 +113,7 @@ class LogoutPage extends StatelessWidget {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<AuthBloc>().add(LogoutEvent());
+                                context.read<AuthBloc>().add(LogOutEvent());
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,

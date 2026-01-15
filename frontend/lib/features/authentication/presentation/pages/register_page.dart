@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/core/common/widgets/primary_button.dart';
+import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -55,22 +57,13 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess || state is AuthRegistered) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Đăng ký thành công! Vui lòng đăng nhập.'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          showSuccessSnackBar(context, 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
           context.pop();
         } else if (state is AuthFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
+          showErrorSnackBar(context, 'Đăng ký thất bại: ${state.message}');
         }
       },
+
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -83,9 +76,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(height: 80),
                       Text(
                         'Đăng ký tài khoản',
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
@@ -184,6 +176,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Vui lòng nhập mật khẩu';
+                            } else if (value.length < 6) {
+                              return 'Mật khẩu phải có ít nhất 6 ký tự';
                             }
                             return null;
                           },
@@ -214,27 +208,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(height: 30),
                       BlocBuilder<AuthBloc, AuthState>(
                         builder: (context, state) {
+                          final isLoading = state is AuthLoading;
                           return SizedBox(
                             width: 340,
-                            child: ElevatedButton(
-                              onPressed: state is AuthLoading ? null : _submitData,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: state is AuthLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                      ),
-                                    )
-                                  : const Text('Đăng ký'),
+                            child: PrimaryButton(
+                              label: 'Đăng ký',
+                              onPressed: _submitData,
+                              isLoading: isLoading,
                             ),
                           );
                         },
@@ -245,9 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           const Text('Đã có tài khoản? '),
                           GestureDetector(
-                            onTap: () {
-                              context.pop();
-                            },
+                            onTap: () => context.pop(),
                             child: Text(
                               'Đăng nhập ngay',
                               style: TextStyle(

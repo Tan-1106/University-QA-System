@@ -39,4 +39,4 @@ final class AuthSignInWithELITEvent extends AuthEvent {
 
 final class AuthVerifyUserAccessEvent extends AuthEvent {}
 
-final class LogoutEvent extends AuthEvent {}
+final class LogOutEvent extends AuthEvent {}

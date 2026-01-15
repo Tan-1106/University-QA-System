@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/core/common/widgets/loader.dart';
+import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/widgets/sign_in_button.dart';
 import 'package:university_qa_system/features/authentication/presentation/widgets/elit_sign_in_button.dart';
@@ -28,17 +28,13 @@ class _SignInPageState extends State<SignInPage> {
     if (!context.mounted) return;
     if (result == null) return;
     if (result.containsKey('error')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lỗi đăng nhập với ELIT.')),
-      );
+      showErrorSnackBar(context, 'Đăng nhập với ELIT thất bại, vui lòng thử lại sau.');
       return;
     }
 
     final String? serverCode = result['code'];
     if (serverCode == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lỗi hệ thống: Không nhận được mã xác thực.')),
-      );
+      showErrorSnackBar(context, 'Không thể lấy mã xác thực, vui lòng thử lại sau.');
       return;
     }
 
@@ -57,7 +53,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthLoading) return const Loader();
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,9 +75,7 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(
                     width: 340,
                     child: SignInButton(
-                      onSignInClick: () {
-                        context.push('/system-sign-in');
-                      },
+                      onSignInClick: () => context.push('/system-sign-in'),
                     ),
                   ),
                   SizedBox(

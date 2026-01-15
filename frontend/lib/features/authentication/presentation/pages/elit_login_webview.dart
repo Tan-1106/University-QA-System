@@ -1,3 +1,4 @@
+import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -85,7 +86,12 @@ class _ElitLoginWebViewState extends State<ElitLoginWebview> {
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
-          if (_isLoading) const Center(child: CircularProgressIndicator()),
+          if (_isLoading)
+            Center(
+              child: Loader(
+                circularColor: Theme.of(context).colorScheme.primary,
+              ),
+            ),
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
@@ -31,14 +33,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _verifyUserAccess = verifyUserAccess,
       _logOut = logOut,
       super(AuthInitial()) {
-    on<AuthEvent>((_, emit) => emit(AuthLoading()));
-    on<AuthRegisterSystemAccountEvent>(_onRegisterSystemAccount);
-    on<AuthSignInWithSystemAccountEvent>(_onSignInWithSystemAccount);
-    on<AuthSignInWithELITEvent>(_onGetUserInformation);
+    on<AuthRegisterSystemAccountEvent>(_onRegisterSystemAccount, transformer: droppable());
+    on<AuthSignInWithSystemAccountEvent>(_onSignInWithSystemAccount, transformer: droppable());
+    on<AuthSignInWithELITEvent>(_onGetUserInformation, transformer: droppable());
+
     on<AuthVerifyUserAccessEvent>(_onVerifyUserAccess);
-    on<LogoutEvent>(_onLogout);
+    on<LogOutEvent>(_onLogout);
   }
 
+  // Register System Account
   void _onRegisterSystemAccount(
     AuthRegisterSystemAccountEvent event,
     Emitter<AuthState> emit,
@@ -61,6 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
+  // Sign In with System Account
   void _onSignInWithSystemAccount(
     AuthSignInWithSystemAccountEvent event,
     Emitter<AuthState> emit,
@@ -76,10 +80,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
-      (user) => _emitAuthSuccess(user, emit),
+      (user) => emit(AuthSuccess(user)),
     );
   }
 
+  // Sign In with ELIT
   void _onGetUserInformation(
     AuthSignInWithELITEvent event,
     Emitter<AuthState> emit,
@@ -90,33 +95,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
-      (user) => _emitAuthSuccess(user, emit),
+      (user) => emit(AuthSuccess(user)),
     );
   }
 
+  // Verify User Access
   void _onVerifyUserAccess(
     AuthVerifyUserAccessEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(AuthLoading());
-
     final result = await _verifyUserAccess.call(NoParams());
 
     result.fold(
-      (failure) => emit(AuthFailure(failure.message)),
-      (user) => _emitAuthSuccess(user, emit),
+      (failure) => emit(AuthUnauthenticated()),
+      (user) => emit(AuthSuccess(user)),
     );
   }
 
-  void _emitAuthSuccess(
-    User user,
-    Emitter<AuthState> emit,
-  ) {
-    emit(AuthSuccess(user));
-  }
-
   void _onLogout(
-    LogoutEvent event,
+    LogOutEvent event,
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());

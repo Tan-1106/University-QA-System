@@ -39,7 +39,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             listenWhen: (previous, current) => current is DashboardError,
             listener: (context, state) {
               if (state is DashboardError) {
-                showSnackBar(context, state.message);
+                showErrorSnackBar(context, state.message);
               }
             },
             buildWhen: (previous, current) =>

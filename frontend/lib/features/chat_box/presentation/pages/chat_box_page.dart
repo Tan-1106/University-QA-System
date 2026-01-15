@@ -54,7 +54,7 @@ class _ChatBoxPageState extends State<ChatBoxPage> {
           listenWhen: (previous, current) => current is ChatBoxError,
           listener: (context, state) {
             if (state is ChatBoxError) {
-              showSnackBar(context, state.message);
+              showErrorSnackBar(context, state.message);
             }
           },
           builder: (context, state) {
