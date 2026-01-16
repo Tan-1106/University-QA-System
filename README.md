@@ -1,4 +1,4 @@
-# 🎓 University QA System - Hệ thống Hỏi đáp Đại học Tôn Đức Thắng
+# 🎓 University QA System - Hệ thống Hỏi đáp Đại học
 
 <div align="center">
 
@@ -21,7 +21,7 @@
 
 ## 🎯 Giới thiệu
 
-**University QA System** là hệ thống hỏi đáp thông minh dành cho sinh viên Đại học Tôn Đức Thắng (TDTU). Hệ thống sử dụng công nghệ AI/LLM để trả lời các câu hỏi liên quan đến quy định, chính sách, học bổng, và các thông tin học thuật của trường.
+**University QA System** là hệ thống hỏi đáp thông minh dành cho học sinh, sinh viên. Hệ thống sử dụng công nghệ AI/LLM để trả lời các câu hỏi liên quan đến quy định, chính sách, học bổng, và các thông tin học thuật của trường.
 
 ### ✨ Tính năng chính:
 - 🤖 **Chatbot AI** - Trả lời câu hỏi tự động dựa trên tài liệu chính thức của trường
