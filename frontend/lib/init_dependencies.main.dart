@@ -240,12 +240,6 @@ void _initDocument() {
     ),
   );
 
-  serviceLocator.registerFactory<GetAllFacultiesUseCase>(
-    () => GetAllFacultiesUseCase(
-      serviceLocator(),
-    ),
-  );
-
   serviceLocator.registerFactory<GetGeneralDocumentsUseCase>(
     () => GetGeneralDocumentsUseCase(
       serviceLocator(),
@@ -266,12 +260,6 @@ void _initDocument() {
 
   serviceLocator.registerFactory<DeleteDocumentUseCase>(
     () => DeleteDocumentUseCase(
-      serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => DocumentFilterBloc(
       serviceLocator(),
     ),
   );

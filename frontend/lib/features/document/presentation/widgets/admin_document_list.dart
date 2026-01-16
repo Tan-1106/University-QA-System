@@ -6,17 +6,17 @@ import 'package:university_qa_system/features/document/domain/entities/documents
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
 
-class DocumentList extends StatefulWidget {
+class AdminDocumentList extends StatefulWidget {
   final Function(String documentId) onDocumentTap;
   final DocumentSegmentedButtonOptions selectedOption;
 
-  const DocumentList({super.key, required this.onDocumentTap, required this.selectedOption});
+  const AdminDocumentList({super.key, required this.onDocumentTap, required this.selectedOption});
 
   @override
-  State<DocumentList> createState() => _DocumentListState();
+  State<AdminDocumentList> createState() => _AdminDocumentListState();
 }
 
-class _DocumentListState extends State<DocumentList> {
+class _AdminDocumentListState extends State<AdminDocumentList> {
   final ScrollController _scrollController = ScrollController();
 
   bool get _isBottom {
@@ -134,6 +134,11 @@ class _DocumentListState extends State<DocumentList> {
                         if (widget.selectedOption == DocumentSegmentedButtonOptions.general)
                           Text(
                             'Phòng ban: ${document.department}',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        if (widget.selectedOption == DocumentSegmentedButtonOptions.faculty)
+                          Text(
+                            'Khoa: ${document.faculty}',
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                         Text(

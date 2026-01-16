@@ -7,8 +7,6 @@ import 'package:university_qa_system/features/document/domain/entities/pdf_bytes
 abstract interface class DocumentRepository {
   Future<Either<Failure, Filters>> loadDocumentFilters();
 
-  Future<Either<Failure, List<String>>> loadAllFaculties();
-
   Future<Either<Failure, Documents>> loadGeneralDocuments({
     int page = 1,
     String? department,

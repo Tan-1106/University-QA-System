@@ -10,8 +10,6 @@ import 'package:university_qa_system/features/document/data/models/pdf_bytes_dat
 abstract interface class DocumentRemoteDataSource {
   Future<FiltersData> fetchDocumentFilters();
 
-  Future<List<String>> fetchAllFaculties();
-
   Future<DocumentsData> fetchGeneralDocuments({
     int page = 1,
     String? docType,
@@ -39,27 +37,54 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
   @override
   Future<FiltersData> fetchDocumentFilters() async {
     try {
-      final departments = await _dio.get('/api/documents/departments');
-      final documentTypes = await _dio.get('/api/documents/doc-types');
+      final departmentsFuture =
+      _dio.get('/api/documents/departments');
+      final documentTypesFuture =
+      _dio.get('/api/documents/doc-types');
+      List<String> facultiesList = [];
 
-      if (departments.statusCode == 200 && documentTypes.statusCode == 200 && departments.data != null && documentTypes.data != null) {
+      try {
+        final faculties = await _dio.get('/api/users/faculties');
+        if (faculties.statusCode == 200 && faculties.data != null) {
+          final facultiesResponse = ApiResponse<List<String>>.fromJson(
+            faculties.data as Map<String, dynamic>,
+                (json) {
+              if (json is Map<String, dynamic> &&
+                  json.containsKey('faculties')) {
+                return List<String>.from(json['faculties'] as List);
+              }
+              return <String>[];
+            },
+          );
+          facultiesList = facultiesResponse.details ?? [];
+        }
+      } catch (_) {
+        facultiesList = [];
+      }
+
+      final departments = await departmentsFuture;
+      final documentTypes = await documentTypesFuture;
+
+      if (departments.statusCode == 200 &&
+          documentTypes.statusCode == 200 &&
+          departments.data != null &&
+          documentTypes.data != null) {
         final departmentsResponse = ApiResponse<List<String>>.fromJson(
           departments.data as Map<String, dynamic>,
-          (json) {
-            return (json as List).map((e) => e as String).toList();
-          },
+              (json) =>
+              (json as List).map((e) => e as String).toList(),
         );
 
         final documentTypesResponse = ApiResponse<List<String>>.fromJson(
           documentTypes.data as Map<String, dynamic>,
-          (json) {
-            return (json as List).map((e) => e as String).toList();
-          },
+              (json) =>
+              (json as List).map((e) => e as String).toList(),
         );
 
         return FiltersData(
           existingDepartments: departmentsResponse.details ?? [],
           existingDocumentTypes: documentTypesResponse.details ?? [],
+          existingFaculties: facultiesList,
         );
       } else {
         throw const ServerException('Failed to retrieve document filters');
@@ -70,39 +95,6 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<List<String>> fetchAllFaculties() async {
-    try {
-      final response = await _dio.get('/api/users/faculties');
-      if (response.statusCode == 200 && response.data != null) {
-        final apiResponse = ApiResponse<List<String>>.fromJson(
-          response.data as Map<String, dynamic>,
-          (json) {
-            if (json is Map<String, dynamic> && json.containsKey('faculties')) {
-              final faculties = List<String>.from(json['faculties'] as List);
-              return faculties;
-            }
-            throw const ServerException('Invalid faculties data structure');
-          },
-        );
-        return apiResponse.details ?? [];
-      } else {
-        throw const ServerException('Failed to retrieve faculties');
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
-      } else {
-        throw ServerException('Network Error: ${e.message}');
-      }
-    } catch (e) {
-      logger.e('Exception while fetching faculties: $e');
-      throw ServerException(e.toString());
     }
   }
 

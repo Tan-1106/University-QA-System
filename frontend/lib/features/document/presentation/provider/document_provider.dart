@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/document/domain/use_cases/get_all_faculties.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
 
 class DocumentProvider extends ChangeNotifier {
-  final GetAllFacultiesUseCase _getAllFacultiesUseCase;
+  final GetExistingFiltersUseCase _getExistingFiltersUseCase;
 
   DocumentProvider(
-    GetAllFacultiesUseCase getAllFacultiesUseCase,
-  ) : _getAllFacultiesUseCase = getAllFacultiesUseCase;
+    GetExistingFiltersUseCase getExistingFiltersUseCase,
+  ) : _getExistingFiltersUseCase = getExistingFiltersUseCase;
 
   // States
   String? _errorMessage;
@@ -18,22 +18,34 @@ class DocumentProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  List<String> _departments = [];
+
+  List<String> get departments => _departments;
+
+  List<String> _documentTypes = [];
+
+  List<String> get documentTypes => _documentTypes;
+
   List<String> _faculties = [];
 
   List<String> get faculties => _faculties;
 
-  Future<void> loadAllFaculties() async {
+  Future<void> loadAllFilters() async {
     _isLoading = true;
     notifyListeners();
 
-    final result = await _getAllFacultiesUseCase(NoParams());
+    final result = await _getExistingFiltersUseCase(NoParams());
     result.fold(
       (failure) {
         _errorMessage = failure.message;
+        _departments = [];
+        _documentTypes = [];
         _faculties = [];
       },
-      (faculties) {
-        _faculties = faculties;
+      (filters) {
+        _departments = filters.existingDepartments;
+        _documentTypes = filters.existingDocumentTypes;
+        _faculties = filters.existingFaculties;
         _errorMessage = null;
       },
     );

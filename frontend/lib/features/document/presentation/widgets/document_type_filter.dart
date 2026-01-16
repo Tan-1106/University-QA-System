@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
 
 class DocumentTypeFilter extends StatefulWidget {
   final String? selectedDocumentType;
@@ -16,12 +16,13 @@ class _DocumentTypeFilterState extends State<DocumentTypeFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final documentListState = context.watch<DocumentFilterBloc>().state;
+    final documentProvider = context.read<DocumentProvider>();
+    final documentTypes = documentProvider.documentTypes;
 
     List<String> existingDocumentTypes = ['Tất cả'];
 
-    if (documentListState is DocumentFiltersLoaded) {
-      existingDocumentTypes = existingDocumentTypes + documentListState.filters.existingDocumentTypes;
+    if (documentTypes.isNotEmpty) {
+      existingDocumentTypes = existingDocumentTypes + documentTypes;
     }
 
     return Column(

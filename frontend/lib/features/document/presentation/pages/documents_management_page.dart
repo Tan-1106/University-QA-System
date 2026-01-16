@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/document_list.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/department_filter.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/keyword_textfield.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/admin_document_list.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/document_type_filter.dart';
-import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/faculty_dropdown_filter.dart';
+import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 
 class DocumentsManagementPage extends StatefulWidget {
   const DocumentsManagementPage({super.key});
@@ -170,8 +169,7 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DocumentFilterBloc>().add(GetDocumentFiltersEvent());
-      context.read<DocumentProvider>().loadAllFaculties();
+      context.read<DocumentProvider>().loadAllFilters();
       _triggerSearch();
     });
   }
@@ -215,7 +213,7 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
                   ),
                   child: RefreshIndicator(
                     onRefresh: () async => _triggerSearch(),
-                    child: DocumentList(
+                    child: AdminDocumentList(
                       onDocumentTap: (documentId) {
                         context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));
                         context.push('/document-viewer');

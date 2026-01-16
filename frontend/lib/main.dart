@@ -4,7 +4,6 @@ import 'package:university_qa_system/features/api_management/presentation/bloc/a
 import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
 import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
@@ -41,7 +40,6 @@ Future<void> main() async {
           BlocProvider(create: (_) => serviceLocator<ChatBoxBloc>()),
           BlocProvider(create: (_) => serviceLocator<HistoryBloc>()),
           BlocProvider(create: (_) => serviceLocator<HistoryDetailsBloc>()),
-          BlocProvider(create: (_) => serviceLocator<DocumentFilterBloc>()),
           BlocProvider(create: (_) => serviceLocator<DocumentListBloc>()),
           BlocProvider(create: (_) => serviceLocator<DocumentViewerBloc>()),
           BlocProvider(create: (_) => serviceLocator<StudentPQBloc>()),

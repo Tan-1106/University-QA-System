@@ -25,16 +25,6 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
-  Future<Either<Failure, List<String>>> loadAllFaculties() async {
-    try {
-      final faculties = await remoteDataSource.fetchAllFaculties();
-      return right(faculties);
-    } on ServerException catch (e) {
-      return left(Failure(e.message));
-    }
-  }
-
-  @override
   Future<Either<Failure, Documents>> loadGeneralDocuments({
     int page = 1,
     String? department,

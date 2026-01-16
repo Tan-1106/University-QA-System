@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_filter/document_filter_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
 
 class DepartmentFilter extends StatefulWidget {
   final String? selectedDepartment;
@@ -16,12 +16,13 @@ class _DepartmentFilterState extends State<DepartmentFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final documentListState = context.watch<DocumentFilterBloc>().state;
+    final documentProvider = context.read<DocumentProvider>();
+    final departments = documentProvider.departments;
 
     List<String> existingDepartments = ['Tất cả'];
 
-    if (documentListState is DocumentFiltersLoaded) {
-      existingDepartments = existingDepartments + documentListState.filters.existingDepartments;
+    if (departments.isNotEmpty) {
+      existingDepartments = existingDepartments + departments;
     }
 
     return Column(
