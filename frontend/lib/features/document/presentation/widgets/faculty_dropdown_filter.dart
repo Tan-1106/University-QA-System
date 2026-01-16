@@ -27,7 +27,7 @@ class _FacultyDropdownFilterState extends State<FacultyDropdownFilter> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Lọc theo khoa:',
+            'Khoa:',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 8),
@@ -58,7 +58,7 @@ class _FacultyDropdownFilterState extends State<FacultyDropdownFilter> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Lọc theo khoa:',
+          'Khoa:',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),

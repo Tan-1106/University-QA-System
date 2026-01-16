@@ -30,7 +30,7 @@ class _DocumentTypeFilterState extends State<DocumentTypeFilter> {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            'Lọc theo loại tài liệu:',
+            'Loại tài liệu:',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),

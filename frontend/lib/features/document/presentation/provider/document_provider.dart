@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/update_document_basic_info.dart';
 
 class DocumentProvider extends ChangeNotifier {
-  final GetExistingFiltersUseCase _getExistingFiltersUseCase;
+  final GetExistingFiltersUseCase _getExistingFilters;
+  final UpdateDocumentBasicInfoUseCase _updateDocumentBasicInfo;
 
   DocumentProvider(
-    GetExistingFiltersUseCase getExistingFiltersUseCase,
-  ) : _getExistingFiltersUseCase = getExistingFiltersUseCase;
+    GetExistingFiltersUseCase getExistingFilters,
+    UpdateDocumentBasicInfoUseCase updateDocumentBasicInfo,
+  ) : _getExistingFilters = getExistingFilters,
+      _updateDocumentBasicInfo = updateDocumentBasicInfo;
 
   // States
   String? _errorMessage;
@@ -34,7 +38,7 @@ class DocumentProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final result = await _getExistingFiltersUseCase(NoParams());
+    final result = await _getExistingFilters(NoParams());
     result.fold(
       (failure) {
         _errorMessage = failure.message;
@@ -46,6 +50,41 @@ class DocumentProvider extends ChangeNotifier {
         _departments = filters.existingDepartments;
         _documentTypes = filters.existingDocumentTypes;
         _faculties = filters.existingFaculties;
+        _errorMessage = null;
+      },
+    );
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> updateDocumentBasicInfo({
+    required String documentId,
+    String? title,
+    String? documentType,
+    String? department,
+    String? faculty,
+    String? fileUrl,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final result = await _updateDocumentBasicInfo(
+      UpdateDocumentBasicInfoParams(
+        documentId: documentId,
+        title: title,
+        documentType: documentType,
+        department: department,
+        faculty: faculty,
+        fileUrl: fileUrl,
+      ),
+    );
+
+    result.fold(
+      (failure) {
+        _errorMessage = failure.message;
+      },
+      (success) {
         _errorMessage = null;
       },
     );

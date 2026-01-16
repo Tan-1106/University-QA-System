@@ -26,6 +26,15 @@ abstract interface class DocumentRemoteDataSource {
 
   Future<PDFBytesData> viewDocument(String documentId);
 
+  Future<bool> updateDocumentBasicInfo({
+    required String documentId,
+    String? title,
+    String? docType,
+    String? department,
+    String? faculty,
+    String? fileUrl,
+  });
+
   Future<bool> deleteDocument(String documentId);
 }
 
@@ -37,10 +46,8 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
   @override
   Future<FiltersData> fetchDocumentFilters() async {
     try {
-      final departmentsFuture =
-      _dio.get('/api/documents/departments');
-      final documentTypesFuture =
-      _dio.get('/api/documents/doc-types');
+      final departmentsFuture = _dio.get('/api/documents/departments');
+      final documentTypesFuture = _dio.get('/api/documents/doc-types');
       List<String> facultiesList = [];
 
       try {
@@ -48,9 +55,8 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         if (faculties.statusCode == 200 && faculties.data != null) {
           final facultiesResponse = ApiResponse<List<String>>.fromJson(
             faculties.data as Map<String, dynamic>,
-                (json) {
-              if (json is Map<String, dynamic> &&
-                  json.containsKey('faculties')) {
+            (json) {
+              if (json is Map<String, dynamic> && json.containsKey('faculties')) {
                 return List<String>.from(json['faculties'] as List);
               }
               return <String>[];
@@ -65,20 +71,15 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
       final departments = await departmentsFuture;
       final documentTypes = await documentTypesFuture;
 
-      if (departments.statusCode == 200 &&
-          documentTypes.statusCode == 200 &&
-          departments.data != null &&
-          documentTypes.data != null) {
+      if (departments.statusCode == 200 && documentTypes.statusCode == 200 && departments.data != null && documentTypes.data != null) {
         final departmentsResponse = ApiResponse<List<String>>.fromJson(
           departments.data as Map<String, dynamic>,
-              (json) =>
-              (json as List).map((e) => e as String).toList(),
+          (json) => (json as List).map((e) => e as String).toList(),
         );
 
         final documentTypesResponse = ApiResponse<List<String>>.fromJson(
           documentTypes.data as Map<String, dynamic>,
-              (json) =>
-              (json as List).map((e) => e as String).toList(),
+          (json) => (json as List).map((e) => e as String).toList(),
         );
 
         return FiltersData(
@@ -202,6 +203,43 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         return PDFBytesData(bytes);
       } else {
         throw const ServerException('Failed to retrieve document bytes');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> updateDocumentBasicInfo({
+    required String documentId,
+    String? title,
+    String? docType,
+    String? department,
+    String? faculty,
+    String? fileUrl,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/api/documents/$documentId',
+        data: {
+          if (title != null) 'file_name': title,
+          if (docType != null) 'doc_type': docType,
+          if (department != null) 'department': department,
+          if (faculty != null) 'faculty': faculty,
+          if (fileUrl != null) 'file_url': fileUrl,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw const ServerException('Failed to update document info');
       }
     } on DioException catch (e) {
       if (e.response != null) {

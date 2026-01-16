@@ -75,6 +75,30 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> updateDocumentBasicInfo({
+    required String documentId,
+    String? title,
+    String? documentType,
+    String? department,
+    String? faculty,
+    String? fileUrl,
+  }) async {
+    try {
+      final result = await remoteDataSource.updateDocumentBasicInfo(
+        documentId: documentId,
+        title: title,
+        docType: documentType,
+        department: department,
+        faculty: faculty,
+        fileUrl: fileUrl,
+      );
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> deleteDocument(String documentId) async {
     try {
       final result = await remoteDataSource.deleteDocument(documentId);

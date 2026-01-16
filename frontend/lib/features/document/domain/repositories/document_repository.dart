@@ -23,5 +23,14 @@ abstract interface class DocumentRepository {
 
   Future<Either<Failure, PDFBytes>> viewDocument(String documentId);
 
+  Future<Either<Failure, bool>> updateDocumentBasicInfo({
+    required String documentId,
+    String? title,
+    String? documentType,
+    String? department,
+    String? faculty,
+    String? fileUrl,
+  });
+
   Future<Either<Failure, bool>> deleteDocument(String documentId);
 }

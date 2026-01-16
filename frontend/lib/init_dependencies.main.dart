@@ -258,6 +258,12 @@ void _initDocument() {
     ),
   );
 
+  serviceLocator.registerFactory<UpdateDocumentBasicInfoUseCase>(
+    () => UpdateDocumentBasicInfoUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerFactory<DeleteDocumentUseCase>(
     () => DeleteDocumentUseCase(
       serviceLocator(),
@@ -280,6 +286,7 @@ void _initDocument() {
 
   serviceLocator.registerLazySingleton(
     () => DocumentProvider(
+      serviceLocator(),
       serviceLocator(),
     ),
   );

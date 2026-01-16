@@ -46,6 +46,7 @@ import 'package:university_qa_system/features/document/domain/use_cases/delete_d
 import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_faculty_documents.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_general_documents.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/update_document_basic_info.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/view_document.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';

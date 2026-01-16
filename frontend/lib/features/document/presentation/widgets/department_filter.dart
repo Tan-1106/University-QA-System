@@ -29,7 +29,7 @@ class _DepartmentFilterState extends State<DepartmentFilter> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Lọc theo phòng ban:',
+          'Phòng ban:',
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         const SizedBox(height: 8),
