@@ -242,6 +242,7 @@ class _AdminDocumentListState extends State<AdminDocumentList> {
 
         return ListView.builder(
           controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           itemCount: documents.length + (isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index >= documents.length) {

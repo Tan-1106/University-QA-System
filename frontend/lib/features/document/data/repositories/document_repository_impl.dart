@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
@@ -69,6 +71,28 @@ class DocumentRepositoryImpl implements DocumentRepository {
     try {
       final pdfBytesData = await remoteDataSource.viewDocument(documentId);
       return right(pdfBytesData.toEntity());
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> uploadPDFDocument({
+    required File file,
+    required String docType,
+    String? department,
+    String? faculty,
+    required String fileUrl,
+  }) async {
+    try {
+      await remoteDataSource.uploadPDFDocument(
+        file: file,
+        docType: docType,
+        department: department,
+        faculty: faculty,
+        fileUrl: fileUrl,
+      );
+      return right(null);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

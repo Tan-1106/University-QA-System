@@ -258,6 +258,12 @@ void _initDocument() {
     ),
   );
 
+  serviceLocator.registerFactory<UploadPDFDocumentUseCase>(
+    () => UploadPDFDocumentUseCase(
+      serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerFactory<UpdateDocumentBasicInfoUseCase>(
     () => UpdateDocumentBasicInfoUseCase(
       serviceLocator(),
@@ -286,6 +292,7 @@ void _initDocument() {
 
   serviceLocator.registerLazySingleton(
     () => DocumentProvider(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
     ),

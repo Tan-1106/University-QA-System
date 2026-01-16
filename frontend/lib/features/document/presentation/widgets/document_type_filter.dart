@@ -5,6 +5,7 @@ import 'package:university_qa_system/features/document/presentation/provider/doc
 class DocumentTypeFilter extends StatefulWidget {
   final String? selectedDocumentType;
   final Function(String type) onDocumentTypeSelected;
+
   const DocumentTypeFilter({super.key, this.selectedDocumentType, required this.onDocumentTypeSelected});
 
   @override
@@ -31,7 +32,9 @@ class _DocumentTypeFilterState extends State<DocumentTypeFilter> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Loại tài liệu:',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         const SizedBox(height: 8),

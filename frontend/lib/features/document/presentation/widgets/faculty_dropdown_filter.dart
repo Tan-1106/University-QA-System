@@ -5,6 +5,7 @@ import 'package:university_qa_system/features/document/presentation/provider/doc
 class FacultyDropdownFilter extends StatefulWidget {
   final String? selectedFaculty;
   final Function(String faculty) onFacultySelected;
+
   const FacultyDropdownFilter({
     super.key,
     this.selectedFaculty,
@@ -28,7 +29,9 @@ class _FacultyDropdownFilterState extends State<FacultyDropdownFilter> {
         children: [
           Text(
             'Khoa:',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Container(
@@ -59,7 +62,9 @@ class _FacultyDropdownFilterState extends State<FacultyDropdownFilter> {
       children: [
         Text(
           'Khoa:',
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -100,4 +105,3 @@ class _FacultyDropdownFilterState extends State<FacultyDropdownFilter> {
     );
   }
 }
-

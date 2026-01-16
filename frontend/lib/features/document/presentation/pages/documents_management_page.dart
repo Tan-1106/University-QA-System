@@ -177,10 +177,24 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showFilterSheet(context),
-        label: const Text('Lọc & tìm kiếm'),
-        icon: const Icon(Icons.filter_list),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        spacing: 10,
+        children: [
+          FloatingActionButton(
+            heroTag: 'upload-document',
+            onPressed: () {
+              context.push('/admin-upload-document');
+            },
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            heroTag: 'filter-documents',
+            onPressed: () => _showFilterSheet(context),
+            child: const Icon(Icons.filter_list),
+          ),
+        ],
       ),
       body: Consumer<DocumentProvider>(
         builder: (context, provider, child) {

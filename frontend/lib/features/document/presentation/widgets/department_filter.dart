@@ -5,6 +5,7 @@ import 'package:university_qa_system/features/document/presentation/provider/doc
 class DepartmentFilter extends StatefulWidget {
   final String? selectedDepartment;
   final Function(String deparment) onDepartmentSelected;
+
   const DepartmentFilter({super.key, this.selectedDepartment, required this.onDepartmentSelected});
 
   @override
@@ -30,7 +31,9 @@ class _DepartmentFilterState extends State<DepartmentFilter> {
       children: [
         Text(
           'Phòng ban:',
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 8),
         Container(

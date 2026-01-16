@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
@@ -25,6 +27,14 @@ abstract interface class DocumentRemoteDataSource {
   });
 
   Future<PDFBytesData> viewDocument(String documentId);
+
+  Future<void> uploadPDFDocument({
+    required File file,
+    required String docType,
+    String? department,
+    String? faculty,
+    required String fileUrl,
+  });
 
   Future<bool> updateDocumentBasicInfo({
     required String documentId,
@@ -203,6 +213,48 @@ class DocumentRemoteDataSourceImpl implements DocumentRemoteDataSource {
         return PDFBytesData(bytes);
       } else {
         throw const ServerException('Failed to retrieve document bytes');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> uploadPDFDocument({
+    required File file,
+    required String docType,
+    String? department,
+    String? faculty,
+    required String fileUrl,
+  }) async {
+    try {
+      String fileName = file.path.split('/').last;
+
+      FormData formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: fileName,
+          contentType: MediaType('application', 'pdf'),
+        ),
+        'doc_type': docType,
+        if (department != null) 'department': department,
+        if (faculty != null) 'faculty': faculty,
+        'file_url': fileUrl,
+      });
+
+      final response = await _dio.post(
+        '/api/documents/upload',
+        data: formData,
+      );
+
+      if (response.statusCode != 201) {
+        throw const ServerException('Failed to upload document');
       }
     } on DioException catch (e) {
       if (e.response != null) {

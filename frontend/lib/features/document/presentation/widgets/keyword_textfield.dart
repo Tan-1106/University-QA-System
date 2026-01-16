@@ -33,7 +33,9 @@ class _KeywordTextfieldState extends State<KeywordTextfield> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Tìm kiếm theo từ khóa:',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         const SizedBox(

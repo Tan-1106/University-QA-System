@@ -14,6 +14,7 @@ class AdminShellLayout extends StatelessWidget {
     if (location.startsWith('/admin-popular-questions')) return 1;
     if (location.startsWith('/admin-users')) return 2;
     if (location.startsWith('/admin-documents-management')) return 3;
+    if (location.startsWith('/admin-upload-document')) return 3;
     if (location.startsWith('/admin-api-settings')) return 4;
     return 0;
   }

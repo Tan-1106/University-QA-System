@@ -12,6 +12,7 @@ import 'package:university_qa_system/features/dashboard/presentation/pages/admin
 import 'package:university_qa_system/features/dashboard/presentation/pages/question_details_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/documents_management_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/documents_page.dart';
+import 'package:university_qa_system/features/document/presentation/pages/upload_document_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
@@ -124,6 +125,11 @@ final GoRouter appRouter = GoRouter(
           name: 'AdminDocumentsManagement',
           path: '/admin-documents-management',
           builder: (context, state) => const DocumentsManagementPage(),
+        ),
+        GoRoute(
+          name: 'AdminUploadDocument',
+          path: '/admin-upload-document',
+          builder: (context, state) => const UploadDocumentPage(),
         ),
         GoRoute(
           name: 'AdminAPISettings',

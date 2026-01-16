@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/features/document/domain/entities/documents.dart';
@@ -22,6 +24,14 @@ abstract interface class DocumentRepository {
   });
 
   Future<Either<Failure, PDFBytes>> viewDocument(String documentId);
+
+  Future<Either<Failure, void>> uploadPDFDocument({
+    required File file,
+    required String docType,
+    String? department,
+    String? faculty,
+    required String fileUrl,
+  });
 
   Future<Either<Failure, bool>> updateDocumentBasicInfo({
     required String documentId,
