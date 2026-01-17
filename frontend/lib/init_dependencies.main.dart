@@ -469,6 +469,12 @@ void _initAPIKeyListManagement() {
     ),
   );
 
+  serviceLocator.registerFactory<ToggleUsingKeyUseCase>(
+    () => ToggleUsingKeyUseCase(
+      repository: serviceLocator(),
+    ),
+  );
+
   serviceLocator.registerLazySingleton(
     () => ApiKeysBloc(
       serviceLocator(),

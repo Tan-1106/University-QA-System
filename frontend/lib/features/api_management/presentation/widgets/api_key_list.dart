@@ -100,6 +100,7 @@ class _ApiKeyListState extends State<ApiKeyList> {
 
         return ListView.builder(
           controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           itemCount: apiKeys.length + (isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
             if (index >= apiKeys.length) {
@@ -294,7 +295,6 @@ class _ApiKeyListState extends State<ApiKeyList> {
                     ],
                   ),
                 ),
-                const Divider(),
               ],
             );
           },

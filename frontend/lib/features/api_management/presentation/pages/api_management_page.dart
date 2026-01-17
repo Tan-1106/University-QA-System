@@ -168,7 +168,14 @@ class _APIManagementPageState extends State<APIManagementPage> {
                 ),
               ],
             ),
-            const Expanded(child: ApiKeyList()),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _triggerSearch();
+                },
+                child: const ApiKeyList(),
+              ),
+            ),
           ],
         ),
       ),

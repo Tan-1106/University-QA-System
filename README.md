@@ -34,7 +34,7 @@
 ---
 
 ### Video Demo
-https://drive.google.com/file/d/1WOpQhMdRMpa5lw2iYpUWVpM-yY5sWYAe/view?usp=sharing
+https://drive.google.com/drive/folders/1ada8hokyDLrYu-WE-FAt4MhzX-PdeEN7?usp=sharing
 
 
 ## 🛠 Công nghệ sử dụng
