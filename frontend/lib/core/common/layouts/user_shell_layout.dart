@@ -125,7 +125,7 @@ class UserShellLayout extends StatelessWidget {
                   String userEmail = '';
                   String? userImageUrl;
 
-                  if (state is AuthSuccess) {
+                  if (state is AuthAuthenticated) {
                     userName = state.user.name;
                     userEmail = state.user.email;
                     userImageUrl = state.user.imageUrl;

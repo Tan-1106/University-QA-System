@@ -16,29 +16,39 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<AuthBloc>().add(AuthVerifyUserAccessEvent());
-  }
-
   void _handleELITSignInClick(BuildContext context) async {
     final result = await context.pushNamed<Map<String, dynamic>>('authWebview');
 
-    if (!context.mounted) return;
-    if (result == null) return;
+    if (!context.mounted || result == null) return;
+
     if (result.containsKey('error')) {
-      showErrorSnackBar(context, 'Đăng nhập với ELIT thất bại, vui lòng thử lại sau.');
+      showErrorSnackBar(
+        context,
+        'Đăng nhập với ELIT thất bại, vui lòng thử lại sau.',
+      );
       return;
     }
 
     final String? serverCode = result['code'];
     if (serverCode == null) {
-      showErrorSnackBar(context, 'Không thể lấy mã xác thực, vui lòng thử lại sau.');
+      showErrorSnackBar(
+        context,
+        'Không thể lấy mã xác thực, vui lòng thử lại sau.',
+      );
       return;
     }
 
-    context.read<AuthBloc>().add(AuthSignInWithELITEvent(authCode: serverCode));
+    context.read<AuthBloc>().add(
+      SignInWithELITEvent(
+        authCode: serverCode,
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(VerifyUserAccessEvent());
   }
 
   @override

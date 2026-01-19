@@ -4,20 +4,19 @@ import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 import 'package:university_qa_system/features/authentication/domain/repositories/auth_repository.dart';
 
-class SignInWithSystemAccountUseCase implements UseCase<User, SignInWithSystemAccountParams> {
+class SignInWithSystemAccountUseCase implements UseCase<UserEntity, SignInWithSystemAccountParams> {
   final AuthRepository authRepository;
 
   SignInWithSystemAccountUseCase(this.authRepository);
 
   @override
-  Future<Either<Failure, User>> call(SignInWithSystemAccountParams params) {
+  Future<Either<Failure, UserEntity>> call(SignInWithSystemAccountParams params) {
     return authRepository.signInWithSystemAccount(
-      params.email,
-      params.password,
+      email: params.email,
+      password: params.password,
     );
   }
 }
-
 
 class SignInWithSystemAccountParams {
   final String email;

@@ -3,31 +3,32 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/authentication/domain/repositories/auth_repository.dart';
 
-class SystemAccountRegistrationUseCase implements UseCase<bool, SystemAccountRegistrationParams> {
+class SignUpSystemAccountUseCase implements UseCase<void, SignUpSystemAccountParams> {
   final AuthRepository authRepository;
 
-  SystemAccountRegistrationUseCase(this.authRepository);
+  SignUpSystemAccountUseCase(this.authRepository);
 
+  // Create a system account
   @override
-  Future<Either<Failure, bool>> call(SystemAccountRegistrationParams params) {
-    return authRepository.registerSystemAccount(
-      params.name,
-      params.email,
-      params.studentId,
-      params.faculty,
-      params.password,
+  Future<Either<Failure, void>> call(SignUpSystemAccountParams params) {
+    return authRepository.signUpSystemAccount(
+      name: params.name,
+      email: params.email,
+      studentId: params.studentId,
+      faculty: params.faculty,
+      password: params.password,
     );
   }
 }
 
-class SystemAccountRegistrationParams {
+class SignUpSystemAccountParams {
   final String name;
   final String email;
   final String studentId;
   final String faculty;
   final String password;
 
-  SystemAccountRegistrationParams({
+  SignUpSystemAccountParams({
     required this.name,
     required this.email,
     required this.studentId,

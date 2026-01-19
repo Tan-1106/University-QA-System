@@ -22,7 +22,7 @@ class _SystemSignInPageState extends State<SystemSignInPage> {
       final password = _passwordController.text;
 
       context.read<AuthBloc>().add(
-        AuthSignInWithSystemAccountEvent(
+        SignInWithSystemAccountEvent(
           email: email,
           password: password,
         ),

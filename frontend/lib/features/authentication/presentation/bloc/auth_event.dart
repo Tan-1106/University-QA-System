@@ -3,24 +3,15 @@ part of 'auth_bloc.dart';
 @immutable
 sealed class AuthEvent {}
 
-final class AuthSignInWithSystemAccountEvent extends AuthEvent {
-  final String email;
-  final String password;
-
-  AuthSignInWithSystemAccountEvent({
-    required this.email,
-    required this.password,
-  });
-}
-
-final class AuthRegisterSystemAccountEvent extends AuthEvent {
+// Sign up with system account
+final class SignUpSystemAccountEvent extends AuthEvent {
   final String name;
   final String email;
   final String studentId;
   final String faculty;
   final String password;
 
-  AuthRegisterSystemAccountEvent({
+  SignUpSystemAccountEvent({
     required this.name,
     required this.email,
     required this.studentId,
@@ -29,14 +20,28 @@ final class AuthRegisterSystemAccountEvent extends AuthEvent {
   });
 }
 
-final class AuthSignInWithELITEvent extends AuthEvent {
+// Sign in with system account
+final class SignInWithSystemAccountEvent extends AuthEvent {
+  final String email;
+  final String password;
+
+  SignInWithSystemAccountEvent({
+    required this.email,
+    required this.password,
+  });
+}
+
+// Sign in with ELIT
+final class SignInWithELITEvent extends AuthEvent {
   final String authCode;
 
-  AuthSignInWithELITEvent({
+  SignInWithELITEvent({
     required this.authCode,
   });
 }
 
-final class AuthVerifyUserAccessEvent extends AuthEvent {}
+// Verify user access (check if user is already authenticated)
+final class VerifyUserAccessEvent extends AuthEvent {}
 
+// Log out
 final class LogOutEvent extends AuthEvent {}

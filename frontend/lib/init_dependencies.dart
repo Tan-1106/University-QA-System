@@ -18,7 +18,7 @@ import 'package:university_qa_system/features/authentication/domain/use_cases/lo
 import 'package:university_qa_system/features/authentication/domain/use_cases/sign_in_with_elit.dart';
 import 'package:university_qa_system/features/authentication/domain/use_cases/verify_user_access.dart';
 import 'package:university_qa_system/features/authentication/domain/use_cases/sign_in_with_system_account.dart';
-import 'package:university_qa_system/features/authentication/domain/use_cases/system_account_registration.dart';
+import 'package:university_qa_system/features/authentication/domain/use_cases/sign_up_system_account.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
 import 'package:university_qa_system/features/dashboard/data/data_sources/dashboard_remote_data_source.dart';

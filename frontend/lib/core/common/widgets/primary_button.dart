@@ -39,7 +39,10 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                 height: 20,
                 child: Loader(),
               )
-            : Text(widget.label),
+            : Text(
+                widget.label,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
+              ),
       ),
     );
   }

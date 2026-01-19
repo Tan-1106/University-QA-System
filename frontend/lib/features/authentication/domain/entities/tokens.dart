@@ -1,14 +1,14 @@
-class Tokens {
+class TokensEntity {
   final String accessToken;
   final String refreshToken;
 
-  Tokens({
+  TokensEntity({
     required this.accessToken,
     required this.refreshToken,
   });
 
-  factory Tokens.fromJson(Map<String, dynamic> json) {
-    return Tokens(
+  factory TokensEntity.fromJson(Map<String, dynamic> json) {
+    return TokensEntity(
       accessToken: json['access_token'] as String,
       refreshToken: json['refresh_token'] as String,
     );

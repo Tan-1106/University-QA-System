@@ -15,35 +15,40 @@ class AuthRepositoryImpl implements AuthRepository {
     this.secureStorageService,
   );
 
+  // Sign up with system account
   @override
-  Future<Either<Failure, bool>> registerSystemAccount(
-    String name,
-    String email,
-    String studentId,
-    String faculty,
-    String password,
-  ) async {
+  Future<Either<Failure, void>> signUpSystemAccount({
+    required String name,
+    required String email,
+    required String studentId,
+    required String faculty,
+    required String password,
+  }) async {
     try {
-      await remoteDataSource.registerSystemAccount(
-        name,
-        email,
-        studentId,
-        faculty,
-        password,
+      await remoteDataSource.signUpSystemAccount(
+        name: name,
+        email: email,
+        studentId: studentId,
+        faculty: faculty,
+        password: password,
       );
-      return right(true);
+      return right(null);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
   }
 
+  // Sign in with system account
   @override
-  Future<Either<Failure, User>> signInWithSystemAccount(
-    String email,
-    String password,
-  ) async {
+  Future<Either<Failure, UserEntity>> signInWithSystemAccount({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final tokens = await remoteDataSource.signInWithSystemAccount(email, password);
+      final tokens = await remoteDataSource.signInWithSystemAccount(
+        email: email,
+        password: password,
+      );
       if (tokens.accessToken.isEmpty || tokens.refreshToken.isEmpty) {
         return left(const Failure('Xác thực thất bại: Không nhận được token hợp lệ'));
       } else {
@@ -58,10 +63,15 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  // Sign in with ELIT
   @override
-  Future<Either<Failure, User>> signInWithELIT(String authCode) async {
+  Future<Either<Failure, UserEntity>> signInWithELIT({
+    required String authCode,
+  }) async {
     try {
-      final userDetails = await remoteDataSource.signInWithELIT(authCode);
+      final userDetails = await remoteDataSource.signInWithELIT(
+        authCode: authCode,
+      );
 
       final tokens = userDetails.tokens;
       if (tokens.accessToken.isEmpty || tokens.refreshToken.isEmpty) {
@@ -77,8 +87,9 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  // Get current user information
   @override
-  Future<Either<Failure, User>> getUserInformation() async {
+  Future<Either<Failure, UserEntity>> getUserInformation() async {
     try {
       final currentUser = await remoteDataSource.getUserInformation();
 
@@ -89,12 +100,16 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  // Sign out (revoke tokens and clear local storage)
   @override
   Future<Either<Failure, void>> signOut() async {
     try {
       final refreshToken = await secureStorageService.getRefreshToken();
       await secureStorageService.deleteAll();
-      await remoteDataSource.signOut(refreshToken!);
+
+      await remoteDataSource.signOut(
+        refreshToken: refreshToken ?? '',
+      );
       return right(null);
     } on ServerException catch (e) {
       return left(Failure(e.message));

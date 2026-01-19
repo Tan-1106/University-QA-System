@@ -84,7 +84,7 @@ void _initAuth() {
   );
 
   serviceLocator.registerFactory(
-    () => SystemAccountRegistrationUseCase(
+    () => SignUpSystemAccountUseCase(
       serviceLocator(),
     ),
   );
@@ -96,7 +96,7 @@ void _initAuth() {
   );
 
   serviceLocator.registerFactory(
-    () => SignInWithELITUseCase(
+    () => SignInWithELitUseCase(
       serviceLocator(),
     ),
   );

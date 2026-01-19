@@ -1,4 +1,4 @@
-class User {
+class UserEntity {
   final String id;
   final String sub;
   final String name;
@@ -8,7 +8,7 @@ class User {
   final String faculty;
   final bool banned;
 
-  User({
+  UserEntity({
     required this.id,
     required this.sub,
     required this.name,
@@ -19,10 +19,10 @@ class User {
     required this.banned,
   });
 
-  factory User.fromApiJson(Map<String, dynamic> json) {
+  factory UserEntity.fromApiJson(Map<String, dynamic> json) {
     final Map<String, dynamic> user = (json['user'] as Map).cast<String, dynamic>();
 
-    return User(
+    return UserEntity(
       id: user['_id'] as String,
       sub: user['sub'] as String,
       name: user['name'] as String,
@@ -34,8 +34,8 @@ class User {
     );
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    return UserEntity(
       id: json['id'] as String,
       sub: json['sub'] as String,
       name: json['name'] as String,

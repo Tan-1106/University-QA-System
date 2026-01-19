@@ -5,14 +5,14 @@ import 'package:university_qa_system/core/common/widgets/primary_button.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -30,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final password = _passwordController.text;
 
       context.read<AuthBloc>().add(
-        AuthRegisterSystemAccountEvent(
+        SignUpSystemAccountEvent(
           name: name,
           email: email,
           studentId: studentId,
@@ -38,6 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
           password: password,
         ),
       );
+      context.pop();
     }
   }
 
@@ -56,14 +57,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthSuccess || state is AuthRegistered) {
-          showSuccessSnackBar(context, 'Đăng ký tài khoản thành công! Vui lòng đăng nhập.');
-          context.pop();
-        } else if (state is AuthFailure) {
-          showErrorSnackBar(context, 'Đăng ký thất bại: ${state.message}');
+        if (state is AuthFailure) {
+          showErrorSnackBar(context, state.message);
         }
       },
-
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(

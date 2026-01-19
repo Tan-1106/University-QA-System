@@ -1,26 +1,38 @@
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
-import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/features/authentication/data/models/current_user.dart';
-import 'package:university_qa_system/features/authentication/data/models/user_details.dart';
+import 'package:university_qa_system/features/authentication/data/models/tokens.dart';
+import 'package:university_qa_system/features/authentication/data/models/elit_authenticated_details.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<bool> registerSystemAccount(
-    String name,
-    String email,
-    String studentId,
-    String faculty,
-    String password,
-  );
+  // Sign up with system account
+  Future<void> signUpSystemAccount({
+    required String name,
+    required String email,
+    required String studentId,
+    required String faculty,
+    required String password,
+  });
 
-  Future<Tokens> signInWithSystemAccount(String email, String password);
+  // Sign in with system account
+  Future<TokensModel> signInWithSystemAccount({
+    required String email,
+    required String password,
+  });
 
-  Future<UserDetails> signInWithELIT(String authCode);
+  // Sign in with ELIT
+  Future<ELITAuthenticatedDetailsModel> signInWithELIT({
+    required String authCode,
+  });
 
-  Future<CurrentUser> getUserInformation();
+  // Get current user information
+  Future<CurrentUserModel> getUserInformation();
 
-  Future<bool> signOut(String refreshToken);
+  // Sign out (revoke tokens)
+  Future<void> signOut({
+    required String refreshToken,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -28,17 +40,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   AuthRemoteDataSourceImpl(this._dio);
 
+  // Sign up with system account
   @override
-  Future<bool> registerSystemAccount(
-    String name,
-    String email,
-    String studentId,
-    String faculty,
-    String password,
-  ) async {
+  Future<void> signUpSystemAccount({
+    required String name,
+    required String email,
+    required String studentId,
+    required String faculty,
+    required String password,
+  }) async {
     try {
-      logger.i('Attempting to register user with email: $email');
-      final response = await _dio.post(
+      await _dio.post(
         '/api/auth/register',
         data: {
           'name': name,
@@ -48,25 +60,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'password': password,
         },
       );
-
-      if (response.statusCode == 201) {
-        return true;
-      } else {
-        throw const ServerException('Failed to register user');
-      }
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
+  // Sign in with system account
   @override
-  Future<Tokens> signInWithSystemAccount(String email, String password) async {
+  Future<TokensModel> signInWithSystemAccount({
+    required String email,
+    required String password,
+  }) async {
     try {
       final response = await _dio.post(
         '/api/auth/login',
@@ -76,33 +84,25 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final apiResponse = ApiResponse<Tokens>.fromJson(
-          response.data as Map<String, dynamic>,
-          (json) => Tokens.fromJson(json as Map<String, dynamic>),
-        );
-
-        if (apiResponse.details != null) {
-          return apiResponse.details!;
-        } else {
-          throw const ServerException('Tokens are missing in the response');
-        }
-      } else {
-        throw const ServerException('Failed to sign in');
-      }
+      final apiResponse = ApiResponse<TokensModel>.fromJson(
+        response.data as Map<String, dynamic>,
+        (json) => TokensModel.fromJson(json as Map<String, dynamic>),
+      );
+      return apiResponse.details!;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
+  // Sign in with ELIT
   @override
-  Future<UserDetails> signInWithELIT(String authCode) async {
+  Future<ELITAuthenticatedDetailsModel> signInWithELIT({
+    required String authCode,
+  }) async {
     try {
       final response = await _dio.post(
         '/api/auth/verify',
@@ -111,84 +111,58 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final apiResponse = ApiResponse<UserDetails>.fromJson(
-          response.data as Map<String, dynamic>,
-          (json) => UserDetails.fromJson(json as Map<String, dynamic>),
-        );
-
-        if (apiResponse.details != null) {
-          return apiResponse.details!;
-        } else {
-          throw const ServerException('User details are missing in the response');
-        }
-      } else {
-        throw const ServerException('Failed to retrieve user information');
-      }
+      final apiResponse = ApiResponse<ELITAuthenticatedDetailsModel>.fromJson(
+        response.data as Map<String, dynamic>,
+        (json) => ELITAuthenticatedDetailsModel.fromJson(json as Map<String, dynamic>),
+      );
+      return apiResponse.details!;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
+  // Get current user information
   @override
-  Future<CurrentUser> getUserInformation() async {
+  Future<CurrentUserModel> getUserInformation() async {
     try {
       final response = await _dio.get('/api/auth/me');
 
-      if (response.statusCode == 200 && response.data != null) {
-        final apiResponse = ApiResponse<CurrentUser>.fromJson(
-          response.data as Map<String, dynamic>,
-          (json) => CurrentUser.fromJson(json as Map<String, dynamic>),
-        );
-
-        if (apiResponse.details != null) {
-          return apiResponse.details!;
-        } else {
-          throw const ServerException('User details are missing in the response');
-        }
-      } else {
-        throw const ServerException('Failed to retrieve user information');
-      }
+      final apiResponse = ApiResponse<CurrentUserModel>.fromJson(
+        response.data as Map<String, dynamic>,
+        (json) => CurrentUserModel.fromJson(json as Map<String, dynamic>),
+      );
+      return apiResponse.details!;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
+  // Sign out (revoke tokens)
   @override
-  Future<bool> signOut(String refreshToken) async {
+  Future<void> signOut({
+    required String refreshToken,
+  }) async {
     try {
-      final response = await _dio.post(
+      await _dio.post(
         '/api/users/logout',
         data: {
           'refresh_token': refreshToken,
         },
       );
-
-      if (response.statusCode != 200) {
-        throw const ServerException('Failed to sign out');
-      }
-
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 }

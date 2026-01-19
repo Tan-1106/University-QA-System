@@ -25,7 +25,7 @@ class LogoutPage extends StatelessWidget {
         ),
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
-        buildWhen: (previous, current) => current is AuthLoading || current is AuthSuccess || current is AuthFailure,
+        buildWhen: (previous, current) => current is AuthLoading || current is AuthAuthenticated || current is AuthFailure,
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -39,7 +39,7 @@ class LogoutPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
 
-                if (state is AuthSuccess)
+                if (state is AuthAuthenticated)
                   Expanded(
                     child: Column(
                       children: [

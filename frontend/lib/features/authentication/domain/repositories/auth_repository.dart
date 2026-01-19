@@ -3,22 +3,29 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 
 abstract interface class AuthRepository {
-  Future<Either<Failure, bool>> registerSystemAccount(
-    String name,
-    String email,
-    String studentId,
-    String faculty,
-    String password,
-  );
+  // Sign up with system account
+  Future<Either<Failure, void>> signUpSystemAccount({
+    required String name,
+    required String email,
+    required String studentId,
+    required String faculty,
+    required String password,
+  });
 
-  Future<Either<Failure, User>> signInWithSystemAccount(
-    String email,
-    String password,
-  );
+  // Sign in with system account
+  Future<Either<Failure, UserEntity>> signInWithSystemAccount({
+    required String email,
+    required String password,
+  });
 
-  Future<Either<Failure, User>> signInWithELIT(String authCode);
+  // Sign in with ELIT
+  Future<Either<Failure, UserEntity>> signInWithELIT({
+    required String authCode,
+  });
 
-  Future<Either<Failure, User>> getUserInformation();
+  // Get current user information
+  Future<Either<Failure, UserEntity>> getUserInformation();
 
+  // Sign out (revoke tokens and clear local storage)
   Future<Either<Failure, void>> signOut();
 }

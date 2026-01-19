@@ -40,7 +40,7 @@ class UserQuestion extends StatelessWidget {
         ),
         BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthSuccess) {
+            if (state is AuthAuthenticated) {
               return CircleAvatar(
                 backgroundImage: NetworkImage(state.user.imageUrl),
                 radius: 20,

@@ -4,18 +4,23 @@ import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 import 'package:university_qa_system/features/authentication/domain/repositories/auth_repository.dart';
 
-class SignInWithELITUseCase implements UseCase<User, VerifyParams> {
+class SignInWithELitUseCase implements UseCase<UserEntity, SignInWithELitParams> {
   final AuthRepository authRepository;
-  const SignInWithELITUseCase(this.authRepository);
+
+  const SignInWithELitUseCase(this.authRepository);
 
   @override
-  Future<Either<Failure, User>> call(VerifyParams params) {
-    return authRepository.signInWithELIT(params.authCode);
+  Future<Either<Failure, UserEntity>> call(SignInWithELitParams params) {
+    return authRepository.signInWithELIT(
+      authCode: params.authCode,
+    );
   }
 }
 
-class VerifyParams {
+class SignInWithELitParams {
   final String authCode;
 
-  VerifyParams({required this.authCode});
+  SignInWithELitParams({
+    required this.authCode,
+  });
 }

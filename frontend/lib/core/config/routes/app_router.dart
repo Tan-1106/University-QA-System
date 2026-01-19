@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:university_qa_system/features/api_management/presentation/pages/api_management_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/logout_page.dart';
-import 'package:university_qa_system/features/authentication/presentation/pages/register_page.dart';
+import 'package:university_qa_system/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/system_sign_in_page.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
 import 'package:university_qa_system/features/chat_box/presentation/pages/qa_history_record_page.dart';
@@ -18,8 +18,8 @@ import 'package:university_qa_system/features/popular_question/presentation/page
 import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
 import 'package:university_qa_system/features/user_management/presentation/pages/user_management_page.dart';
 import 'package:university_qa_system/init_dependencies.dart';
-import 'package:university_qa_system/core/common/widgets/user_shell_layout.dart';
-import 'package:university_qa_system/core/common/widgets/admin_shell_layout.dart';
+import 'package:university_qa_system/core/common/layouts/user_shell_layout.dart';
+import 'package:university_qa_system/core/common/layouts/admin_shell_layout.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/sign_in_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/elit_login_webview.dart';
@@ -38,17 +38,20 @@ final GoRouter appRouter = GoRouter(
     final authState = serviceLocator<AuthBloc>().state;
     final currentLocation = state.matchedLocation;
 
+    // Define public routes that don't require authentication
     final publicRoutes = ['/sign-in', '/auth-webview', '/system-sign-in', '/register'];
     final isPublicRoute = publicRoutes.contains(currentLocation);
 
-    if (authState is AuthLoggedOut || authState is AuthUnauthenticated || authState is AuthFailure || authState is AuthInitial) {
+    // Handle redirection based on authentication state
+    if (authState is AuthInitial || authState is AuthUnauthenticated || authState is AuthFailure) {
       if (!isPublicRoute) {
         return '/sign-in';
       }
       return null;
     }
 
-    if (authState is AuthSuccess) {
+    // If authenticated, redirect away from public routes
+    if (authState is AuthAuthenticated) {
       if (isPublicRoute) {
         final role = authState.user.role;
 
@@ -57,15 +60,10 @@ final GoRouter appRouter = GoRouter(
       }
       return null;
     }
-
-    if (authState is AuthRegistered) {
-      if (currentLocation != '/system-sign-in') {
-        return '/system-sign-in';
-      }
-    }
     return null;
   },
 
+  // Define application routes
   routes: <RouteBase>[
     // Sign In Page
     GoRoute(
@@ -81,7 +79,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: 'Register',
       path: '/register',
-      builder: (context, state) => const RegisterPage(),
+      builder: (context, state) => const SignUpPage(),
     ),
 
     // ELIT Authentication Webview
@@ -185,6 +183,7 @@ final GoRouter appRouter = GoRouter(
   ],
 );
 
+// GoRouterRefreshStream to listen to a Stream and notify GoRouter on changes
 class GoRouterRefreshStream extends ChangeNotifier {
   late final StreamSubscription<dynamic> _subscription;
 

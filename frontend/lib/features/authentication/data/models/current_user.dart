@@ -1,6 +1,7 @@
-import '../../domain/entities/user.dart';
+import 'package:university_qa_system/features/authentication/data/models/tokens.dart';
+import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 
-class CurrentUser {
+class CurrentUserModel {
   final String id;
   final String sub;
   final String name;
@@ -10,7 +11,7 @@ class CurrentUser {
   final String? faculty;
   final bool banned;
 
-  CurrentUser({
+  CurrentUserModel({
     required this.id,
     required this.sub,
     required this.name,
@@ -21,8 +22,8 @@ class CurrentUser {
     required this.banned,
   });
 
-  factory CurrentUser.fromJson(Map<String, dynamic> json) {
-    return CurrentUser(
+  factory CurrentUserModel.fromJson(Map<String, dynamic> json) {
+    return CurrentUserModel(
       id: json['_id'] as String,
       sub: json['sub'] as String,
       name: json['name'] as String,
@@ -34,8 +35,8 @@ class CurrentUser {
     );
   }
 
-  User toEntity() {
-    return User(
+  UserEntity toEntity() {
+    return UserEntity(
       id: id,
       sub: sub,
       name: name,

@@ -1,23 +1,23 @@
-import 'package:university_qa_system/features/authentication/data/models/user_details.dart';
+import 'package:university_qa_system/features/authentication/domain/entities/tokens.dart';
 
-class UserSystemSignIn {
+class TokensModel {
   final String accessToken;
   final String refreshToken;
 
-  UserSystemSignIn({
+  TokensModel({
     required this.accessToken,
     required this.refreshToken,
   });
 
-  factory UserSystemSignIn.fromJson(Map<String, dynamic> json) {
-    return UserSystemSignIn(
+  factory TokensModel.fromJson(Map<String, dynamic> json) {
+    return TokensModel(
       accessToken: json['access_token'] as String,
       refreshToken: json['refresh_token'] as String,
     );
   }
 
-  Tokens toEntity() {
-    return Tokens(
+  TokensEntity toEntity() {
+    return TokensEntity(
       accessToken: accessToken,
       refreshToken: refreshToken,
     );
@@ -25,6 +25,6 @@ class UserSystemSignIn {
 
   @override
   String toString() {
-    return 'UserSystemSignIn{accessToken: $accessToken, refreshToken: $refreshToken}';
+    return 'Tokens{accessToken: $accessToken, refreshToken: $refreshToken}';
   }
 }
