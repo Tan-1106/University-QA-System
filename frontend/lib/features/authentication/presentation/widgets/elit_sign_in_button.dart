@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ElitSignInButton extends StatelessWidget {
-  final void Function() onSignInClick;
+  final VoidCallback onSignInClick;
 
   const ElitSignInButton({super.key, required this.onSignInClick});
 

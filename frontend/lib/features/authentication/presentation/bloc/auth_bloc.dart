@@ -57,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (failure) => emit(AuthFailure(failure.message)),
+      (failure) => emit(AuthError(failure.message)),
       (_) => emit(AuthUnauthenticated()),
     );
   }
@@ -77,7 +77,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (failure) => emit(AuthFailure(failure.message)),
+      (failure) => emit(AuthError(failure.message)),
       (user) => emit(AuthAuthenticated(user)),
     );
   }
@@ -92,7 +92,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final result = await _signInWithELIT(SignInWithELitParams(authCode: event.authCode));
 
     result.fold(
-      (failure) => emit(AuthFailure(failure.message)),
+      (failure) => emit(AuthError(failure.message)),
       (user) => emit(AuthAuthenticated(user)),
     );
   }

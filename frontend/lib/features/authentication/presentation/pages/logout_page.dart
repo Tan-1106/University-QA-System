@@ -25,7 +25,7 @@ class LogoutPage extends StatelessWidget {
         ),
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
-        buildWhen: (previous, current) => current is AuthLoading || current is AuthAuthenticated || current is AuthFailure,
+        buildWhen: (previous, current) => current is AuthLoading || current is AuthAuthenticated || current is AuthError,
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -33,7 +33,7 @@ class LogoutPage extends StatelessWidget {
               children: [
                 if (state is AuthLoading) const Loader(),
 
-                if (state is AuthFailure)
+                if (state is AuthError)
                   Text(
                     'Không thể tải thông tin người dùng.',
                     style: Theme.of(context).textTheme.titleMedium,

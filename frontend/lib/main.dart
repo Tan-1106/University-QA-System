@@ -1,26 +1,24 @@
-import 'package:provider/provider.dart';
-import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
-import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
-import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
-import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
-import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
-import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
-
 import 'core/config/theme/theme.dart';
 import 'core/utils/create_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:university_qa_system/init_dependencies.dart';
+import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
 import 'package:university_qa_system/core/config/routes/app_router.dart';
-import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
-
-import 'features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
-import 'features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'features/user_management/presentation/bloc/user_management_bloc.dart';
+import 'features/chat/presentation/bloc/history_details/history_details_bloc.dart';
+import 'features/document/presentation/bloc/document_list/document_list_bloc.dart';
+import 'package:university_qa_system/features/chat/presentation/bloc/chat/chat_bloc.dart';
+import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
+import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/chat/presentation/bloc/history/history_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
+import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
+import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
+import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
+import 'package:university_qa_system/features/document/presentation/bloc/document_viewer/document_viewer_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +47,7 @@ Future<void> main() async {
         ],
         child: const MyApp(),
       ),
-    )
+    ),
   );
 }
 

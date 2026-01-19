@@ -29,16 +29,16 @@ import 'package:university_qa_system/features/dashboard/domain/use_cases/load_da
 import 'package:university_qa_system/features/dashboard/domain/use_cases/respond_to_question.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
-import 'package:university_qa_system/features/chat_box/data/data_sources/chat_box_remote_data_source.dart';
-import 'package:university_qa_system/features/chat_box/data/repositories/chat_box_repository_impl.dart';
-import 'package:university_qa_system/features/chat_box/domain/repositories/chat_box_repository.dart';
-import 'package:university_qa_system/features/chat_box/domain/use_cases/ask_question.dart';
-import 'package:university_qa_system/features/chat_box/domain/use_cases/send_feedback.dart';
-import 'package:university_qa_system/features/chat_box/domain/use_cases/get_qa_history.dart';
-import 'package:university_qa_system/features/chat_box/domain/use_cases/view_qa_record_details.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/chat/chat_box_bloc.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/history/history_bloc.dart';
-import 'package:university_qa_system/features/chat_box/presentation/bloc/history_details/history_details_bloc.dart';
+import 'package:university_qa_system/features/chat/data/data_sources/chat_remote_data_source.dart';
+import 'package:university_qa_system/features/chat/data/repositories/chat_repository_impl.dart';
+import 'package:university_qa_system/features/chat/domain/repositories/chat_repository.dart';
+import 'package:university_qa_system/features/chat/domain/use_cases/ask_question.dart';
+import 'package:university_qa_system/features/chat/domain/use_cases/send_feedback.dart';
+import 'package:university_qa_system/features/chat/domain/use_cases/get_question_history.dart';
+import 'package:university_qa_system/features/chat/domain/use_cases/view_question_details.dart';
+import 'package:university_qa_system/features/chat/presentation/bloc/chat/chat_bloc.dart';
+import 'package:university_qa_system/features/chat/presentation/bloc/history/history_bloc.dart';
+import 'package:university_qa_system/features/chat/presentation/bloc/history_details/history_details_bloc.dart';
 
 import 'package:university_qa_system/features/document/data/data_sources/document_remote_data_source.dart';
 import 'package:university_qa_system/features/document/data/repositories/document_repository_impl.dart';
@@ -85,7 +85,5 @@ import 'package:university_qa_system/features/api_management/domain/use_cases/ge
 import 'package:university_qa_system/features/api_management/domain/use_cases/add_api_key.dart';
 import 'package:university_qa_system/features/api_management/domain/use_cases/add_key_model.dart';
 import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
-
-
 
 part 'init_dependencies.main.dart';

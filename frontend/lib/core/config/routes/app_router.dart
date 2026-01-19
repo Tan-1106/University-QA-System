@@ -1,28 +1,35 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:university_qa_system/features/api_management/presentation/pages/api_management_page.dart';
-import 'package:university_qa_system/features/authentication/presentation/pages/logout_page.dart';
+import 'package:university_qa_system/init_dependencies.dart';
+
+import 'package:university_qa_system/core/common/layouts/user_shell_layout.dart';
+import 'package:university_qa_system/core/common/layouts/admin_shell_layout.dart';
+
 import 'package:university_qa_system/features/authentication/presentation/pages/sign_up_page.dart';
 import 'package:university_qa_system/features/authentication/presentation/pages/system_sign_in_page.dart';
-import 'package:university_qa_system/features/chat_box/presentation/pages/chat_box_page.dart';
-import 'package:university_qa_system/features/chat_box/presentation/pages/qa_history_record_page.dart';
+import 'package:university_qa_system/features/authentication/presentation/pages/sign_in_page.dart';
+import 'package:university_qa_system/features/authentication/presentation/pages/elit_login_webview.dart';
+import 'package:university_qa_system/features/authentication/presentation/pages/logout_page.dart';
+import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
+
+import 'package:university_qa_system/features/chat/presentation/pages/chat_page.dart';
+import 'package:university_qa_system/features/chat/presentation/pages/history_question_details_page.dart';
+
 import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/question_details_page.dart';
+
 import 'package:university_qa_system/features/document/presentation/pages/documents_management_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/documents_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/upload_document_page.dart';
 import 'package:university_qa_system/features/document/presentation/pages/view_document_page.dart';
+
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
 import 'package:university_qa_system/features/user_management/presentation/pages/user_management_page.dart';
-import 'package:university_qa_system/init_dependencies.dart';
-import 'package:university_qa_system/core/common/layouts/user_shell_layout.dart';
-import 'package:university_qa_system/core/common/layouts/admin_shell_layout.dart';
-import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
-import 'package:university_qa_system/features/authentication/presentation/pages/sign_in_page.dart';
-import 'package:university_qa_system/features/authentication/presentation/pages/elit_login_webview.dart';
+
+import 'package:university_qa_system/features/api_management/presentation/pages/api_management_page.dart';
 
 // GoRouter Navigator Keys
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -43,7 +50,7 @@ final GoRouter appRouter = GoRouter(
     final isPublicRoute = publicRoutes.contains(currentLocation);
 
     // Handle redirection based on authentication state
-    if (authState is AuthInitial || authState is AuthUnauthenticated || authState is AuthFailure) {
+    if (authState is AuthInitial || authState is AuthUnauthenticated || authState is AuthError) {
       if (!isPublicRoute) {
         return '/sign-in';
       }
@@ -147,7 +154,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'UserQ&A',
           path: '/qa',
-          builder: (context, state) => const ChatBoxPage(),
+          builder: (context, state) => const ChatPage(),
         ),
         GoRoute(
           name: 'UserDocuments',
@@ -164,7 +171,7 @@ final GoRouter appRouter = GoRouter(
           path: '/qa-history/:questionId',
           builder: (context, state) {
             final questionId = state.pathParameters['questionId']!;
-            return QaHistoryDetailsPage(questionId: questionId);
+            return HistoryQuestionDetailsPage(questionId: questionId);
           },
         ),
         GoRoute(

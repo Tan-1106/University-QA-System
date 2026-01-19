@@ -165,14 +165,14 @@ void _initDashboard() {
 }
 
 void _initChatBox() {
-  serviceLocator.registerFactory<ChatBoxRemoteDataSource>(
-    () => ChatBoxRemoteDataSourceImpl(
+  serviceLocator.registerFactory<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(
       serviceLocator(),
     ),
   );
 
   serviceLocator.registerFactory<ChatBoxRepository>(
-    () => ChatBoxRepositoryImpl(
+    () => ChatRepositoryImpl(
       serviceLocator(),
     ),
   );
@@ -190,13 +190,13 @@ void _initChatBox() {
   );
 
   serviceLocator.registerFactory(
-    () => GetQAHistoryUseCase(
+    () => GetQuestionHistoryUseCase(
       serviceLocator(),
     ),
   );
 
   serviceLocator.registerFactory(
-    () => ViewQARecordDetailsUseCase(
+    () => ViewQuestionDetailsUseCase(
       serviceLocator(),
     ),
   );

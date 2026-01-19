@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:university_qa_system/features/chat/presentation/widgets/user_history.dart';
 import 'package:university_qa_system/features/authentication/presentation/bloc/auth_bloc.dart';
-import 'package:university_qa_system/features/chat_box/presentation/widgets/user_history.dart';
 
 class UserShellLayout extends StatelessWidget {
   final Widget child;
@@ -113,7 +113,7 @@ class UserShellLayout extends StatelessWidget {
               Expanded(
                 child: UserHistory(
                   onTap: (question) {
-                    context.go('/qa-history/${question.id}');
+                    context.go('/qa-history/${question.questionID}');
                     Navigator.pop(context);
                   },
                 ),

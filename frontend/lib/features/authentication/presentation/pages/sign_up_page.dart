@@ -57,7 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthFailure) {
+        if (state is AuthError) {
           showErrorSnackBar(context, state.message);
         }
       },
