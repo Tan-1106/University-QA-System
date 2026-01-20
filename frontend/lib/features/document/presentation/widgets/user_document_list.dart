@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/core/utils/format_date.dart';
-import 'package:university_qa_system/features/document/domain/entities/documents.dart';
+import 'package:university_qa_system/features/document/domain/entities/document.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/document_segmented_button.dart';
 
@@ -32,14 +32,14 @@ class _UserDocumentListState extends State<UserDocumentList> {
       if (state is DocumentListLoaded && state.hasMore && !state.isLoadingMore) {
         if (widget.selectedOption == DocumentSegmentedButtonOptions.general) {
           context.read<DocumentListBloc>().add(
-            LoadGeneralDocumentsEvent(
+            GetGeneralDocumentsEvent(
               page: state.currentPage + 1,
               isLoadMore: true,
             ),
           );
         } else if (widget.selectedOption == DocumentSegmentedButtonOptions.faculty) {
           context.read<DocumentListBloc>().add(
-            LoadFacultyDocumentsEvent(
+            GetFacultyDocumentsEvent(
               page: state.currentPage + 1,
               isLoadMore: true,
             ),
@@ -67,7 +67,7 @@ class _UserDocumentListState extends State<UserDocumentList> {
     return BlocBuilder<DocumentListBloc, DocumentListState>(
       buildWhen: (previous, current) => current is DocumentListLoading || current is DocumentListLoaded,
       builder: (context, state) {
-        List<Document> documents = [];
+        List<DocumentEntity> documents = [];
         bool isLoadingMore = false;
 
         if (state is DocumentListLoaded) {

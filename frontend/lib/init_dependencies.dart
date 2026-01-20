@@ -44,7 +44,7 @@ import 'package:university_qa_system/features/document/data/data_sources/documen
 import 'package:university_qa_system/features/document/data/repositories/document_repository_impl.dart';
 import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/delete_document.dart';
-import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/get_document_filters.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_faculty_documents.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/get_general_documents.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/update_document_basic_info.dart';

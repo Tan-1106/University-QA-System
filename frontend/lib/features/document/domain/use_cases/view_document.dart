@@ -11,7 +11,9 @@ class ViewDocumentUseCase implements UseCase<PDFBytes, ViewDocumentParams> {
 
   @override
   Future<Either<Failure, PDFBytes>> call(ViewDocumentParams params) {
-    return documentRepository.viewDocument(params.documentId);
+    return documentRepository.viewDocument(
+      documentId: params.documentId,
+    );
   }
 }
 

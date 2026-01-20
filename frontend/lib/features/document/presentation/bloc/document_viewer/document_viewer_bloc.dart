@@ -14,11 +14,12 @@ class DocumentViewerBloc extends Bloc<DocumentViewerEvent, DocumentViewerState> 
     ViewDocumentUseCase viewDocument,
   ) : _viewDocument = viewDocument,
       super(DocumentViewerInitial()) {
-    on<LoadDocumentEvent>(_onLoadDocumentView);
+    on<ViewDocumentEvent>(_onViewDocument);
   }
 
-  void _onLoadDocumentView(
-      LoadDocumentEvent event,
+  // View Document
+  void _onViewDocument(
+      ViewDocumentEvent event,
       Emitter<DocumentViewerState> emit,
   ) async {
     emit(DocumentViewerLoading());

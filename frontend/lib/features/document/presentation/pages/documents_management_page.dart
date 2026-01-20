@@ -28,7 +28,7 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
   void _triggerSearch() {
     if (_selectedType == DocumentSegmentedButtonOptions.general) {
       context.read<DocumentListBloc>().add(
-        LoadGeneralDocumentsEvent(
+        GetGeneralDocumentsEvent(
           department: _selectedDepartment,
           documentType: _selectedDocumentType,
           keyword: _keyword,
@@ -36,7 +36,7 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
       );
     } else {
       context.read<DocumentListBloc>().add(
-        LoadFacultyDocumentsEvent(
+        GetFacultyDocumentsEvent(
           documentType: _selectedDocumentType,
           keyword: _keyword,
           faculty: _faculty,
@@ -229,7 +229,7 @@ class _DocumentsManagementPageState extends State<DocumentsManagementPage> {
                     onRefresh: () async => _triggerSearch(),
                     child: AdminDocumentList(
                       onDocumentTap: (documentId) {
-                        context.read<DocumentViewerBloc>().add(LoadDocumentEvent(documentId));
+                        context.read<DocumentViewerBloc>().add(ViewDocumentEvent(documentId));
                         context.push('/document-viewer');
                       },
                       selectedOption: _selectedType,

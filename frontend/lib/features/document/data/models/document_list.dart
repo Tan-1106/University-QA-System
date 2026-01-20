@@ -1,23 +1,24 @@
-import 'package:university_qa_system/features/document/domain/entities/documents.dart';
+import 'package:university_qa_system/features/document/data/models/document.dart';
+import 'package:university_qa_system/features/document/domain/entities/document_list.dart';
 
-class DocumentsData {
-  final List<Document> documents;
+class DocumentListModel {
+  final List<DocumentModel> documents;
   final int total;
   final int totalPages;
   final int currentPage;
 
-  DocumentsData({
+  DocumentListModel({
     required this.documents,
     required this.total,
     required this.totalPages,
     required this.currentPage,
   });
 
-  factory DocumentsData.fromJson(Map<String, dynamic> json) {
+  factory DocumentListModel.fromJson(Map<String, dynamic> json) {
     var documentsJson = json['documents'] as List<dynamic>;
-    List<Document> documentsList = documentsJson
+    List<DocumentModel> documentsList = documentsJson
         .map(
-          (documentJson) => Document(
+          (documentJson) => DocumentModel(
             id: documentJson['id'] as String,
             fileName: documentJson['file_name'] as String,
             docType: documentJson['doc_type'] as String,
@@ -28,7 +29,7 @@ class DocumentsData {
         )
         .toList();
 
-    return DocumentsData(
+    return DocumentListModel(
       documents: documentsList,
       total: json['total'] as int,
       totalPages: json['total_pages'] as int,
@@ -36,9 +37,9 @@ class DocumentsData {
     );
   }
 
-  Documents toEntity() {
-    return Documents(
-      documents: documents,
+  DocumentListEntity toEntity() {
+    return DocumentListEntity(
+      documents: documents.map((d) => d.toEntity()).toList(),
       total: total,
       totalPages: totalPages,
       currentPage: currentPage,

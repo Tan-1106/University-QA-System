@@ -1,18 +1,18 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/document/domain/entities/documents.dart';
+import 'package:university_qa_system/features/document/domain/entities/document_list.dart';
 import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
 
 
-class GetGeneralDocumentsUseCase implements UseCase<Documents, GetGeneralDocumentsParams> {
+class GetGeneralDocumentsUseCase implements UseCase<DocumentListEntity, GetGeneralDocumentsParams> {
   final DocumentRepository documentRepository;
 
   const GetGeneralDocumentsUseCase(this.documentRepository);
 
   @override
-  Future<Either<Failure, Documents>> call(GetGeneralDocumentsParams params) {
-    return documentRepository.loadGeneralDocuments(
+  Future<Either<Failure, DocumentListEntity>> call(GetGeneralDocumentsParams params) {
+    return documentRepository.getGeneralDocuments(
       page: params.page,
       keyword: params.keyword,
       department: params.department,

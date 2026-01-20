@@ -1,18 +1,4 @@
-class Documents {
-  final List<Document> documents;
-  final int total;
-  final int totalPages;
-  final int currentPage;
-
-  Documents({
-    required this.documents,
-    required this.total,
-    required this.totalPages,
-    required this.currentPage,
-  });
-}
-
-class Document {
+class DocumentEntity {
   final String id;
   final String fileName;
   final String docType;
@@ -20,7 +6,7 @@ class Document {
   final String? faculty;
   final String uploadedAt;
 
-  Document({
+  DocumentEntity({
     required this.id,
     required this.fileName,
     required this.docType,
@@ -28,4 +14,9 @@ class Document {
     this.faculty,
     required this.uploadedAt,
   });
+
+  @override
+  String toString() {
+    return 'Document{id: $id, fileName: $fileName, docType: $docType, department: $department, faculty: $faculty, uploadedAt: $uploadedAt}';
+  }
 }

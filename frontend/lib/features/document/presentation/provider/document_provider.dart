@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/document/domain/use_cases/get_existing_filters.dart';
+import 'package:university_qa_system/features/document/domain/use_cases/get_document_filters.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/update_document_basic_info.dart';
 import 'package:university_qa_system/features/document/domain/use_cases/upload_pdf_document.dart';
 
 class DocumentProvider extends ChangeNotifier {
-  final GetExistingFiltersUseCase _getExistingFilters;
+  final GetDocumentFiltersUseCase _getExistingFilters;
   final UploadPDFDocumentUseCase _uploadPDFDocument;
   final UpdateDocumentBasicInfoUseCase _updateDocumentBasicInfo;
 
   DocumentProvider(
-    GetExistingFiltersUseCase getExistingFilters,
+    GetDocumentFiltersUseCase getExistingFilters,
     UploadPDFDocumentUseCase uploadPDFDocument,
     UpdateDocumentBasicInfoUseCase updateDocumentBasicInfo,
   ) : _getExistingFilters = getExistingFilters,

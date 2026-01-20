@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/utils/format_date.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
 import 'package:university_qa_system/core/common/widgets/primary_button.dart';
-import 'package:university_qa_system/features/document/domain/entities/documents.dart';
+import 'package:university_qa_system/features/document/domain/entities/document.dart';
 import 'package:university_qa_system/features/document/presentation/bloc/document_list/document_list_bloc.dart';
 import 'package:university_qa_system/features/document/presentation/provider/document_provider.dart';
 import 'package:university_qa_system/features/document/presentation/widgets/department_filter.dart';
@@ -42,14 +42,14 @@ class _AdminDocumentListState extends State<AdminDocumentList> {
       if (state is DocumentListLoaded && state.hasMore && !state.isLoadingMore) {
         if (widget.selectedOption == DocumentSegmentedButtonOptions.general) {
           context.read<DocumentListBloc>().add(
-            LoadGeneralDocumentsEvent(
+            GetGeneralDocumentsEvent(
               page: state.currentPage + 1,
               isLoadMore: true,
             ),
           );
         } else if (widget.selectedOption == DocumentSegmentedButtonOptions.faculty) {
           context.read<DocumentListBloc>().add(
-            LoadFacultyDocumentsEvent(
+            GetFacultyDocumentsEvent(
               page: state.currentPage + 1,
               isLoadMore: true,
             ),
@@ -59,7 +59,7 @@ class _AdminDocumentListState extends State<AdminDocumentList> {
     }
   }
 
-  void _showEditDocumentSheet(BuildContext context, Document document) {
+  void _showEditDocumentSheet(BuildContext context, DocumentEntity document) {
     _titleController.text = document.fileName;
     _selectedDocType = document.docType;
     _selectedDepartmentOrFaculty = (widget.selectedOption == DocumentSegmentedButtonOptions.general ? document.department : document.faculty)!;
@@ -204,7 +204,7 @@ class _AdminDocumentListState extends State<AdminDocumentList> {
     return BlocBuilder<DocumentListBloc, DocumentListState>(
       buildWhen: (previous, current) => current is DocumentListLoading || current is DocumentListLoaded,
       builder: (context, state) {
-        List<Document> documents = [];
+        List<DocumentEntity> documents = [];
         bool isLoadingMore = false;
 
         if (state is DocumentListLoaded) {

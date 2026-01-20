@@ -234,8 +234,8 @@ void _initDocument() {
     ),
   );
 
-  serviceLocator.registerFactory<GetExistingFiltersUseCase>(
-    () => GetExistingFiltersUseCase(
+  serviceLocator.registerFactory<GetDocumentFiltersUseCase>(
+    () => GetDocumentFiltersUseCase(
       serviceLocator(),
     ),
   );

@@ -3,14 +3,13 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
 
-
-class UpdateDocumentBasicInfoUseCase implements UseCase<bool, UpdateDocumentBasicInfoParams> {
+class UpdateDocumentBasicInfoUseCase implements UseCase<void, UpdateDocumentBasicInfoParams> {
   final DocumentRepository documentRepository;
 
   const UpdateDocumentBasicInfoUseCase(this.documentRepository);
 
   @override
-  Future<Either<Failure, bool>> call(UpdateDocumentBasicInfoParams params) {
+  Future<Either<Failure, void>> call(UpdateDocumentBasicInfoParams params) {
     return documentRepository.updateDocumentBasicInfo(
       documentId: params.documentId,
       title: params.title,

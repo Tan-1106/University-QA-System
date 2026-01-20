@@ -3,14 +3,14 @@ part of 'document_list_bloc.dart';
 @immutable
 sealed class DocumentListEvent {}
 
-final class LoadGeneralDocumentsEvent extends DocumentListEvent {
+final class GetGeneralDocumentsEvent extends DocumentListEvent {
   final int page;
   final String? keyword;
   final String? department;
   final String? documentType;
   final bool isLoadMore;
 
-  LoadGeneralDocumentsEvent({
+  GetGeneralDocumentsEvent({
     this.page = 1,
     this.keyword,
     this.department,
@@ -19,14 +19,14 @@ final class LoadGeneralDocumentsEvent extends DocumentListEvent {
   });
 }
 
-final class LoadFacultyDocumentsEvent extends DocumentListEvent {
+final class GetFacultyDocumentsEvent extends DocumentListEvent {
   final int page;
   final String? keyword;
   final String? documentType;
   final String? faculty;
   final bool isLoadMore;
 
-  LoadFacultyDocumentsEvent({
+  GetFacultyDocumentsEvent({
     this.page = 1,
     this.keyword,
     this.documentType,

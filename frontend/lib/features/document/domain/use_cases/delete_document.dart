@@ -3,14 +3,16 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/document/domain/repositories/document_repository.dart';
 
-class DeleteDocumentUseCase implements UseCase<bool, DeleteDocumentParams> {
+class DeleteDocumentUseCase implements UseCase<void, DeleteDocumentParams> {
   final DocumentRepository documentRepository;
 
   const DeleteDocumentUseCase(this.documentRepository);
 
   @override
-  Future<Either<Failure, bool>> call(DeleteDocumentParams params) {
-    return documentRepository.deleteDocument(params.documentId);
+  Future<Either<Failure, void>> call(DeleteDocumentParams params) {
+    return documentRepository.deleteDocument(
+      documentId: params.documentId,
+    );
   }
 }
 

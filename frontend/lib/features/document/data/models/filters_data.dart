@@ -11,8 +11,8 @@ class FiltersData {
     required this.existingFaculties,
   });
 
-  Filters toEntity() {
-    return Filters(
+  FiltersEntity toEntity() {
+    return FiltersEntity(
       existingDepartments: existingDepartments,
       existingDocumentTypes: existingDocumentTypes,
       existingFaculties: existingFaculties,

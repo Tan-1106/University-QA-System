@@ -10,7 +10,7 @@ final class DocumentListInitial extends DocumentListState {}
 final class DocumentListLoading extends DocumentListState {}
 
 final class DocumentListLoaded extends DocumentListState {
-  final List<Document> documents;
+  final List<DocumentEntity> documents;
   final int currentPage;
   final int totalPages;
   final bool hasMore;
@@ -25,7 +25,7 @@ final class DocumentListLoaded extends DocumentListState {
   });
 
   DocumentListLoaded copyWith({
-    List<Document>? documents,
+    List<DocumentEntity>? documents,
     int? currentPage,
     int? totalPages,
     bool? hasMore,
