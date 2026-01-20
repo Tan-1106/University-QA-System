@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question.dart';
 
 class QuestionDetailsPage extends StatefulWidget {
-  final Question question;
+  final DashboardQuestionEntity question;
 
   const QuestionDetailsPage({super.key, required this.question});
 

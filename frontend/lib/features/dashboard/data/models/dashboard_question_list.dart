@@ -1,23 +1,24 @@
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
+import 'package:university_qa_system/features/dashboard/data/models/dashboard_question.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question_list.dart';
 
-class QuestionRecordsData {
-  final List<Question> questions;
+class DashboardQuestionListModel {
+  final List<DashboardQuestionModel> questions;
   final int total;
   final int totalPages;
   final int currentPage;
 
-  QuestionRecordsData({
+  DashboardQuestionListModel({
     required this.questions,
     required this.total,
     required this.totalPages,
     required this.currentPage,
   });
 
-  factory QuestionRecordsData.fromJson(Map<String, dynamic> json) {
+  factory DashboardQuestionListModel.fromJson(Map<String, dynamic> json) {
     var recordsJson = json['questions'] as List<dynamic>;
-    List<Question> recordsList = recordsJson
+    List<DashboardQuestionModel> recordsList = recordsJson
         .map(
-          (recordJson) => Question(
+          (recordJson) => DashboardQuestionModel(
             id: recordJson['_id'] as String,
             userId: recordJson['user_id'] as String,
             userSub: recordJson['user_sub'] as String,
@@ -30,7 +31,7 @@ class QuestionRecordsData {
         )
         .toList();
 
-    return QuestionRecordsData(
+    return DashboardQuestionListModel(
       questions: recordsList,
       total: json['total'] as int,
       totalPages: json['total_pages'] as int,
@@ -38,9 +39,9 @@ class QuestionRecordsData {
     );
   }
 
-  QuestionRecords toEntity() {
-    return QuestionRecords(
-      questions: questions,
+  DashboardQuestionListEntity toEntity() {
+    return DashboardQuestionListEntity(
+      questions: questions.map((q) => q.toEntity()).toList(),
       total: total,
       totalPages: totalPages,
       currentPage: currentPage,

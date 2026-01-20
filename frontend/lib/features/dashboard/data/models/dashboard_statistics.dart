@@ -1,26 +1,26 @@
-import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_statistics.dart';
 
-class StatisticData {
+class DashboardStatisticsModel {
   final int total;
   final int like;
   final int dislike;
 
-  StatisticData({
+  DashboardStatisticsModel({
     required this.total,
     required this.like,
     required this.dislike,
   });
 
-  factory StatisticData.fromJson(Map<String, dynamic> json) {
-    return StatisticData(
+  factory DashboardStatisticsModel.fromJson(Map<String, dynamic> json) {
+    return DashboardStatisticsModel(
       total: json['total'] as int,
       like: json['like'] as int,
       dislike: json['dislike'] as int,
     );
   }
 
-  Statistic toEntity() {
-    return Statistic(
+  DashboardStatisticsEntity toEntity() {
+    return DashboardStatisticsEntity(
       total: total,
       like: like,
       dislike: dislike,

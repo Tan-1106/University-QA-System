@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question.dart';
 
 class QuestionItem extends StatelessWidget {
   final String userSub;
-  final Question question;
   final VoidCallback? onTap;
+  final DashboardQuestionEntity question;
 
   const QuestionItem({
     super.key,
@@ -70,7 +70,7 @@ class QuestionItem extends StatelessWidget {
           Divider(
             color: Theme.of(context).colorScheme.onSurface,
             thickness: 0.5,
-          )
+          ),
         ],
       ),
     );

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
-import 'package:university_qa_system/features/dashboard/presentation/widgets/statistic_box.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/dashboard/presentation/widgets/statistic_box.dart';
 import 'package:university_qa_system/features/dashboard/presentation/widgets/question_list.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_statistics.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -21,7 +21,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   void initState() {
     super.initState();
-    context.read<DashboardBloc>().add(LoadDashboardStatisticEvent());
+    context.read<DashboardBloc>().add(GetDashboardStatisticsEvent());
   }
 
   @override
@@ -42,28 +42,28 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             },
             buildWhen: (previous, current) =>
                 current is DashboardLoading ||
-                current is DashboardStatisticLoaded ||
+                current is DashboardStatisticsLoaded ||
                 current is DashboardDataLoaded ||
-                (current is DashboardError && previous is! DashboardQuestionRecordsLoaded && previous is! DashboardDataLoaded),
+                (current is DashboardError && previous is! DashboardQuestionsLoaded && previous is! DashboardDataLoaded),
             builder: (context, state) {
-              Statistic? statisticData;
+              DashboardStatisticsEntity? statisticData;
 
               if (state is DashboardLoading) {
                 return const Loader();
               }
 
-              if (state is DashboardStatisticLoaded) {
-                statisticData = state.statisticData;
+              if (state is DashboardStatisticsLoaded) {
+                statisticData = state.statistics;
               }
 
               if (state is DashboardDataLoaded) {
-                statisticData = state.statisticData;
+                statisticData = state.statistics;
               }
 
               if (statisticData != null) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    context.read<DashboardBloc>().add(LoadDashboardStatisticEvent());
+                    context.read<DashboardBloc>().add(GetDashboardStatisticsEvent());
                   },
                   child: ListView(
                     children: [

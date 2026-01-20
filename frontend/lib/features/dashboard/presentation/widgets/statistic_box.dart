@@ -5,6 +5,7 @@ class StatisticBox extends StatelessWidget {
   final String title;
   final Color backgroundColor;
   final Color textColor;
+
   const StatisticBox({super.key, required this.quantity, required this.title, required this.backgroundColor, required this.textColor});
 
   @override

@@ -16,7 +16,7 @@ import 'package:university_qa_system/features/authentication/presentation/bloc/a
 import 'package:university_qa_system/features/chat/presentation/pages/chat_page.dart';
 import 'package:university_qa_system/features/chat/presentation/pages/history_question_details_page.dart';
 
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/admin_dashboard_page.dart';
 import 'package:university_qa_system/features/dashboard/presentation/pages/question_details_page.dart';
 
@@ -27,6 +27,7 @@ import 'package:university_qa_system/features/document/presentation/pages/view_d
 
 import 'package:university_qa_system/features/popular_question/presentation/pages/admin_popular_questions_page.dart';
 import 'package:university_qa_system/features/popular_question/presentation/pages/student_popular_questions_page.dart';
+
 import 'package:university_qa_system/features/user_management/presentation/pages/user_management_page.dart';
 
 import 'package:university_qa_system/features/api_management/presentation/pages/api_management_page.dart';
@@ -107,7 +108,7 @@ final GoRouter appRouter = GoRouter(
           name: 'AdminDashboardQuestionDetails',
           path: '/admin-dashboard-question-details',
           builder: (context, state) {
-            final question = state.extra as Question;
+            final question = state.extra as DashboardQuestionEntity;
             return QuestionDetailsPage(question: question);
           },
         ),

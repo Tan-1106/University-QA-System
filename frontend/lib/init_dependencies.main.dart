@@ -137,14 +137,14 @@ void _initDashboard() {
     ),
   );
 
-  serviceLocator.registerFactory<LoadDashboardStatisticUseCase>(
-    () => LoadDashboardStatisticUseCase(
+  serviceLocator.registerFactory<GetStatisticsUseCase>(
+    () => GetStatisticsUseCase(
       serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<LoadDashboardQuestionRecordsUseCase>(
-    () => LoadDashboardQuestionRecordsUseCase(
+  serviceLocator.registerFactory<GetQuestionsUseCase>(
+    () => GetQuestionsUseCase(
       serviceLocator(),
     ),
   );

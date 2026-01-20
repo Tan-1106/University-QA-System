@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
 import 'package:university_qa_system/features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question.dart';
 import 'package:university_qa_system/features/dashboard/presentation/widgets/question_item.dart';
 
 class QuestionList extends StatefulWidget {
-  final void Function(Question question)? onTap;
+  final void Function(DashboardQuestionEntity question)? onTap;
 
   const QuestionList({super.key, this.onTap});
 
@@ -24,14 +24,14 @@ class _QuestionListState extends State<QuestionList> {
       final state = context.read<DashboardBloc>().state;
       if (state is DashboardDataLoaded && state.hasMore && !state.isLoadingMore) {
         context.read<DashboardBloc>().add(
-          LoadDashboardQuestionRecordsEvent(
+          GetDashboardQuestionsEvent(
             page: state.currentPage + 1,
             isLoadMore: true,
           ),
         );
-      } else if (state is DashboardQuestionRecordsLoaded && state.hasMore && !state.isLoadingMore) {
+      } else if (state is DashboardQuestionsLoaded && state.hasMore && !state.isLoadingMore) {
         context.read<DashboardBloc>().add(
-          LoadDashboardQuestionRecordsEvent(
+          GetDashboardQuestionsEvent(
             page: state.currentPage + 1,
             isLoadMore: true,
           ),
@@ -51,7 +51,7 @@ class _QuestionListState extends State<QuestionList> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    context.read<DashboardBloc>().add(LoadDashboardQuestionRecordsEvent(page: 1));
+    context.read<DashboardBloc>().add(GetDashboardQuestionsEvent(page: 1));
   }
 
   @override
@@ -64,9 +64,9 @@ class _QuestionListState extends State<QuestionList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DashboardBloc, DashboardState>(
-      buildWhen: (previous, current) => current is DashboardDataLoaded || current is DashboardQuestionRecordsLoaded || current is DashboardLoading,
+      buildWhen: (previous, current) => current is DashboardDataLoaded || current is DashboardQuestionsLoaded || current is DashboardLoading,
       builder: (context, state) {
-        List<Question> questions = [];
+        List<DashboardQuestionEntity> questions = [];
         bool isLoadingMore = false;
 
         if (state is DashboardDataLoaded) {
@@ -74,7 +74,7 @@ class _QuestionListState extends State<QuestionList> {
           isLoadingMore = state.isLoadingMore;
         }
 
-        if (state is DashboardQuestionRecordsLoaded) {
+        if (state is DashboardQuestionsLoaded) {
           questions = state.questions;
           isLoadingMore = state.isLoadingMore;
         }

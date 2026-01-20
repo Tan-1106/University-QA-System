@@ -1,18 +1,4 @@
-class QuestionRecords {
-  final List<Question> questions;
-  final int total;
-  final int totalPages;
-  final int currentPage;
-
-  QuestionRecords({
-    required this.questions,
-    required this.total,
-    required this.totalPages,
-    required this.currentPage,
-  });
-}
-
-class Question {
+class DashboardQuestionEntity {
   final String id;
   final String userId;
   final String userSub;
@@ -22,7 +8,7 @@ class Question {
   final String? managerAnswer;
   final String createdAt;
 
-  Question({
+  DashboardQuestionEntity({
     required this.id,
     required this.userId,
     required this.userSub,
@@ -32,4 +18,9 @@ class Question {
     this.managerAnswer,
     required this.createdAt,
   });
+
+  @override
+  String toString() {
+    return 'DashboardQuestionEntity{id: $id, userId: $userId, userSub: $userSub, question: $question, answer: $answer, feedback: $feedback, managerAnswer: $managerAnswer, createdAt: $createdAt}';
+  }
 }

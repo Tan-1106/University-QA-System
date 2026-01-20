@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/statistic.dart';
-import 'package:university_qa_system/features/dashboard/domain/entities/question_records.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_statistics.dart';
+import 'package:university_qa_system/features/dashboard/domain/entities/dashboard_question_list.dart';
 import 'package:university_qa_system/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:university_qa_system/features/dashboard/data/data_sources/dashboard_remote_data_source.dart';
 
@@ -11,23 +11,25 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
   const DashboardRepositoryImpl(this.remoteDataSource);
 
+  // Get dashboard statistics
   @override
-  Future<Either<Failure, Statistic>> loadStatisticData() async {
+  Future<Either<Failure, DashboardStatisticsEntity>> getStatistics() async {
     try {
-      final statisticData = await remoteDataSource.fetchDashboardStatistic();
+      final statisticData = await remoteDataSource.getStatistics();
       return right(statisticData.toEntity());
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
   }
 
+  // Get list of questions with optional pagination and feedback type filtering
   @override
-  Future<Either<Failure, QuestionRecords>> loadQuestionRecordsData({
+  Future<Either<Failure, DashboardQuestionListEntity>> getQuestions({
     int page = 1,
     String? feedbackType,
   }) async {
     try {
-      final questionRecordsData = await remoteDataSource.fetchDashboardQuestionRecords(
+      final questionRecordsData = await remoteDataSource.getQuestions(
         page: page,
         feedbackType: feedbackType,
       );
@@ -37,15 +39,16 @@ class DashboardRepositoryImpl implements DashboardRepository {
     }
   }
 
+  // Respond to a specific question
   @override
-  Future<Either<Failure, bool>> respondToQuestion({
+  Future<Either<Failure, void>> respondToQuestion({
     required String questionId,
     required String response,
   }) async {
     try {
       final result = await remoteDataSource.respondToQuestion(
         questionId: questionId,
-        res: response,
+        adminResponse: response,
       );
       return right(result);
     } on ServerException catch (e) {

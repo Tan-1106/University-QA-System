@@ -3,16 +3,16 @@ part of 'dashboard_bloc.dart';
 @immutable
 sealed class DashboardEvent {}
 
-final class LoadDashboardStatisticEvent extends DashboardEvent {
-  LoadDashboardStatisticEvent();
+final class GetDashboardStatisticsEvent extends DashboardEvent {
+  GetDashboardStatisticsEvent();
 }
 
-final class LoadDashboardQuestionRecordsEvent extends DashboardEvent {
+final class GetDashboardQuestionsEvent extends DashboardEvent {
   final int page;
   final String? feedbackType;
   final bool isLoadMore;
 
-  LoadDashboardQuestionRecordsEvent({
+  GetDashboardQuestionsEvent({
     this.page = 1,
     this.feedbackType,
     this.isLoadMore = false,

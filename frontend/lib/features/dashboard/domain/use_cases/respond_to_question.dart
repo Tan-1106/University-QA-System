@@ -3,13 +3,13 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/dashboard/domain/repositories/dashboard_repository.dart';
 
-class RespondToQuestionUseCase implements UseCase<bool, RespondToQuestionUseCaseParams> {
+class RespondToQuestionUseCase implements UseCase<void, RespondToQuestionParams> {
   final DashboardRepository dashboardRepository;
 
   const RespondToQuestionUseCase(this.dashboardRepository);
 
   @override
-  Future<Either<Failure, bool>> call(RespondToQuestionUseCaseParams params) {
+  Future<Either<Failure, void>> call(RespondToQuestionParams params) {
     return dashboardRepository.respondToQuestion(
       questionId: params.questionId,
       response: params.response,
@@ -17,11 +17,11 @@ class RespondToQuestionUseCase implements UseCase<bool, RespondToQuestionUseCase
   }
 }
 
-class RespondToQuestionUseCaseParams {
+class RespondToQuestionParams {
   final String questionId;
   final String response;
 
-  RespondToQuestionUseCaseParams({
+  RespondToQuestionParams({
     required this.questionId,
     required this.response,
   });
