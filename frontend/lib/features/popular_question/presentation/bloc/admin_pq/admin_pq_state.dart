@@ -13,12 +13,8 @@ class AdminPQLoading extends AdminPQState {
   const AdminPQLoading();
 }
 
-class AdminPQGenerating extends AdminPQState {
-  const AdminPQGenerating();
-}
-
 class AdminPQDataState extends AdminPQState {
-  final List<PopularQuestion> questions;
+  final List<PopularQuestionEntity> questions;
   final List<String> faculties;
 
   const AdminPQDataState({
@@ -27,7 +23,7 @@ class AdminPQDataState extends AdminPQState {
   });
 
   AdminPQDataState copyWith({
-    List<PopularQuestion>? questions,
+    List<PopularQuestionEntity>? questions,
     List<String>? faculties,
   }) {
     return AdminPQDataState(

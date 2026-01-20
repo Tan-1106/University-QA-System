@@ -318,20 +318,20 @@ void _initPopularQuestions() {
     ),
   );
 
-  serviceLocator.registerFactory<LoadExistingFacultiesUseCase>(
-    () => LoadExistingFacultiesUseCase(
+  serviceLocator.registerFactory<GetFacultiesUseCase>(
+    () => GetFacultiesUseCase(
       serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<LoadStudentPopularQuestionsUseCase>(
-    () => LoadStudentPopularQuestionsUseCase(
+  serviceLocator.registerFactory<GetPopularQuestionsForStudentUseCase>(
+    () => GetPopularQuestionsForStudentUseCase(
       serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<LoadAdminPopularQuestionsUseCase>(
-    () => LoadAdminPopularQuestionsUseCase(
+  serviceLocator.registerFactory<GetPopularQuestionsForAdminUseCase>(
+    () => GetPopularQuestionsForAdminUseCase(
       serviceLocator(),
     ),
   );

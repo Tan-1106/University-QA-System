@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:university_qa_system/core/common/widgets/loader.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/utils/app_bloc_observer.dart';
+import 'package:university_qa_system/core/utils/show_snackbar.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/admin_faculty_filter.dart';
 import 'package:university_qa_system/features/popular_question/presentation/widgets/admin_pq_generate_button.dart';
@@ -20,7 +20,8 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
   bool _isDisplay = true;
 
   void _triggerGeneratePotentialQuestions() {
-    context.read<AdminPQBloc>().add(GeneratePotentialQuestionsEvent());
+    context.read<AdminPQBloc>().add(GeneratePopularQuestionsEvent());
+    showSuccessSnackBar(context, 'Đang thống kê câu hỏi, vui lòng quay lại sau...');
     context.pop();
   }
 
@@ -190,7 +191,7 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AdminPQBloc>().add(LoadExistingFacultiesEvent());
+    context.read<AdminPQBloc>().add(GetFacultiesEvent());
     _triggerSearch();
   }
 
@@ -208,26 +209,6 @@ class _AdminPopularQuestionsPageState extends State<AdminPopularQuestionsPage> {
       ),
       body: BlocBuilder<AdminPQBloc, AdminPQState>(
         builder: (context, state) {
-          if (state is AdminPQGenerating) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 20,
-                children: [
-                  const Loader(),
-                  Text(
-                    'Đang thống kê câu hỏi phổ biến',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    'Vui lòng quay lại sau...',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
-              ),
-            );
-          }
-
           if (state is AdminPQDataState) {
             if (state.questions.isEmpty) {
               return RefreshIndicator(

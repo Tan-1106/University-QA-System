@@ -3,14 +3,18 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 
-class UpdateQuestionUseCase implements UseCase<bool, UpdateQuestionParams> {
+class UpdateQuestionUseCase implements UseCase<void, UpdateQuestionParams> {
   final PopularQuestionsRepository repository;
 
   const UpdateQuestionUseCase(this.repository);
 
   @override
-  Future<Either<Failure, bool>> call(UpdateQuestionParams params) async {
-    return repository.updateQuestion(params.questionId, params.question, params.answer);
+  Future<Either<Failure, void>> call(UpdateQuestionParams params) async {
+    return repository.updateQuestion(
+      questionId: params.questionId,
+      question: params.question,
+      answer: params.answer,
+    );
   }
 }
 

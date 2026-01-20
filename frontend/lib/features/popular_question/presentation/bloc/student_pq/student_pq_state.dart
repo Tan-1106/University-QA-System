@@ -10,7 +10,7 @@ final class StudentPQInitial extends StudentPQState {}
 final class StudentPQLoading extends StudentPQState {}
 
 final class StudentPQLoaded extends StudentPQState {
-  final List<PopularQuestion> questions;
+  final List<PopularQuestionEntity> questions;
 
   const StudentPQLoaded({
     required this.questions,

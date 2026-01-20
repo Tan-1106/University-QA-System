@@ -1,15 +1,17 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
+import 'package:university_qa_system/features/popular_question/domain/entities/faculty_list.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 
-class GeneratePopularQuestionsUseCase implements UseCase<void, NoParams> {
+
+class GetFacultiesUseCase implements UseCase<FacultyListEntity, NoParams> {
   final PopularQuestionsRepository repository;
 
-  const GeneratePopularQuestionsUseCase(this.repository);
+  const GetFacultiesUseCase(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(NoParams params) {
-    return repository.generatePopularQuestions();
+  Future<Either<Failure, FacultyListEntity>> call(NoParams params) {
+    return repository.getFaculties();
   }
 }

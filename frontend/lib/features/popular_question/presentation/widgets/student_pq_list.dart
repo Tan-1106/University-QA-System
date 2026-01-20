@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/popular_question/domain/entities/popular_questions.dart';
+import 'package:university_qa_system/features/popular_question/domain/entities/popular_question.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 
 class StudentPQList extends StatelessWidget {
-  final Function(PopularQuestion question) onQuestionTap;
+  final Function(PopularQuestionEntity question) onQuestionTap;
 
   const StudentPQList({super.key, required this.onQuestionTap});
 

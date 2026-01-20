@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:university_qa_system/features/popular_question/domain/entities/popular_questions.dart';
+import 'package:university_qa_system/features/popular_question/domain/entities/popular_question.dart';
 
 class AdminPQItem extends StatelessWidget {
   final Function() onEditPressed;
 
-  final PopularQuestion question;
+  final PopularQuestionEntity question;
 
   const AdminPQItem({super.key, required this.onEditPressed, required this.question});
 

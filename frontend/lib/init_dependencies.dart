@@ -59,11 +59,11 @@ import 'package:university_qa_system/features/popular_question/data/repositories
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/assign_faculty_scope_to_question.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/generate_popular_questions.dart';
-import 'package:university_qa_system/features/popular_question/domain/use_cases/load_admin_popular_questions.dart';
-import 'package:university_qa_system/features/popular_question/domain/use_cases/load_student_popular_questions.dart';
+import 'package:university_qa_system/features/popular_question/domain/use_cases/get_popular_questions_for_admin.dart';
+import 'package:university_qa_system/features/popular_question/domain/use_cases/get_popular_questions_for_student.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/student_pq/student_pq_bloc.dart';
 import 'package:university_qa_system/features/popular_question/presentation/bloc/admin_pq/admin_pq_bloc.dart';
-import 'package:university_qa_system/features/popular_question/domain/use_cases/load_existing_faculties.dart';
+import 'package:university_qa_system/features/popular_question/domain/use_cases/get_faculties.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/toggle_question_display_status.dart';
 import 'package:university_qa_system/features/popular_question/domain/use_cases/update_question.dart';
 

@@ -3,14 +3,16 @@ import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 
-class ToggleQuestionDisplayStatusUseCase implements UseCase<bool, ToggleQuestionDisplayStatusParams> {
+class ToggleQuestionDisplayStatusUseCase implements UseCase<void, ToggleQuestionDisplayStatusParams> {
   final PopularQuestionsRepository repository;
 
   const ToggleQuestionDisplayStatusUseCase(this.repository);
 
   @override
-  Future<Either<Failure, bool>> call(ToggleQuestionDisplayStatusParams params) async {
-    return repository.toggleQuestionDisplayStatus(params.questionId);
+  Future<Either<Failure, void>> call(ToggleQuestionDisplayStatusParams params) async {
+    return repository.toggleQuestionDisplayStatus(
+      questionId: params.questionId,
+    );
   }
 }
 

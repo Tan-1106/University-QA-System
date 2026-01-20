@@ -3,7 +3,7 @@ part of 'admin_pq_bloc.dart';
 @immutable
 sealed class AdminPQEvent {}
 
-final class GeneratePotentialQuestionsEvent extends AdminPQEvent {}
+final class GeneratePopularQuestionsEvent extends AdminPQEvent {}
 
 final class GetAdminPopularQuestionsEvent extends AdminPQEvent {
   final String? faculty;
@@ -15,7 +15,7 @@ final class GetAdminPopularQuestionsEvent extends AdminPQEvent {
   });
 }
 
-final class LoadExistingFacultiesEvent extends AdminPQEvent {}
+final class GetFacultiesEvent extends AdminPQEvent {}
 
 final class AssignFacultyScopeEvent extends AdminPQEvent {
   final String questionId;

@@ -1,28 +1,28 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/popular_question/domain/entities/popular_questions.dart';
+import 'package:university_qa_system/features/popular_question/domain/entities/popular_question_list.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 
-class LoadAdminPopularQuestionsUseCase implements UseCase<PopularQuestions, LoadAdminPopularQuestionsParams> {
+class GetPopularQuestionsForAdminUseCase implements UseCase<PopularQuestionListEntity, GetPopularQuestionsForAdminParams> {
   final PopularQuestionsRepository repository;
 
-  LoadAdminPopularQuestionsUseCase(this.repository);
+  GetPopularQuestionsForAdminUseCase(this.repository);
 
   @override
-  Future<Either<Failure, PopularQuestions>> call(LoadAdminPopularQuestionsParams params) {
-    return repository.loadAdminPopularQuestions(
+  Future<Either<Failure, PopularQuestionListEntity>> call(GetPopularQuestionsForAdminParams params) {
+    return repository.getPopularQuestionsForAdmin(
       isDisplay: params.isDisplay,
       faculty: params.faculty,
     );
   }
 }
 
-class LoadAdminPopularQuestionsParams {
+class GetPopularQuestionsForAdminParams {
   final bool isDisplay;
   final String? faculty;
 
-  LoadAdminPopularQuestionsParams({
+  GetPopularQuestionsForAdminParams({
     this.isDisplay = true,
     this.faculty,
   });

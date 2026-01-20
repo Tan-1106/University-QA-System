@@ -1,27 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/popular_question/data/models/existing_faculties_data.dart';
-import 'package:university_qa_system/features/popular_question/data/models/popular_questions_data.dart';
+import 'package:university_qa_system/features/popular_question/data/models/faculty_list.dart';
+import 'package:university_qa_system/features/popular_question/data/models/popular_question_list.dart';
 
 abstract interface class PopularQuestionDataSource {
-  Future<bool> generatePopularQuestions();
+  // Compile statistics on common questions
+  Future<void> generatePopularQuestions();
 
-  Future<PopularQuestionsData> fetchPopularQuestionsForStudent({
+  // Get popular questions for students
+  Future<PopularQuestionListModel> getPopularQuestionsForStudent({
     bool facultyOnly = false,
   });
 
-  Future<PopularQuestionsData> fetchPopularQuestionsForAdmin({
+  // Get popular questions for admin
+  Future<PopularQuestionListModel> getPopularQuestionsForAdmin({
     String? faculty,
     bool isDisplay = true,
   });
 
-  Future<ExistingFacultiesData> fetchFaculties();
+  // Get list of faculties
+  Future<FacultyListModel> getFaculties();
 
-  Future<bool> toggleQuestionDisplayStatus(String questionId);
+  // Toggle question display status
+  Future<void> toggleQuestionDisplayStatus({
+    required String questionId,
+  });
 
-  Future<bool> assignFacultyScopeToQuestion(String questionId, String? faculty);
+  // Assign faculty scope to question
+  Future<void> assignFacultyScopeToQuestion({
+    required String questionId,
+    required String? faculty,
+  });
 
-  Future<bool> updateQuestion(String questionId, String? question, String? answer);
+  // Update question and/or answer
+  Future<void> updateQuestion({
+    required String questionId,
+    required String? question,
+    required String? answer,
+  });
 }
 
 class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
@@ -29,24 +45,17 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
 
   PopularQuestionDataSourceImpl(this._dio);
 
+  // Compile statistics on common questions
   @override
-  Future<bool> generatePopularQuestions() async {
+  Future<void> generatePopularQuestions() async {
     try {
-      final queryParameters = <String, dynamic>{
-        'period_type': 'Monthly',
-        'n': '20',
-      };
-
-      final response = await _dio.get(
+      await _dio.get(
         '/api/statistics/generate-popular-questions',
-        queryParameters: queryParameters,
+        queryParameters: {
+          'period_type': 'Monthly',
+          'n': '20',
+        },
       );
-
-      if (response.statusCode != 200) {
-        throw const ServerException('Failed to generate potential questions');
-      }
-
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -56,30 +65,24 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Get popular questions for students
   @override
-  Future<PopularQuestionsData> fetchPopularQuestionsForStudent({
+  Future<PopularQuestionListModel> getPopularQuestionsForStudent({
     bool facultyOnly = false,
   }) async {
     try {
-      // No need to implement pagination because small number of questions
-      final queryParameters = <String, dynamic>{
-        'page': 1,
-        'limit': 10,
-        'faculty_only': facultyOnly,
-      };
-
       final response = await _dio.get(
         '/api/statistics/popular-questions-student',
-        queryParameters: queryParameters,
+        queryParameters: {
+          'page': 1,
+          'limit': 10,
+          'faculty_only': facultyOnly,
+        },
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final data = response.data as Map<String, dynamic>;
-        final details = data['details'] as Map<String, dynamic>;
-        return PopularQuestionsData.fromJson(details);
-      } else {
-        throw const ServerException('Failed to retrieve popular questions');
-      }
+      final data = response.data as Map<String, dynamic>;
+      final details = data['details'] as Map<String, dynamic>;
+      return PopularQuestionListModel.fromJson(details);
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -89,32 +92,26 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Get popular questions for admin
   @override
-  Future<PopularQuestionsData> fetchPopularQuestionsForAdmin({
+  Future<PopularQuestionListModel> getPopularQuestionsForAdmin({
     String? faculty,
     bool isDisplay = true,
   }) async {
     try {
-      // No need to implement pagination because small number of questions
-      final queryParameters = <String, dynamic>{
-        'page': 1,
-        'limit': 20,
-        'is_display': isDisplay,
-        if (faculty != null) 'faculty': faculty,
-      };
-
       final response = await _dio.get(
         '/api/statistics/popular-questions',
-        queryParameters: queryParameters,
+        queryParameters: {
+          'page': 1,
+          'limit': 20,
+          'is_display': isDisplay,
+          if (faculty != null) 'faculty': faculty,
+        },
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final data = response.data as Map<String, dynamic>;
-        final details = data['details'] as Map<String, dynamic>;
-        return PopularQuestionsData.fromJson(details);
-      } else {
-        throw const ServerException('Failed to retrieve popular questions');
-      }
+      final data = response.data as Map<String, dynamic>;
+      final details = data['details'] as Map<String, dynamic>;
+      return PopularQuestionListModel.fromJson(details);
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -124,18 +121,17 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Get list of faculties
   @override
-  Future<ExistingFacultiesData> fetchFaculties() async {
+  Future<FacultyListModel> getFaculties() async {
     try {
-      final response = await _dio.get('/api/users/faculties');
+      final response = await _dio.get(
+        '/api/users/faculties',
+      );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final data = response.data as Map<String, dynamic>;
-        final details = data['details'] as Map<String, dynamic>;
-        return ExistingFacultiesData.fromJson(details);
-      } else {
-        throw const ServerException('Failed to retrieve faculties');
-      }
+      final data = response.data as Map<String, dynamic>;
+      final details = data['details'] as Map<String, dynamic>;
+      return FacultyListModel.fromJson(details);
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -145,16 +141,15 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Toggle question display status
   @override
-  Future<bool> toggleQuestionDisplayStatus(String questionId) async {
+  Future<void> toggleQuestionDisplayStatus({
+    required String questionId,
+  }) async {
     try {
-      final response = await _dio.patch(
+      await _dio.patch(
         '/api/statistics/popular-questions/$questionId/toggle-display',
       );
-      if (response.statusCode != 200) {
-        throw const ServerException('Failed to toggle question display status');
-      }
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -164,10 +159,14 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Assign faculty scope to question
   @override
-  Future<bool> assignFacultyScopeToQuestion(String questionId, String? faculty) async {
+  Future<void> assignFacultyScopeToQuestion({
+    required String questionId,
+    required String? faculty,
+  }) async {
     try {
-      final response = (faculty != null)
+      (faculty != null)
           ? await _dio.patch(
               '/api/statistics/popular-questions/$questionId/assign-faculty',
               data: {'faculty': faculty},
@@ -175,12 +174,6 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
           : await _dio.patch(
               '/api/statistics/popular-questions/$questionId/assign-faculty',
             );
-
-      if (response.statusCode != 200) {
-        throw const ServerException('Failed to assign faculty scope to questions');
-      }
-
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
@@ -190,21 +183,21 @@ class PopularQuestionDataSourceImpl implements PopularQuestionDataSource {
     }
   }
 
+  // Update question and/or answer
   @override
-  Future<bool> updateQuestion(String questionId, String? question, String? answer) async {
+  Future<void> updateQuestion({
+    required String questionId,
+    required String? question,
+    required String? answer,
+  }) async {
     try {
-      final body = <String, dynamic>{
-        if (question != null) 'question': question,
-        if (answer != null) 'answer': answer,
-      };
-      final response = await _dio.patch(
+      await _dio.patch(
         '/api/statistics/popular-questions/$questionId/update',
-        data: body,
+        data: {
+          if (question != null) 'question': question,
+          if (answer != null) 'answer': answer,
+        },
       );
-      if (response.statusCode != 200) {
-        throw const ServerException('Failed to update question');
-      }
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');

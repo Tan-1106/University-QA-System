@@ -1,19 +1,20 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/popular_question/domain/entities/popular_questions.dart';
+import 'package:university_qa_system/features/popular_question/domain/entities/popular_question_list.dart';
 import 'package:university_qa_system/features/popular_question/data/data_sources/popular_question_data_source.dart';
 import 'package:university_qa_system/features/popular_question/domain/repositories/popular_questions_repository.dart';
 
-import '../../domain/entities/existing_faculties.dart';
+import '../../domain/entities/faculty_list.dart';
 
 class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
   final PopularQuestionDataSource remoteDataSource;
 
   const PopularQuestionsRepositoryImpl(this.remoteDataSource);
 
+  // Compile statistics on common questions
   @override
-  Future<Either<Failure, bool>> generatePopularQuestions() async {
+  Future<Either<Failure, void>> generatePopularQuestions() async {
     try {
       final result = await remoteDataSource.generatePopularQuestions();
       return right(result);
@@ -22,12 +23,13 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
     }
   }
 
+  // Get popular questions for students
   @override
-  Future<Either<Failure, PopularQuestions>> loadStudentPopularQuestions({
+  Future<Either<Failure, PopularQuestionListEntity>> getPopularQuestionsForStudent({
     bool facultyOnly = false,
   }) async {
     try {
-      final popularQuestionsData = await remoteDataSource.fetchPopularQuestionsForStudent(
+      final popularQuestionsData = await remoteDataSource.getPopularQuestionsForStudent(
         facultyOnly: facultyOnly,
       );
       return right(popularQuestionsData.toEntity());
@@ -36,13 +38,14 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
     }
   }
 
+  // Get popular questions for admin
   @override
-  Future<Either<Failure, PopularQuestions>> loadAdminPopularQuestions({
+  Future<Either<Failure, PopularQuestionListEntity>> getPopularQuestionsForAdmin({
     bool isDisplay = true,
     String? faculty,
   }) async {
     try {
-      final popularQuestionsData = await remoteDataSource.fetchPopularQuestionsForAdmin(
+      final popularQuestionsData = await remoteDataSource.getPopularQuestionsForAdmin(
         faculty: faculty,
         isDisplay: isDisplay,
       );
@@ -52,40 +55,62 @@ class PopularQuestionsRepositoryImpl implements PopularQuestionsRepository {
     }
   }
 
+  // Get list of faculties
   @override
-  Future<Either<Failure, ExistingFaculties>> loadExistingFaculties() async {
+  Future<Either<Failure, FacultyListEntity>> getFaculties() async {
     try {
-      final existingFacultiesData = await remoteDataSource.fetchFaculties();
+      final existingFacultiesData = await remoteDataSource.getFaculties();
       return right(existingFacultiesData.toEntity());
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
   }
 
+  // Toggle question display status
   @override
-  Future<Either<Failure, bool>> toggleQuestionDisplayStatus(String questionId) async {
+  Future<Either<Failure, void>> toggleQuestionDisplayStatus({
+    required String questionId,
+  }) async {
     try {
-      final result = await remoteDataSource.toggleQuestionDisplayStatus(questionId);
+      final result = await remoteDataSource.toggleQuestionDisplayStatus(
+        questionId: questionId,
+      );
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
   }
 
+  // Assign faculty scope to question
   @override
-  Future<Either<Failure, bool>> assignFacultyScopeToQuestion(String questionId, String? faculty) async {
+  Future<Either<Failure, void>> assignFacultyScopeToQuestion({
+    required String questionId,
+    required String? faculty,
+  }) async {
     try {
-      final result = await remoteDataSource.assignFacultyScopeToQuestion(questionId, faculty);
+      final result = await remoteDataSource.assignFacultyScopeToQuestion(
+        questionId: questionId,
+        faculty: faculty,
+      );
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
   }
 
+  // Update question and/or answer
   @override
-  Future<Either<Failure, bool>> updateQuestion(String questionId, String? question, String? answer) async {
+  Future<Either<Failure, void>> updateQuestion({
+    required String questionId,
+    required String? question,
+    required String? answer,
+  }) async {
     try {
-      final result = await remoteDataSource.updateQuestion(questionId, question, answer);
+      final result = await remoteDataSource.updateQuestion(
+        questionId: questionId,
+        question: question,
+        answer: answer,
+      );
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));

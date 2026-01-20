@@ -1,27 +1,13 @@
-class PopularQuestions {
-  final List<PopularQuestion> popularQuestions;
-  final int total;
-  final int totalPages;
-  final int currentPage;
-
-  PopularQuestions({
-    required this.popularQuestions,
-    required this.total,
-    required this.totalPages,
-    required this.currentPage,
-  });
-}
-
-class PopularQuestion {
+class PopularQuestionEntity {
   final String id;
   final String question;
   final String answer;
-  final Summary summary;
+  final SummaryEntity summary;
   final bool isDisplay;
   final String createdAt;
   final String? updatedAt;
 
-  PopularQuestion({
+  PopularQuestionEntity({
     required this.id,
     required this.question,
     required this.answer,
@@ -30,18 +16,28 @@ class PopularQuestion {
     required this.createdAt,
     this.updatedAt,
   });
+
+  @override
+  String toString() {
+    return 'PopularQuestionEntity{id: $id, question: $question, answer: $answer, summary: $summary, isDisplay: $isDisplay, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
 }
 
-class Summary {
+class SummaryEntity {
   final String? facultyScope;
   final String? startDate;
   final String? endDate;
   final int count;
 
-  Summary({
+  SummaryEntity({
     this.facultyScope,
     this.startDate,
     this.endDate,
     required this.count,
   });
+
+  @override
+  String toString() {
+    return 'SummaryEntity{facultyScope: $facultyScope, startDate: $startDate, endDate: $endDate, count: $count}';
+  }
 }
