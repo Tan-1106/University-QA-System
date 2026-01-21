@@ -324,7 +324,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
 
   void _triggerSearch() {
     context.read<UserManagementBloc>().add(
-      LoadBasicInformationEvent(
+      GetBasicInformationEvent(
         role: _selectedRole,
         faculty: _selectedFaculty,
         keyword: _keyword,

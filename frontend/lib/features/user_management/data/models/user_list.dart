@@ -1,23 +1,24 @@
-import 'package:university_qa_system/features/user_management/domain/entities/users.dart';
+import 'package:university_qa_system/features/user_management/data/models/user.dart';
+import 'package:university_qa_system/features/user_management/domain/entities/user_list.dart';
 
-class UsersData {
-  final List<User> users;
+class UserListModel {
+  final List<UserModel> users;
   final int total;
   final int totalPages;
   final int currentPage;
 
-  UsersData({
+  UserListModel({
     required this.users,
     required this.total,
     required this.totalPages,
     required this.currentPage,
   });
 
-  factory UsersData.fromJson(Map<String, dynamic> json) {
+  factory UserListModel.fromJson(Map<String, dynamic> json) {
     var usersJson = json['users'] as List<dynamic>;
-    List<User> usersList = usersJson
+    List<UserModel> usersList = usersJson
         .map(
-          (userJson) => User(
+          (userJson) => UserModel(
             id: userJson['_id'] as String,
             sub: userJson['sub'] as String,
             name: userJson['name'] as String,
@@ -29,7 +30,7 @@ class UsersData {
         )
         .toList();
 
-    return UsersData(
+    return UserListModel(
       users: usersList,
       total: json['total'] as int,
       totalPages: json['total_pages'] as int,
@@ -37,9 +38,9 @@ class UsersData {
     );
   }
 
-  Users toEntity() {
-    return Users(
-      users: users,
+  UserListEntity toEntity() {
+    return UserListEntity(
+      users: users.map((userModel) => userModel.toEntity()).toList(),
       total: total,
       totalPages: totalPages,
       currentPage: currentPage,

@@ -1,56 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/use_case/use_case.dart';
-import 'package:university_qa_system/features/user_management/domain/entities/users.dart';
+import 'package:university_qa_system/features/user_management/domain/entities/user.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_users.dart';
 import 'package:university_qa_system/features/user_management/domain/use_cases/assign_role.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_all_roles.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_all_faculties.dart';
 import 'package:university_qa_system/features/user_management/domain/use_cases/change_ban_status.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_faculties.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_roles.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_users.dart';
 
 part 'user_management_event.dart';
 
 part 'user_management_state.dart';
 
 class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> {
-  final LoadAllRolesUseCase _loadAllRoles;
-  final LoadAllFacultiesUseCase _loadAllFaculties;
-  final LoadUsersUseCase _loadUsers;
+  final GetAllRolesUseCase _getAllRoles;
+  final GetAllFacultiesUseCase _getAllFaculties;
+  final GetUsersUseCase _getUsers;
   final AssignRoleUseCase _assignRole;
   final ChangeBanStatusUseCase _changeBanStatus;
 
   List<String> _roles = [];
   List<String> _faculties = [];
-  List<User> _users = [];
+  List<UserEntity> _users = [];
   int _currentPage = 0;
   int _totalPages = 1;
 
   UserManagementBloc(
-    LoadAllRolesUseCase loadAllRoles,
-    LoadAllFacultiesUseCase loadAllFaculties,
-    LoadUsersUseCase loadUsers,
+    GetAllRolesUseCase getAllRoles,
+    GetAllFacultiesUseCase getAllFaculties,
+    GetUsersUseCase getUsers,
     AssignRoleUseCase assignRole,
     ChangeBanStatusUseCase changeBanStatus,
-  ) : _loadAllRoles = loadAllRoles,
-      _loadAllFaculties = loadAllFaculties,
-      _loadUsers = loadUsers,
+  ) : _getAllRoles = getAllRoles,
+      _getAllFaculties = getAllFaculties,
+      _getUsers = getUsers,
       _assignRole = assignRole,
       _changeBanStatus = changeBanStatus,
       super(UserManagementInitial()) {
-    on<LoadBasicInformationEvent>(_onLoadBasicInformation);
-    on<LoadUserListEvent>(_onLoadUserList);
+    on<GetBasicInformationEvent>(_onGetBasicInformation);
+    on<GetUserListEvent>(_onGetUserList);
     on<AssignRoleToUserEvent>(_onAssignRoleToUser);
     on<ChangeUserBanStatusEvent>(_onChangeUserBanStatus);
   }
 
-  void _onLoadBasicInformation(
-    LoadBasicInformationEvent event,
+  // Get user management basic information
+  void _onGetBasicInformation(
+    GetBasicInformationEvent event,
     Emitter<UserManagementState> emit,
   ) async {
     emit(UserManagementLoading());
 
-    final rolesResult = await _loadAllRoles(NoParams());
-    final facultiesResult = await _loadAllFaculties(NoParams());
+    final rolesResult = await _getAllRoles(NoParams());
+    final facultiesResult = await _getAllFaculties(NoParams());
 
     bool hasError = false;
 
@@ -90,7 +91,7 @@ class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> 
       ),
     );
 
-    add(LoadUserListEvent(
+    add(GetUserListEvent(
       role: event.role,
       faculty: event.faculty,
       banned: event.banned,
@@ -98,8 +99,9 @@ class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> 
     ));
   }
 
-  void _onLoadUserList(
-    LoadUserListEvent event,
+  // Get user list with optional filters
+  void _onGetUserList(
+    GetUserListEvent event,
     Emitter<UserManagementState> emit,
   ) async {
     UserManagementStateLoaded? previousState;
@@ -126,8 +128,8 @@ class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> 
     }
 
     final pageToLoad = event.isLoadMore ? _currentPage + 1 : event.page;
-    final usersResult = await _loadUsers(
-      LoadUsersUseCaseParams(
+    final usersResult = await _getUsers(
+      GetUsersParams(
         page: pageToLoad,
         role: event.role,
         faculty: event.faculty,
@@ -168,12 +170,13 @@ class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> 
     );
   }
 
+  // Assign role to a user
   void _onAssignRoleToUser(
     AssignRoleToUserEvent event,
     Emitter<UserManagementState> emit,
   ) async {
     final result = await _assignRole(
-      AssignRoleUseCaseParams(
+      AssignRoleParams(
         userId: event.userId,
         roleToAssign: event.roleToAssign,
         faculty: event.faculty,
@@ -186,12 +189,13 @@ class UserManagementBloc extends Bloc<UserManagementEvent, UserManagementState> 
     );
   }
 
+  // Change user ban status
   void _onChangeUserBanStatus(
     ChangeUserBanStatusEvent event,
     Emitter<UserManagementState> emit,
   ) async {
     final result = await _changeBanStatus(
-      ChangeBanStatusUseCaseParams(
+      ChangeBanStatusParams(
         userId: event.userId,
         currentBanStatus: event.currentBanStatus,
       ),

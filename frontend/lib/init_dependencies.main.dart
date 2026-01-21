@@ -385,20 +385,20 @@ void _initUserManagement() {
     ),
   );
 
-  serviceLocator.registerFactory<LoadAllRolesUseCase>(
-    () => LoadAllRolesUseCase(
+  serviceLocator.registerFactory<GetAllRolesUseCase>(
+    () => GetAllRolesUseCase(
       serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<LoadAllFacultiesUseCase>(
-    () => LoadAllFacultiesUseCase(
+  serviceLocator.registerFactory<GetAllFacultiesUseCase>(
+    () => GetAllFacultiesUseCase(
       serviceLocator(),
     ),
   );
 
-  serviceLocator.registerFactory<LoadUsersUseCase>(
-    () => LoadUsersUseCase(
+  serviceLocator.registerFactory<GetUsersUseCase>(
+    () => GetUsersUseCase(
       serviceLocator(),
     ),
   );

@@ -1,18 +1,4 @@
-class Users {
-  final List<User> users;
-  final int total;
-  final int totalPages;
-  final int currentPage;
-
-  Users({
-    required this.users,
-    required this.total,
-    required this.totalPages,
-    required this.currentPage,
-  });
-}
-
-class User {
+class UserEntity {
   final String id;
   final String sub;
   final String name;
@@ -21,7 +7,7 @@ class User {
   final String? faculty;
   final bool banned;
 
-  User({
+  UserEntity({
     required this.id,
     required this.sub,
     required this.name,
@@ -30,4 +16,9 @@ class User {
     this.faculty,
     required this.banned,
   });
+
+  @override
+  String toString() {
+    return 'UserEntity(id: $id, sub: $sub, name: $name, imageUrl: $imageUrl, role: $role, faculty: $faculty, banned: $banned)';
+  }
 }

@@ -1,9 +1,16 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
-import 'package:university_qa_system/features/user_management/domain/entities/users.dart';
+import 'package:university_qa_system/features/user_management/domain/entities/user_list.dart';
 
 abstract interface class UserManagementRepository {
-  Future<Either<Failure, Users>> fetchAllUsers({
+  // Get all available roles
+  Future<Either<Failure, List<String>>> getAllRoles();
+
+  // Get all available faculties
+  Future<Either<Failure, List<String>>> getAllFaculties();
+
+  // Get all users with optional filters
+  Future<Either<Failure, UserListEntity>> getAllUsers({
     int page = 1,
     String? role,
     String? faculty,
@@ -11,11 +18,16 @@ abstract interface class UserManagementRepository {
     String? keyword,
   });
 
-  Future<Either<Failure, List<String>>> fetchAllRoles();
+  // Assign role to a user
+  Future<Either<Failure, void>> assignRole({
+    required String userId,
+    required String roleToAssign,
+    required String? faculty,
+  });
 
-  Future<Either<Failure, List<String>>> fetchAllFaculties();
-
-  Future<Either<Failure, bool>> assignRole(String userId, String roleToAssign, String? faculty);
-
-  Future<Either<Failure, bool>> changeUserBanStatus(String userId, bool currentBanStatus);
+  // Change user ban status
+  Future<Either<Failure, void>> changeUserBanStatus({
+    required String userId,
+    required bool currentBanStatus,
+  });
 }

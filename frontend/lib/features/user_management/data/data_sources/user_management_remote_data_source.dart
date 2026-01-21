@@ -1,24 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:university_qa_system/core/common/api_response.dart';
 import 'package:university_qa_system/core/error/exceptions.dart';
-import 'package:university_qa_system/features/user_management/data/models/users_data.dart';
+import 'package:university_qa_system/features/user_management/data/models/user_list.dart';
 
 abstract interface class UserManagementRemoteDataSource {
-  Future<UsersData> fetchAllUsers({
+  // Get all available roles
+  Future<List<String>> getAllRoles();
+
+  // Get all available faculties
+  Future<List<String>> getAllFaculties();
+
+  // Get all users with optional filters
+  Future<UserListModel> getAllUsers({
     int page = 1,
     String? role,
     String? faculty,
     bool? banned,
     String? keyword,
-});
+  });
 
-  Future<List<String>> fetchAllRoles();
+  // Assign role to a user
+  Future<void> assignRole({
+    required String userId,
+    required String roleToAssign,
+    required String? faculty,
+  });
 
-  Future<List<String>> fetchAllFaculties();
-
-  Future<bool> assignRole(String userId, String roleToAssign, String? faculty);
-
-  Future<bool> changeUserBanStatus(String userId, bool currentBanStatus);
+  // Change user ban status
+  Future<void> changeUserBanStatus({
+    required String userId,
+    required bool currentBanStatus,
+  });
 }
 
 class UserManagementDataSourceImpl implements UserManagementRemoteDataSource {
@@ -26,8 +38,43 @@ class UserManagementDataSourceImpl implements UserManagementRemoteDataSource {
 
   UserManagementDataSourceImpl(this._dio);
 
+  // Get all available roles
   @override
-  Future<UsersData> fetchAllUsers({
+  Future<List<String>> getAllRoles() async {
+    try {
+      final response = await _dio.get('/api/users/roles');
+      final details = response.data['details'] as Map<String, dynamic>;
+      final roles = details['roles'] as List;
+      return roles.map((role) => role.toString()).toList();
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    }
+  }
+
+  // Get all available faculties
+  @override
+  Future<List<String>> getAllFaculties() async {
+    try {
+      final response = await _dio.get('/api/users/faculties');
+      final details = response.data['details'] as Map<String, dynamic>;
+      final faculties = details['faculties'] as List;
+      return faculties.map((faculty) => faculty.toString()).toList();
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
+      } else {
+        throw ServerException('Network Error: ${e.message}');
+      }
+    }
+  }
+
+  // Get all users with optional filters
+  @override
+  Future<UserListModel> getAllUsers({
     int page = 1,
     String? role,
     String? faculty,
@@ -35,141 +82,78 @@ class UserManagementDataSourceImpl implements UserManagementRemoteDataSource {
     String? keyword,
   }) async {
     try {
-      final queryParameters = <String, dynamic>{
-        'page': page.toString(),
-        if (banned != null) 'banned': banned.toString(),
-        if (role != null) 'role': role,
-        if (faculty != null) 'faculty': faculty,
-        if (keyword != null) 'keyword': keyword,
-      };
-
       final response = await _dio.get(
         '/api/users',
-        queryParameters: queryParameters,
+        queryParameters: {
+          'page': page.toString(),
+          if (banned != null) 'banned': banned.toString(),
+          if (role != null) 'role': role,
+          if (faculty != null) 'faculty': faculty,
+          if (keyword != null) 'keyword': keyword,
+        },
       );
 
-      if (response.statusCode == 200 && response.data != null) {
-        final apiResponse = ApiResponse<UsersData>.fromJson(
-          response.data as Map<String, dynamic>,
-          (json) => UsersData.fromJson(json as Map<String, dynamic>),
-        );
-
-        if (apiResponse.details != null) {
-          return apiResponse.details!;
-        } else {
-          throw const ServerException('No user data found');
-        }
-      } else {
-        throw const ServerException('Failed to retrieve users');
-      }
+      final apiResponse = ApiResponse<UserListModel>.fromJson(
+        response.data as Map<String, dynamic>,
+            (json) => UserListModel.fromJson(json as Map<String, dynamic>),
+      );
+      return apiResponse.details!;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
+  // Assign role to a user
   @override
-  Future<List<String>> fetchAllRoles() async {
-    try {
-      final response = await _dio.get('/api/users/roles');
-      if (response.statusCode == 200 && response.data != null) {
-        final details = response.data['details'] as Map<String, dynamic>;
-        final roles = details['roles'] as List;
-        return roles.map((role) => role.toString()).toList();
-      } else {
-        throw const ServerException('Failed to retrieve roles');
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
-      } else {
-        throw ServerException('Network Error: ${e.message}');
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<List<String>> fetchAllFaculties() async {
-    try {
-      final response = await _dio.get('/api/users/faculties');
-      if (response.statusCode == 200 && response.data != null) {
-        final details = response.data['details'] as Map<String, dynamic>;
-        final faculties = details['faculties'] as List;
-        return faculties.map((faculty) => faculty.toString()).toList();
-      } else {
-        throw const ServerException('Failed to retrieve faculties');
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        throw ServerException(e.response?.data['detail'] ?? 'Server Error');
-      } else {
-        throw ServerException('Network Error: ${e.message}');
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<bool> assignRole(String userId, String roleToAssign, String? faculty) async {
+  Future<void> assignRole({
+    required String userId,
+    required String roleToAssign,
+    required String? faculty,
+  }) async {
     try {
       if (roleToAssign == 'Admin') {
-        final response = await _dio.post(
+        await _dio.post(
           '/api/users/$userId/assign-admin',
         );
-        if (response.statusCode != 200) {
-          throw const ServerException('Failed to assign Admin role');
-        }
       }
-
-      if (roleToAssign == 'Student' && faculty != null) {
-        final response = await _dio.post(
+      else if (roleToAssign == 'Student' && faculty != null) {
+        await _dio.post(
           '/api/users/$userId/assign-student',
           data: {'faculty': faculty},
         );
-        if (response.statusCode != 200) {
-          throw const ServerException('Failed to assign Student role');
-        }
+      } else {
+        throw const ServerException('Invalid role or missing faculty');
       }
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 
-
+  // Change user ban status
   @override
-  Future<bool> changeUserBanStatus(String userId, bool currentBanStatus) async {
+  Future<void> changeUserBanStatus({
+    required String userId,
+    required bool currentBanStatus,
+  }) async {
     try {
       final endpoint = currentBanStatus ? 'unban' : 'ban';
-      final response = await _dio.patch(
+      await _dio.patch(
         '/api/users/$userId/$endpoint',
       );
-      if (response.statusCode != 200) {
-        throw ServerException('Failed to ${currentBanStatus ? 'unban' : 'ban'} user');
-      }
-      return true;
     } on DioException catch (e) {
       if (e.response != null) {
         throw ServerException(e.response?.data['detail'] ?? 'Server Error');
       } else {
         throw ServerException('Network Error: ${e.message}');
       }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 }

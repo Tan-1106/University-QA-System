@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/user_management/domain/entities/users.dart';
+import 'package:university_qa_system/features/user_management/domain/entities/user.dart';
 
 import '../bloc/user_management_bloc.dart';
 
@@ -36,7 +36,7 @@ class _UserListState extends State<UserList> {
 
       if (state is UserManagementStateLoaded && state.hasMore && !state.isLoadingMoreUsers) {
         context.read<UserManagementBloc>().add(
-          LoadUserListEvent(
+          GetUserListEvent(
             page: state.currentPage + 1,
           ),
         );
@@ -62,7 +62,7 @@ class _UserListState extends State<UserList> {
     return BlocBuilder<UserManagementBloc, UserManagementState>(
       buildWhen: (previous, current) => current is UserManagementLoading || current is UserManagementStateLoaded,
       builder: (context, state) {
-        List<User> users = [];
+        List<UserEntity> users = [];
         bool isLoadingMore = false;
 
         if (state is UserManagementLoading) {

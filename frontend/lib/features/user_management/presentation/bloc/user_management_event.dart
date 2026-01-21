@@ -3,13 +3,13 @@ part of 'user_management_bloc.dart';
 @immutable
 sealed class UserManagementEvent {}
 
-final class LoadBasicInformationEvent extends UserManagementEvent {
+final class GetBasicInformationEvent extends UserManagementEvent {
   final String? role;
   final String? faculty;
   final bool? banned;
   final String? keyword;
 
-  LoadBasicInformationEvent({
+  GetBasicInformationEvent({
     this.role,
     this.faculty,
     this.banned,
@@ -17,7 +17,7 @@ final class LoadBasicInformationEvent extends UserManagementEvent {
   });
 }
 
-final class LoadUserListEvent extends UserManagementEvent {
+final class GetUserListEvent extends UserManagementEvent {
   final int page;
   final String? role;
   final String? faculty;
@@ -25,7 +25,7 @@ final class LoadUserListEvent extends UserManagementEvent {
   final String? keyword;
   final bool isLoadMore;
 
-  LoadUserListEvent({
+  GetUserListEvent({
     this.page = 1,
     this.role,
     this.faculty,

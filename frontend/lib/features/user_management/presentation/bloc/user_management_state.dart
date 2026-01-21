@@ -12,7 +12,7 @@ final class UserManagementLoading extends UserManagementState {}
 final class UserManagementStateLoaded extends UserManagementState {
   final List<String> roles;
   final List<String> faculties;
-  final List<User> users;
+  final List<UserEntity> users;
   final int currentPage;
   final int totalPages;
   final bool hasMore;
@@ -31,7 +31,7 @@ final class UserManagementStateLoaded extends UserManagementState {
   UserManagementStateLoaded copyWith({
     List<String>? roles,
     List<String>? faculties,
-    List<User>? users,
+    List<UserEntity>? users,
     int? currentPage,
     int? totalPages,
     bool? hasMore,

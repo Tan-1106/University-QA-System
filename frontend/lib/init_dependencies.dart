@@ -73,9 +73,9 @@ import 'package:university_qa_system/features/user_management/data/repositories/
 import 'package:university_qa_system/features/user_management/domain/repositories/user_management_repository.dart';
 import 'package:university_qa_system/features/user_management/domain/use_cases/assign_role.dart';
 import 'package:university_qa_system/features/user_management/domain/use_cases/change_ban_status.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_faculties.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_all_roles.dart';
-import 'package:university_qa_system/features/user_management/domain/use_cases/load_users.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_all_faculties.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_all_roles.dart';
+import 'package:university_qa_system/features/user_management/domain/use_cases/get_users.dart';
 
 import 'package:university_qa_system/features/api_management/data/repositories/api_management_repository_impl.dart';
 import 'package:university_qa_system/features/api_management/domain/repositories/api_management_repository.dart';
