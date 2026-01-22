@@ -173,7 +173,7 @@ class _APIManagementPageState extends State<APIManagementPage> {
                 onRefresh: () async {
                   _triggerSearch();
                 },
-                child: const ApiKeyList(),
+                child: const APIKeyList(),
               ),
             ),
           ],

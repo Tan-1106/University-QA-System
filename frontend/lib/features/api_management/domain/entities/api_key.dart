@@ -1,18 +1,4 @@
-class APIKeys {
-  final List<APIKey> apiKeys;
-  final int total;
-  final int totalPages;
-  final int currentPage;
-
-  APIKeys({
-    required this.apiKeys,
-    required this.total,
-    required this.totalPages,
-    required this.currentPage,
-  });
-}
-
-class APIKey {
+class APIKeyEntity {
   final String id;
   final String name;
   final String? description;
@@ -21,7 +7,7 @@ class APIKey {
   final bool isUsing;
   final String? usingModel;
 
-  APIKey({
+  APIKeyEntity({
     required this.id,
     required this.name,
     this.description,
@@ -30,4 +16,9 @@ class APIKey {
     required this.isUsing,
     this.usingModel,
   });
+
+  @override
+  String toString() {
+    return 'APIKeyEntity(id: $id, name: $name, description: $description, key: $key, provider: $provider, isUsing: $isUsing, usingModel: $usingModel)';
+  }
 }

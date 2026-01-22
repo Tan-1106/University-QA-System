@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/features/api_management/domain/use_cases/toggle_using_key.dart';
 import 'package:university_qa_system/init_dependencies.dart';
 import 'package:university_qa_system/core/common/widgets/loader.dart';
-import 'package:university_qa_system/features/api_management/domain/entities/api_keys.dart';
+import 'package:university_qa_system/features/api_management/domain/entities/api_key.dart';
 import 'package:university_qa_system/features/api_management/domain/use_cases/delete_api_key.dart';
+import 'package:university_qa_system/features/api_management/domain/use_cases/toggle_using_key.dart';
 import 'package:university_qa_system/features/api_management/presentation/bloc/api_key/api_keys_bloc.dart';
 
-class ApiKeyList extends StatefulWidget {
-  const ApiKeyList({super.key});
+class APIKeyList extends StatefulWidget {
+  const APIKeyList({super.key});
 
   @override
-  State<ApiKeyList> createState() => _ApiKeyListState();
+  State<APIKeyList> createState() => _APIKeyListState();
 }
 
-class _ApiKeyListState extends State<ApiKeyList> {
+class _APIKeyListState extends State<APIKeyList> {
   final ScrollController _scrollController = ScrollController();
 
   bool get _isBottom {
@@ -57,7 +57,7 @@ class _ApiKeyListState extends State<ApiKeyList> {
     return BlocBuilder<ApiKeysBloc, ApiKeysState>(
       buildWhen: (previous, current) => current is ApiKeysLoading || current is ApiKeysLoaded || current is ApiKeysError,
       builder: (context, state) {
-        List<APIKey> apiKeys = [];
+        List<APIKeyEntity> apiKeys = [];
         bool isLoadingMore = false;
 
         if (state is ApiKeysLoading) {
@@ -119,7 +119,7 @@ class _ApiKeyListState extends State<ApiKeyList> {
                 ListTile(
                   contentPadding: const EdgeInsets.all(0),
                   title: Text(
-                    'Key: ${apiKey.name}',
+                    apiKey.name,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -127,22 +127,8 @@ class _ApiKeyListState extends State<ApiKeyList> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Trạng thái: ',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Text(
-                            apiKey.isUsing ? 'Đang sử dụng' : 'Không sử dụng',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: apiKey.isUsing ? Colors.green : Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
                       Text(
-                        'Nhà cung cấp: ${apiKey.provider}',
+                        '${apiKey.provider} | ${apiKey.usingModel?.toUpperCase() ?? 'N/A'}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       Text(
@@ -230,11 +216,12 @@ class _ApiKeyListState extends State<ApiKeyList> {
                               ? const Icon(
                                   Icons.pause,
                                   size: 20,
+                                  color: Colors.green,
                                 )
                               : const Icon(
                                   Icons.play_arrow,
                                   size: 20,
-                                  color: Colors.grey,
+                                  color: Colors.orange,
                                 ),
                         ),
                       ),

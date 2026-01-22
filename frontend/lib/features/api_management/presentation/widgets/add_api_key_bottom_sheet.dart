@@ -121,7 +121,7 @@ class _AddApiKeyBottomSheetState extends State<AddApiKeyBottomSheet> {
 
     final addApiKeyUseCase = serviceLocator<AddAPIKeyUseCase>();
     final addKeyResult = await addApiKeyUseCase(
-      AddAPIKeyUseCaseParams(
+      AddAPIKeyParams(
         name: _nameController.text.trim(),
         description: _descriptionController.text.trim().isEmpty
             ? null

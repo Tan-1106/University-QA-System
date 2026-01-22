@@ -1,18 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:university_qa_system/core/error/failures.dart';
-import 'package:university_qa_system/features/api_management/domain/entities/api_keys.dart';
+import 'package:university_qa_system/features/api_management/domain/entities/api_key.dart';
+import 'package:university_qa_system/features/api_management/domain/entities/api_key_list.dart';
 
 abstract interface class APIManagementRepository {
-  Future<Either<Failure, APIKeys>> loadAPIKeys({
-    int page = 1,
-    String? provider,
-    String? keyword,
-  });
-
-  Future<Either<Failure, APIKey>> getAPIKeyById({
-    required String id,
-  });
-
+  // Add a new API key
   Future<Either<Failure, String>> addAPIKey({
     required String name,
     String? description,
@@ -20,21 +12,37 @@ abstract interface class APIManagementRepository {
     required String apiKey,
   });
 
-  Future<Either<Failure, bool>> deleteAPIKey({
+  // Get a paginated list of API keys with optional filtering by provider and keyword
+  Future<Either<Failure, APIKeyListEntity>> getAPIKeys({
+    int page = 1,
+    String? provider,
+    String? keyword,
+  });
+
+  // Get API key details by ID
+  Future<Either<Failure, APIKeyEntity>> getAPIKeyById({
     required String id,
   });
 
+  // Get available models for a given API key and provider
   Future<Either<Failure, List<String>>> getKeyModels({
     required String key,
     required String provider,
   });
 
-  Future<Either<Failure, bool>> addKeyModel({
+  // Add a model to an existing API key
+  Future<Either<Failure, void>> addKeyModel({
     required String id,
     required String model,
   });
 
-  Future<Either<Failure, bool>> toggleUsingKey({
+  // Toggle the usage status of an API key
+  Future<Either<Failure, void>> toggleUsingKey({
+    required String id,
+  });
+
+  // Delete an API key by ID
+  Future<Either<Failure, void>> deleteAPIKey({
     required String id,
   });
 }

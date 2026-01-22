@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:university_qa_system/features/api_management/domain/entities/api_keys.dart';
-import 'package:university_qa_system/features/api_management/domain/use_cases/load_api_keys.dart';
+import 'package:university_qa_system/features/api_management/domain/entities/api_key.dart';
+import 'package:university_qa_system/features/api_management/domain/use_cases/get_api_keys.dart';
 
 part 'api_keys_event.dart';
 
@@ -10,7 +10,7 @@ part 'api_keys_state.dart';
 class ApiKeysBloc extends Bloc<ApiKeysEvent, ApiKeysState> {
   final LoadAPIKeysUseCase _loadAPIKeys;
 
-  List<APIKey> _allApiKeys = [];
+  List<APIKeyEntity> _allApiKeys = [];
   int _currentPage = 0;
   int _totalPages = 1;
 

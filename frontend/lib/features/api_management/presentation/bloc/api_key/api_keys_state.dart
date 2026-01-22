@@ -10,7 +10,7 @@ final class ApiKeysInitial extends ApiKeysState {}
 final class ApiKeysLoading extends ApiKeysState {}
 
 final class ApiKeysLoaded extends ApiKeysState {
-  final List<APIKey> apiKeys;
+  final List<APIKeyEntity> apiKeys;
   final int currentPage;
   final int totalPages;
   final bool hasMore;
@@ -25,7 +25,7 @@ final class ApiKeysLoaded extends ApiKeysState {
   });
 
   ApiKeysLoaded copyWith({
-    List<APIKey>? apiKeys,
+    List<APIKeyEntity>? apiKeys,
     int? currentPage,
     int? totalPages,
     bool? hasMore,
