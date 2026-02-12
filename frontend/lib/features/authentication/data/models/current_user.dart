@@ -1,4 +1,3 @@
-import 'package:university_qa_system/features/authentication/data/models/tokens.dart';
 import 'package:university_qa_system/features/authentication/domain/entities/user.dart';
 
 class CurrentUserModel {
