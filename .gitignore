@@ -93,6 +93,7 @@ htmlcov/
 .coverage.*
 coverage.xml
 **/*.egg-info/
+.cache/
 
 
 # =====================
