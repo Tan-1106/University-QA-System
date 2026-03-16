@@ -1,19 +1,34 @@
+# Multi-Stage Docker Build for Development
+# Stage 1: Builder - Install build dependencies and compile packages
 FROM python:3.12-slim AS builder
 
-RUN apt-get update && apt-get install -y \
+# Install build dependencies in single layer with cleanup
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     g++ \
-    && rm -rf /var/lib/apt/lists/*
+    pkg-config \
+    git \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get autoremove -y
 
 WORKDIR /app
 
-COPY requirements.txt .
+# Copy requirements files
+COPY requirements.txt requirements-manual-lock.txt ./
+
+# Install Python dependencies with optimizations
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install --prefix=/install -r requirements.txt
+    pip install --prefix=/install --no-cache-dir --no-deps -r requirements-manual-lock.txt && \
+    pip install --prefix=/install --no-cache-dir -r requirements.txt && \
+    find /install -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true && \
+    find /install -type f -name "*.pyc" -delete
 
-FROM python:3.12-slim
+# Stage 2: Development Runtime - Optimized for fast rebuilds and debugging
+FROM python:3.12-slim AS development
 
-RUN apt-get update && apt-get install -y \
+# Install runtime dependencies + development tools in single layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-eng \
     tesseract-ocr-vie \
@@ -21,14 +36,44 @@ RUN apt-get update && apt-get install -y \
     poppler-utils \
     curl \
     git \
-    && rm -rf /var/lib/apt/lists/*
+    vim \
+    htop \
+    procps \
+    strace \
+    gdb \
+    iputils-ping \
+    netcat-openbsd \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get autoremove -y
 
+# Set working directory
 WORKDIR /app
 
+# Copy Python packages from builder stage
 COPY --from=builder /install /usr/local
 
-RUN mkdir -p /app/app
+# Create app directory structure (app code will be mounted as volume)
+RUN mkdir -p /app/app /app/uploads /app/chroma_data /tmp/app && \
+    chmod -R 755 /app
 
+# Set environment variables optimized for development
+ENV PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    WATCHFILES_FORCE_POLLING=true \
+    WATCHFILES_IGNORE_PATHS='["*.pyc", "__pycache__", ".git", ".pytest_cache", "*.log"]' \
+    UVICORN_RELOAD_DELAY=0.5 \
+    UVICORN_RELOAD_DIRS=/app/app \
+    PIP_NO_CACHE_DIR=1
+
+# Expose port
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Add optimized health check for development (faster intervals)
+HEALTHCHECK --interval=5s --timeout=3s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Development command with optimized hot reloading and debugging
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-dir", "/app/app", "--reload-delay", "0.5", "--log-level", "debug", "--access-log", "--use-colors"]

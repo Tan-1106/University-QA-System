@@ -76,14 +76,15 @@ class DocumentChunkDAO:
         return chunk_data
     
     
-    # Update chunk's embedding_id by document ID and chunk index
+    # Update chunk's embedding_id by document ID and chunk index (updated for new schema)
     async def update_chunk_embedding_id(
         self,
         doc_id: str,
         chunk_index: int,
-        embedding_index: int, embedding_id: str
+        embedding_id: str
     ):
-        field_path = f"chunks.{chunk_index}.embedding_ids.{embedding_index}"
+        """Update chunk's embedding_id (singular) for new schema."""
+        field_path = f"chunks.{chunk_index}.embedding_id"
         result = await self.document_chunks_collection.update_one(
             {"doc_id": doc_id},
             {"$set": {field_path: embedding_id}}

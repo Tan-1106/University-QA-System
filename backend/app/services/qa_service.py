@@ -1,5 +1,7 @@
 import os
 import asyncio
+import logging
+import time
 from fastapi.encoders import jsonable_encoder
 from sentence_transformers import CrossEncoder
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -7,6 +9,9 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from app.daos.qa_dao import QADao
 from app.utils.api_response import UserError
 from app.services import embedding_service, document_chunk_service, llm_service
+
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -61,49 +66,130 @@ async def translate_to_vietnamese(text: str) -> str:
     return result
 
 
-# Get answer for the question
-async def get_answer(question: str, question_in_vietnamese: str, user_faculty: str, question_language: str) -> str:
-    api_key = await llm_service.get_current_api_key()
-    if not api_key:
-        raise UserError("No active API key found. Please activate an API key to proceed.")
+# Get answer for the question (Task 4.5 - Updated to integrate conversation history)
+async def get_answer(
+    question: str, 
+    question_in_vietnamese: str, 
+    user_faculty: str, 
+    question_language: str,
+    session_id: str = None,
+    user_id: str = None
+) -> tuple[str, str]:
+    """
+    Get answer for the question with conversation history integration.
     
-    embedded_question = await embedding_service.get_embedding(question_in_vietnamese)
-    relevant_potential_question_embeddings = await embedding_service.find_relevant_potential_questions(
-        top_k = 100,
-        embedding_vector = embedded_question,
-        user_faculty = user_faculty
-    )
+    Args:
+        question: Original user question
+        question_in_vietnamese: Question translated to Vietnamese
+        user_faculty: User's faculty for filtering
+        question_language: Language of the question ('vi' or 'en')
+        session_id: Optional conversation session ID (creates new if not provided)
+        user_id: User ID for creating new sessions
+        
+    Returns:
+        Tuple of (answer, session_id)
+    """
+    start_time = time.time()
     
-    chunks = []
-    for item in relevant_potential_question_embeddings:
-        metadata = item["metadata"]
-        chunk = await document_chunk_service.get_document_chunk_by_index(metadata["doc_id"], metadata["chunk_index"])
-        chunk_content = f"""Tài liệu: {chunk['file_name']}. Nội dung: {chunk['text']}. URL: {chunk['file_url']}"""
-        chunks.append(chunk_content)
-    unique_chunks = set(chunks)
-    chunks = list(unique_chunks)
-    chunks = rerank_chunks(question_in_vietnamese, chunks, top_k=20)
-    
-    answer = await llm_service.generate_answer(api_key, chunks, question, question_language)
-    return answer
+    try:
+        api_key = await llm_service.get_current_api_key()
+        if not api_key:
+            raise UserError("No active API key found. Please activate an API key to proceed.")
+        
+        # Create new session if not provided
+        if not session_id:
+            # Import here to avoid circular imports
+            from app.services import conversation_service
+            session_id = await conversation_service.create_conversation_session(user_id or "system")
+        
+        # Get conversation history
+        from app.services import conversation_service
+        conversation_history = await conversation_service.get_conversation_history(session_id, max_turns=10)
+        
+        # Embed the question
+        embed_start = time.time()
+        embedded_question = await embedding_service.embed_text(question_in_vietnamese)
+        embed_time = time.time() - embed_start
+        
+        # Find relevant chunks (top 100)
+        search_start = time.time()
+        relevant_chunk_embeddings = await embedding_service.find_relevant_chunks(
+            top_k=100,
+            embedding_vector=embedded_question,
+            user_faculty=user_faculty
+        )
+        search_time = time.time() - search_start
+        
+        # Get chunk content
+        chunks = []
+        for item in relevant_chunk_embeddings:
+            doc_id = item["doc_id"]
+            chunk_index = item["chunk_index"]
+            chunk = await document_chunk_service.get_document_chunk_by_index(doc_id, chunk_index)
+            chunk_content = f"""Tài liệu: {chunk['file_name']}. Nội dung: {chunk['text']}. URL: {chunk['file_url']}"""
+            chunks.append(chunk_content)
+        
+        # Remove duplicates and rerank to top 20
+        unique_chunks = list(set(chunks))
+        rerank_start = time.time()
+        reranked_chunks = rerank_chunks(question_in_vietnamese, unique_chunks, top_k=20)
+        rerank_time = time.time() - rerank_start
+        
+        # Generate answer with conversation history
+        llm_start = time.time()
+        answer = await llm_service.generate_answer(
+            api_key, 
+            reranked_chunks, 
+            question, 
+            question_language,
+            conversation_history=conversation_history
+        )
+        llm_time = time.time() - llm_start
+        
+        # Append Q&A pair to conversation history
+        await conversation_service.append_to_conversation(session_id, question, answer)
+        
+        total_time = time.time() - start_time
+        logger.info(f"QA processing completed - session_id: {session_id}, user_faculty: '{user_faculty}', chunks_found: {len(relevant_chunk_embeddings)}, unique_chunks: {len(unique_chunks)}, embed_time: {embed_time:.3f}s, search_time: {search_time:.3f}s, rerank_time: {rerank_time:.3f}s, llm_time: {llm_time:.3f}s, total_time: {total_time:.3f}s")
+        
+        return answer, session_id
+        
+    except Exception as e:
+        total_time = time.time() - start_time
+        logger.error(f"QA processing failed - session_id: {session_id}, user_faculty: '{user_faculty}', total_time: {total_time:.3f}s, error: {str(e)}")
+        raise
 
 
 # Rerank chunks using Cross-Encoder
 def rerank_chunks(question: str, chunks: list[str], top_k: int) -> list[str]:
-    scored_chunks = {}
-    for chunk in chunks:
-        score = cross_encoder_model.predict([[question, chunk]])[0]
-        scored_chunks[chunk] = float(score)
+    start_time = time.time()
     
-    sorted_scored_chunks = sorted(scored_chunks, key=scored_chunks.get, reverse=True)
-    top_chunks = sorted_scored_chunks[:top_k]
-    
-    # Logging
-    print("- LOG: Reranked chunks:")
-    for i, chunk in enumerate(top_chunks):
-        print(f"  {i+1}. (score: {scored_chunks[chunk]:.4f}) {chunk}")
-    
-    return top_chunks
+    try:
+        scored_chunks = {}
+        for chunk in chunks:
+            score = cross_encoder_model.predict([[question, chunk]])[0]
+            scored_chunks[chunk] = float(score)
+        
+        sorted_scored_chunks = sorted(scored_chunks, key=scored_chunks.get, reverse=True)
+        top_chunks = sorted_scored_chunks[:top_k]
+        
+        processing_time = time.time() - start_time
+        
+        # Structured logging
+        logger.info(f"Reranking completed - input_chunks: {len(chunks)}, output_chunks: {len(top_chunks)}, processing_time: {processing_time:.3f}s")
+        
+        # Debug logging for top chunks with scores
+        for i, chunk in enumerate(top_chunks[:5]):  # Log top 5 chunks
+            score = scored_chunks[chunk]
+            chunk_preview = chunk[:100] + "..." if len(chunk) > 100 else chunk
+            logger.debug(f"Rerank #{i+1} (score: {score:.4f}): {chunk_preview}")
+        
+        return top_chunks
+        
+    except Exception as e:
+        processing_time = time.time() - start_time
+        logger.error(f"Reranking failed - input_chunks: {len(chunks)}, processing_time: {processing_time:.3f}s, error: {str(e)}")
+        raise
 
 
 # Update question record with answer

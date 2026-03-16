@@ -7,8 +7,8 @@ from app.utils.api_response import UserError
 from app.services import qa_service, user_service
 
 
-# Question-Answering
-async def get_answer(question: str, current_user: dict):    
+# Question-Answering (Task 4.8 - Updated to support session management)
+async def get_answer(question: str, current_user: dict, session_id: str = None):    
     question_language = detect(question)
     
     question_record = jsonable_encoder(await qa_service.create_question_record(
@@ -19,16 +19,23 @@ async def get_answer(question: str, current_user: dict):
     ))
     
     user_faculty = current_user["faculty"] if current_user["faculty"] is not None else ""
+    user_id = current_user["_id"]
+    
     if question_language == "vi":
-        answer = await qa_service.get_answer(question, question, user_faculty, "vi")
+        answer, session_id = await qa_service.get_answer(
+            question, question, user_faculty, "vi", session_id, user_id
+        )
     else:
         question_in_vietnamese = await qa_service.translate_to_vietnamese(question)
-        answer = await qa_service.get_answer(question, question_in_vietnamese, user_faculty, "en")
+        answer, session_id = await qa_service.get_answer(
+            question, question_in_vietnamese, user_faculty, "en", session_id, user_id
+        )
         
     question_record = await qa_service.update_question_record_with_answer(question_record["_id"], answer)
         
     return {
         "question_id": question_record["_id"],
+        "session_id": session_id,
         "question": question_record["question"],
         "answer": question_record["answer"]
     }

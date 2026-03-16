@@ -5,12 +5,24 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-# Question Schema
+# Question Schema (Task 4.8 - Updated to support session_id)
 class QuestionSchema(BaseModel):
     question: str
+    session_id: Optional[str] = None  # Optional session ID for conversation continuity
     class Config:
         from_attributes = True
         extra = "forbid"
+
+
+# QA Response Schema (Task 4.8 - Updated to include session_id)
+class QAResponseSchema(BaseModel):
+    question_id: str
+    session_id: str  # Always returned for conversation continuity
+    question: str
+    answer: str
+    
+    class Config:
+        from_attributes = True
         
         
 # Question Record Schema
@@ -52,3 +64,45 @@ class ManagerAnswerSchema(BaseModel):
     class Config:
         from_attributes = True
         extra = "forbid"
+
+
+# Conversation Schemas
+class CreateConversationSchema(BaseModel):
+    user_id: str
+    
+    class Config:
+        from_attributes = True
+        extra = "forbid"
+
+
+class ConversationMessageSchema(BaseModel):
+    role: str  # 'user' or 'assistant'
+    content: str
+    timestamp: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class ConversationSessionResponseSchema(BaseModel):
+    session_id: str
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class ConversationHistoryResponseSchema(BaseModel):
+    session_id: str
+    messages: list[ConversationMessageSchema]
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+class ConversationDeleteResponseSchema(BaseModel):
+    success: bool
+    
+    class Config:
+        from_attributes = True

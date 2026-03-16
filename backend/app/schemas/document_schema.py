@@ -44,11 +44,3 @@ class DocumentUpdateSchema(BaseModel):
     class Config:
         from_attributes = True
         extra = "forbid"
-        
-        
-# Add Document Chunk Schema
-class UpdateChunkQuestionSchema(BaseModel):
-    question: str
-    class Config:
-        from_attributes = True
-        extra = "forbid"

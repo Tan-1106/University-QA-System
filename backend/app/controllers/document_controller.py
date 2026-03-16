@@ -1,4 +1,6 @@
 import os
+import logging
+import time
 import unicodedata
 from urllib.parse import quote
 from urllib.parse import urlparse
@@ -13,6 +15,9 @@ from app.utils.api_response import UserError, AuthException
 from app.services import llm_service, embedding_service, document_chunk_service
 
 
+logger = logging.getLogger(__name__)
+
+
 # --- ROUTERS ---
 # Upload a new document
 async def upload_document(
@@ -23,6 +28,10 @@ async def upload_document(
     file_url: str = Form(...),
     current_user: dict = None,
 ):
+    start_time = time.time()
+    file_size = 0
+    chunk_count = 0
+    
     if not (current_user["role"] == Role.ADMIN.value or current_user["is_faculty_manager"]):
         raise AuthException("You do not have permission to upload documents.")
     
@@ -48,12 +57,23 @@ async def upload_document(
     new_document = None
     
     try:
+        # Get file size for logging
+        await file.seek(0, 2)  # Seek to end
+        file_size = await file.tell()
+        await file.seek(0)  # Reset to beginning
+        
+        logger.info(f"Document upload started - filename: {file.filename}, size: {file_size} bytes, doc_type: {doc_type}, faculty: {faculty}, department: {department}")
+        
         # Extract text content from the uploaded PDF file
+        extract_start = time.time()
         document_content = await document_service.extract_file_content(file)
+        extract_time = time.time() - extract_start
         await file.seek(0)
         
         # Save file to server
+        save_start = time.time()
         file_path = await document_service.save_document_file(file)
+        save_time = time.time() - save_start
         
         # Create document record in database
         file_name = os.path.splitext(file.filename)[0]
@@ -68,48 +88,56 @@ async def upload_document(
         }
         new_document = await document_service.store_document_record(document_record)
         
-        # Split text into chunks
-        chunks = await text_process.split_text_into_chunks(document_content, words_per_chunk=800, overlap=200)
+        # Use new chunking strategy (Task 2.8)
+        chunk_start = time.time()
+        chunks = await text_process.chunk_document(
+            content=document_content,
+            chunk_size_tokens=1400,  # 1200-1500 tokens
+            overlap_tokens=350       # 300-400 tokens
+        )
+        chunk_time = time.time() - chunk_start
+        chunk_count = len(chunks)
         
-        # Generate chunk potential questions
-        api_key = await llm_service.get_current_api_key()
-        if not api_key:
-            raise UserError("No active API key found. Please activate an API key to proceed.")
-        
+        # Create document chunks record with new schema
         document_chunks_record = {
             "doc_id": new_document["id"],
             "chunks": {}
         }
-        for idx, chunk in enumerate(chunks):
-            potential_questions = await llm_service.generate_potential_questions(
-                api_key=api_key,
-                context=chunk,
-                num_questions=5
+        
+        # Process each chunk with direct embedding (no LLM calls)
+        embed_start = time.time()
+        for chunk in chunks:
+            chunk_idx = chunk["chunk_index"]
+            
+            # Embed chunk text directly
+            embedding_id = await embedding_service.embed_and_store_chunk(
+                chunk_text=chunk["text"],
+                doc_id=new_document["id"],
+                chunk_index=chunk_idx,
+                faculty=faculty if faculty else ""
             )
-            document_chunks_record["chunks"][str(idx)] = {
-                "text": chunk,
-                "potential_questions": potential_questions,
-                "embedding_ids": []
+            
+            # Store chunk with new schema (embedding_id singular, token_count)
+            document_chunks_record["chunks"][str(chunk_idx)] = {
+                "text": chunk["text"],
+                "token_count": chunk["token_count"],
+                "embedding_id": embedding_id
             }
-                    
-        # Convert potential question and store in ChromaDB
-        for idx, chunk_data in document_chunks_record["chunks"].items():
-            for question in chunk_data["potential_questions"]:
-                embedding = await embedding_service.store_embedding(
-                    text=question,
-                    metadatas={
-                        "doc_id": new_document["id"],
-                        "chunk_index": int(idx),
-                        "faculty": faculty if faculty else ""
-                    }
-                )
-                chunk_data["embedding_ids"].append(embedding["embedding_id"])               
+        embed_time = time.time() - embed_start
                 
         # Store document chunks record in database
         await document_chunk_service.store_document_chunks_record(document_chunks_record)
+        
+        total_time = time.time() - start_time
+        logger.info(f"Document upload completed successfully - doc_id: {new_document['id']}, filename: {file.filename}, chunks: {chunk_count}, extract_time: {extract_time:.3f}s, save_time: {save_time:.3f}s, chunk_time: {chunk_time:.3f}s, embed_time: {embed_time:.3f}s, total_time: {total_time:.3f}s")
+        
         return new_document
         
     except Exception as e:
+        # Rollback logic updated for new schema
+        total_time = time.time() - start_time
+        logger.error(f"Document upload failed - filename: {file.filename}, size: {file_size} bytes, chunks: {chunk_count}, total_time: {total_time:.3f}s, error: {str(e)}")
+        
         if file_path:
             await document_service.delete_document_file(file_path)
         if new_document:
@@ -129,6 +157,11 @@ async def upload_appendix_document(
     file_url: str = Form(...),
     current_user: dict = None,
 ):
+    start_time = time.time()
+    file_size = 0
+    chunk_count = 0
+    table_count = 0
+    
     if not (current_user["role"] == Role.ADMIN.value or current_user["is_faculty_manager"]):
         raise AuthException("You do not have permission to upload documents.")
     
@@ -154,12 +187,23 @@ async def upload_appendix_document(
     new_document = None
     
     try:
+        # Get file size for logging
+        await file.seek(0, 2)  # Seek to end
+        file_size = await file.tell()
+        await file.seek(0)  # Reset to beginning
+        
+        logger.info(f"Appendix document upload started - filename: {file.filename}, size: {file_size} bytes, doc_type: {doc_type}, faculty: {faculty}, department: {department}")
+        
         # Extract appendix content from the uploaded PDF file
+        extract_start = time.time()
         file_content = await document_service.extract_pdf_appendix_content(file)
+        extract_time = time.time() - extract_start
         await file.seek(0)
         
         # Save file to server
+        save_start = time.time()
         file_path = await document_service.save_document_file(file)
+        save_time = time.time() - save_start
         
         # Create document record in database
         file_name = os.path.splitext(file.filename)[0]
@@ -174,50 +218,60 @@ async def upload_appendix_document(
         }
         new_document = await document_service.store_document_record(document_record)
         
-        # Split text into chunks
+        # Use new appendix chunking strategy (Task 2.9)
         appendix_description = file_content["description"]
         tables = file_content["tables"]
-        chunks = await text_process.split_appendix_into_chunks(appendix_description, tables, table_header_rows=2)
+        table_count = len(tables)
         
-        # Generate chunk potential questions
-        api_key = await llm_service.get_current_api_key()
-        if not api_key:
-            raise UserError("No active API key found. Please activate an API key to proceed.")
+        chunk_start = time.time()
+        chunks = await text_process.chunk_appendix_document(
+            description=appendix_description,
+            tables=tables,
+            table_header_rows=2
+        )
+        chunk_time = time.time() - chunk_start
+        chunk_count = len(chunks)
         
+        # Create document chunks record with new schema
         document_chunks_record = {
             "doc_id": new_document["id"],
             "chunks": {}
         }
-        for idx, chunk in enumerate(chunks):
-            potential_questions = await llm_service.generate_potential_questions_appendix(
-                api_key=api_key,
-                context=chunk,
-                num_questions=5
-            )
-            document_chunks_record["chunks"][str(idx)] = {
-                "text": chunk,
-                "potential_questions": potential_questions,
-                "embedding_ids": []
-            }
         
-        # Convert potential question and store in ChromaDB
-        for idx, chunk_data in document_chunks_record["chunks"].items():
-            for question in chunk_data["potential_questions"]:
-                embedding = await embedding_service.store_embedding(
-                    text=question,
-                    metadatas={
-                        "doc_id": new_document["id"],
-                        "chunk_index": int(idx),
-                        "faculty": faculty if faculty else ""
-                    }
-                )
-                chunk_data["embedding_ids"].append(embedding["embedding_id"])               
+        # Process each chunk with direct embedding (no LLM calls)
+        embed_start = time.time()
+        for chunk in chunks:
+            chunk_idx = chunk["chunk_index"]
+            
+            # Embed chunk text directly
+            embedding_id = await embedding_service.embed_and_store_chunk(
+                chunk_text=chunk["text"],
+                doc_id=new_document["id"],
+                chunk_index=chunk_idx,
+                faculty=faculty if faculty else ""
+            )
+            
+            # Store chunk with new schema (embedding_id singular, token_count)
+            document_chunks_record["chunks"][str(chunk_idx)] = {
+                "text": chunk["text"],
+                "token_count": chunk["token_count"],
+                "embedding_id": embedding_id
+            }
+        embed_time = time.time() - embed_start
                 
         # Store document chunks record in database
         await document_chunk_service.store_document_chunks_record(document_chunks_record)
+        
+        total_time = time.time() - start_time
+        logger.info(f"Appendix document upload completed successfully - doc_id: {new_document['id']}, filename: {file.filename}, chunks: {chunk_count}, tables: {table_count}, extract_time: {extract_time:.3f}s, save_time: {save_time:.3f}s, chunk_time: {chunk_time:.3f}s, embed_time: {embed_time:.3f}s, total_time: {total_time:.3f}s")
+        
         return new_document
         
     except Exception as e:
+        # Rollback logic updated for new schema
+        total_time = time.time() - start_time
+        logger.error(f"Appendix document upload failed - filename: {file.filename}, size: {file_size} bytes, chunks: {chunk_count}, tables: {table_count}, total_time: {total_time:.3f}s, error: {str(e)}")
+        
         if file_path:
             await document_service.delete_document_file(file_path)
         if new_document:

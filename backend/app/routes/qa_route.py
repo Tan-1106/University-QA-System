@@ -16,7 +16,7 @@ router = APIRouter(
 
 
 # --- ROUTES ---
-# Question-Answering
+# Question-Answering (Task 4.8 - Updated to support session management)
 @router.post("/ask")
 async def qa(
     data: qa_schema.QuestionSchema,
@@ -24,12 +24,16 @@ async def qa(
 ):
     data = jsonable_encoder(data)
     current_user = jsonable_encoder(current_user)
-    answer = await qa_controller.get_answer(data["question"], current_user)
+    
+    # Extract session_id from request data if provided
+    session_id = data.get("session_id")
+    
+    answer = await qa_controller.get_answer(data["question"], current_user, session_id)
     return api_response(
         status_code=200,
         message="Get answer successfully.",
         details=answer
-)
+    )
     
     
 # Leave feedback for a question

@@ -97,3 +97,12 @@ def get_popular_questions_collection():
         raise RuntimeError("Database has not been initialized.")
     logging.info(f"Accessing collection: popular_questions in database: {DB_NAME}")
     return db.get_collection("popular_questions")
+
+
+# Conversations collection
+def get_conversations_collection():
+    global db
+    if db is None:
+        raise RuntimeError("Database has not been initialized.")
+    logging.info(f"Accessing collection: conversations in database: {DB_NAME}")
+    return db.get_collection("conversations")

@@ -8,7 +8,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.routes import llm_route
 from app.utils.api_response import api_response, UserError, NotFoundException, DatabaseException, AuthException
 from app.databases.mongo import connect_to_mongo, close_mongo_connection
-from app.routes import auth_route, user_route, document_route, document_chunk_route, embedding_route, qa_route, statistical_route
+from app.routes import auth_route, user_route, document_route, document_chunk_route, embedding_route, qa_route, statistical_route, conversation_routes, health_route
 
 
 # --- LOGGER SETUP ---
@@ -26,6 +26,13 @@ logger.addFilter(HealthCheckFilter())
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_to_mongo()
+    
+    # Initialize conversation indexes
+    from app.daos.conversation_dao import ConversationDAO
+    conversation_dao = ConversationDAO()
+    await conversation_dao.ensure_indexes()
+    logger.info("Conversation indexes initialized")
+    
     yield
     await close_mongo_connection()
 
@@ -134,6 +141,9 @@ async def home():
 
 
 # --- ROUTES ---
+# Health check routes (no prefix for Docker health checks)
+app.include_router(health_route.router)
+
 # Authentication routes
 app.include_router(auth_route.router, prefix="/api")
 
@@ -160,6 +170,10 @@ app.include_router(embedding_route.router, prefix="/api")
 
 # Q&A routes
 app.include_router(qa_route.router, prefix="/api")
+
+
+# Conversation routes
+app.include_router(conversation_routes.router, prefix="/api")
 
 
 # Statistical routes

@@ -162,6 +162,64 @@ async def split_text_into_chunks(text: str, words_per_chunk: int, overlap: int) 
     return chunks
 
 
+# New chunking strategy with semantic boundaries (Task 2.1)
+async def chunk_document(
+    content: str,
+    chunk_size_tokens: int = 1400,  # Target: 1200-1500
+    overlap_tokens: int = 350,       # Target: 300-400
+    preserve_semantic_boundaries: bool = True
+) -> list[dict]:
+    """
+    Chunk document content into overlapping segments with semantic boundaries.
+    
+    Args:
+        content: Full document text
+        chunk_size_tokens: Target chunk size in tokens (1200-1500)
+        overlap_tokens: Overlap between consecutive chunks (300-400)
+        preserve_semantic_boundaries: Try to split at paragraph/section boundaries
+        
+    Returns:
+        List of chunk dictionaries with 'text', 'token_count', and 'chunk_index'
+    """
+    content = content.strip()
+    if not content:
+        return []
+    
+    # Use RecursiveCharacterTextSplitter with semantic separators
+    separators = [
+        "CHƯƠNG", "Chương",
+        "ĐIỀU", "Điều", 
+        "MỤC", "Mục",
+        "I.", "II.", "III.", "IV.", "V.", "VI.", "VII.", "VIII.", "IX.", "X.", 
+        "XI.", "XII.", "XIII.", "XIV.", "XV.", "XVI.", "XVII.", "XVIII.", "XIX.", "XX.",
+        "1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.", "9.", "10.", 
+        "11.", "12.", "13.", "14.", "15.", "16.", "17.", "18.", "19.", "20.",
+        "(1)", "(2)", "(3)", "(4)", "(5)", "(6)", "(7)", "(8)", "(9)", "(10)",
+        "\n\n", "\n", ".", ";", " ", ""
+    ]
+    
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size_tokens,
+        chunk_overlap=overlap_tokens,
+        separators=separators,
+        length_function=lambda x: len(enc.encode(x))
+    )
+    
+    text_chunks = splitter.split_text(content)
+    
+    # Convert to chunk dictionaries with metadata
+    chunks = []
+    for i, chunk_text in enumerate(text_chunks):
+        token_count = len(enc.encode(chunk_text))
+        chunks.append({
+            "text": chunk_text.strip(),
+            "token_count": token_count,
+            "chunk_index": i
+        })
+    
+    return chunks
+
+
 # Split appendix description and tables into chunks
 async def split_appendix_into_chunks(description: str, tables: list[list[str]], table_header_rows: int) -> list[str]:
     chunks = []
@@ -173,4 +231,74 @@ async def split_appendix_into_chunks(description: str, tables: list[list[str]], 
         chunk = chunk_format + '. Content: ' + ' | '.join(tables[i])
         chunks.append(chunk)
         
+    return chunks
+
+
+# New appendix chunking with table preservation (Task 2.2)
+async def chunk_appendix_document(
+    description: str,
+    tables: list[list[str]],
+    table_header_rows: int = 2
+) -> list[dict]:
+    """
+    Chunk appendix documents preserving table structure.
+    
+    Args:
+        description: Appendix description text
+        tables: List of table data (rows)
+        table_header_rows: Number of header rows in tables
+        
+    Returns:
+        List of chunk dictionaries with table data preserved
+    """
+    chunks = []
+    
+    if not tables:
+        # If no tables, just chunk the description normally
+        return await chunk_document(description)
+    
+    # Prepare table header
+    table_header = ""
+    for i in range(min(table_header_rows, len(tables))):
+        table_header += ' | '.join(str(cell) for cell in tables[i]) + '\n'
+    
+    # Create chunks with complete table rows
+    chunk_base = f"Description: {description}\n\nTable header:\n{table_header}\nTable content:\n"
+    
+    current_chunk_rows = []
+    current_token_count = len(enc.encode(chunk_base))
+    
+    # Process data rows (skip header rows)
+    for i in range(table_header_rows, len(tables)):
+        row = tables[i]
+        row_text = ' | '.join(str(cell) for cell in row) + '\n'
+        row_tokens = len(enc.encode(row_text))
+        
+        # Check if adding this row would exceed token limit
+        if current_token_count + row_tokens > 1500 and current_chunk_rows:
+            # Create chunk with current rows
+            chunk_content = chunk_base + ''.join(current_chunk_rows)
+            chunks.append({
+                "text": chunk_content.strip(),
+                "token_count": current_token_count,
+                "chunk_index": len(chunks)
+            })
+            
+            # Start new chunk
+            current_chunk_rows = [row_text]
+            current_token_count = len(enc.encode(chunk_base + row_text))
+        else:
+            # Add row to current chunk
+            current_chunk_rows.append(row_text)
+            current_token_count += row_tokens
+    
+    # Add final chunk if there are remaining rows
+    if current_chunk_rows:
+        chunk_content = chunk_base + ''.join(current_chunk_rows)
+        chunks.append({
+            "text": chunk_content.strip(),
+            "token_count": current_token_count,
+            "chunk_index": len(chunks)
+        })
+    
     return chunks
